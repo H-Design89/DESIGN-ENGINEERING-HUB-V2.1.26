@@ -1,4 +1,4 @@
-﻿// ==============================================
+// ==============================================
 // LOGIC LƯU LỊCH SỬ THIẾT KẾ
 // ==============================================
 let savedDesigns = [];
@@ -68,9 +68,15 @@ function confirmSaveDesign() {
     });
     const kheLaStr = kheLaArr.length > 0 ? kheLaArr.join('; ') : '---';
     
-    // Diện tích trao đổi nhiệt
-    let dttdn = document.getElementById('res_s_co_dt').innerText;
-    if (dttdn === '---' || !dttdn) dttdn = document.getElementById('res_s_khong_dt').innerText;
+    // Diện tích trao đổi nhiệt theo đánh giá hiệu suất
+    let dttdn = "";
+    const perfAreaSrc = document.getElementById('perf_area_src').value;
+    if (perfAreaSrc === 'with_heater') {
+        dttdn = document.getElementById('res_s_co_dt').innerText;
+        if (dttdn === '---' || !dttdn) dttdn = document.getElementById('res_s_khong_dt').innerText; // Fallback
+    } else {
+        dttdn = document.getElementById('res_s_khong_dt').innerText;
+    }
     
     const kw = document.getElementById('perf_kw').value || '0';
     const std = document.getElementById('perf_std').value || '0';
