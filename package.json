@@ -1,0 +1,15 @@
+{
+    "app_name": "DESIGN ENGINEERING HUB V1.7.26 - share",
+    "main": "index.html",
+    "name": "DESIGN ENGINEERING HUB V1.7.26 - share",
+    "webkit": {},
+    "window": {
+        "frame": true,
+        "id": "DESIGN ENGINEERING HUB V1.7.26 - share",
+        "resizable": true,
+        "show": true,
+        "show_in_taskbar": true,
+        "title": "DESIGN ENGINEERING HUB V1.7.26 - share",
+        "visible": true
+    }
+}
