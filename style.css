@@ -25,7 +25,7 @@ body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); margi
 .container { max-width: 1200px; margin: auto; }
 
 /* CẬP NHẬT HEADER CHO MOBILE */
-.header { background: var(--secondary); color: white; padding: 15px 10px 0 10px; text-align: center; border-radius: 12px 12px 0 0; }
+.header { position: relative; background: var(--secondary); color: white; padding: 15px 10px 0 10px; text-align: center; border-radius: 12px 12px 0 0; }
 .header-title-container { display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 12px; }
 .header h2 { margin: 0; font-size: 1.2rem; letter-spacing: 0.5px; text-transform: uppercase; }
 .logo-top { height: 35px; background: white; border: 2px solid white; border-radius: 6px; padding: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
@@ -115,3 +115,29 @@ input[readonly] { background: #e9ecef; color: #202124; font-weight: bold; cursor
 /* History Card */
 .history-card { background: white; padding: 15px; border-radius: 8px; border: 1px solid #ddd; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
 .badge { position: absolute; top: -10px; right: -10px; background: #f44336; color: white; border-radius: 50%; min-width: 24px; height: 24px; display: flex; justify-content: center; align-items: center; font-size: 0.85rem; font-weight: bold; box-shadow: 0 2px 6px rgba(0,0,0,0.3); z-index: 100; border: 2px solid white; }
+
+.btn-install-app {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid #1b5e20;
+    white-space: nowrap;
+    z-index: 100;
+}
+.btn-install-app:hover {
+    background: linear-gradient(135deg, #43a047 0%, #1b5e20 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
