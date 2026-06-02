@@ -17,7 +17,7 @@ function calculatePsychro() {
     
     if (!isNaN(T1) && !isNaN(RH1)) {
         let p1 = getPsyProps(T1, RH1);
-        document.getElementById('psy_psat1').innerText = Math.round(p1.P_sat).toLocaleString();
+        document.getElementById('psy_psat1').innerText = Math.round(p1.P_sat).toLocaleString('en-US');
         document.getElementById('psy_h1').innerText = p1.h.toFixed(2);
         document.getElementById('psy_w1').innerText = p1.w.toFixed(2);
         document.getElementById('psy_tdp1').innerText = p1.T_dp.toFixed(1);
@@ -33,7 +33,7 @@ function calculatePsychro() {
 
     if (!isNaN(T2) && !isNaN(RH2)) {
         let p2 = getPsyProps(T2, RH2);
-        document.getElementById('psy_psat2').innerText = Math.round(p2.P_sat).toLocaleString();
+        document.getElementById('psy_psat2').innerText = Math.round(p2.P_sat).toLocaleString('en-US');
         document.getElementById('psy_h2').innerText = p2.h.toFixed(2);
         document.getElementById('psy_w2').innerText = p2.w.toFixed(2);
         document.getElementById('psy_tdp2').innerText = p2.T_dp.toFixed(1);
@@ -61,16 +61,16 @@ function calculateAll() {
     let L_fin = 0;
 
     if (!isLFinManual) {
-        L_mm = parseFloat(document.getElementById('l_su_dung').value) * 1000 || 0;
+        L_mm = parseFloat(document.getElementById('l_su_dung').value.replace(/,/g, '.')) * 1000 || 0;
         if (method === "Cắt") {
             L_fin = L_mm - (L_mm * h_rut) - thickness_san - d_han;
         } else {
             L_fin = ((L_mm * 2 - k_co) / 2) - d_han - (L_mm * h_rut) - thickness_san;
         }
         L_fin = Math.floor(L_fin); 
-        document.getElementById('l_fin_input').value = L_fin;
+        document.getElementById('l_fin_input').value = parseFloat(L_fin).toLocaleString('en-US');
     } else {
-        L_fin = Math.floor(parseFloat(document.getElementById('l_fin_input').value) || 0); 
+        L_fin = Math.floor(parseFloat(document.getElementById('l_fin_input').value.replace(/,/g, '')) || 0); 
         if (method === "Cắt") {
             L_mm = (L_fin + thickness_san + d_han) / (1 - h_rut);
         } else {
@@ -173,7 +173,7 @@ function calculateAll() {
     vol_liter = v_straight + v_ubend_total + v_hdr_total;
     // -------------------------------
 
-    const q_fan = parseFloat(document.getElementById('gio_1_quat').value) || 0;
+    const q_fan = parseFloat(document.getElementById('gio_1_quat').value.replace(/,/g, '')) || 0;
     const n_fan = parseFloat(document.getElementById('so_quat').value) || 0;
     const tong_gio = q_fan * n_fan;
 
@@ -181,15 +181,15 @@ function calculateAll() {
     const width_m = L_fin / 1000;
     const v_wind = (height_m > 0 && width_m > 0) ? (tong_gio / (height_m * width_m * 3600)) : 0;
 
-    document.getElementById('res_tong_gio').innerText = tong_gio.toLocaleString();
+    document.getElementById('res_tong_gio').innerText = tong_gio.toLocaleString('en-US');
     document.getElementById('res_v_gio').innerText = v_wind.toFixed(2);
     document.getElementById('res_vol').innerText = vol_liter.toFixed(2);
     document.getElementById('res_l_tong').innerText = L_tong_ong.toFixed(1);
     document.getElementById('res_l_fin').innerText = L_fin; 
     
-    document.getElementById('res_s_khong_dt').innerText = lastCalculatedAreaNoHeater.toFixed(2);
+    document.getElementById('res_s_khong_dt').innerText = (Math.trunc(lastCalculatedAreaNoHeater * 10) / 10).toFixed(1);
     if (d_dt > 0) {
-        document.getElementById('res_s_co_dt').innerText = lastCalculatedAreaWithHeater.toFixed(2);
+        document.getElementById('res_s_co_dt').innerText = (Math.trunc(lastCalculatedAreaWithHeater * 10) / 10).toFixed(1);
     } else {
         document.getElementById('res_s_co_dt').innerText = "---";
     }
@@ -212,7 +212,7 @@ function calculateRequiredAirflow() {
     const spec = TUBE_SPECS[loaiOng] || TUBE_SPECS["D16_45"];
     let b_d = spec.b_d;
 
-    const L_fin = parseFloat(document.getElementById('l_fin_input').value) || 0;
+    const L_fin = parseFloat(document.getElementById('l_fin_input').value.replace(/,/g, '')) || 0;
     
     const height_m = (C * b_d) / 1000;
     const width_m = L_fin / 1000;
@@ -220,8 +220,8 @@ function calculateRequiredAirflow() {
     const req_total = target_v * height_m * width_m * 3600;
     const req_per_fan = req_total / n_fan_req;
 
-    document.getElementById('req_total_val').innerText = Math.round(req_total).toLocaleString();
-    document.getElementById('req_per_fan_val').innerText = Math.round(req_per_fan).toLocaleString();
+    document.getElementById('req_total_val').innerText = Math.round(req_total).toLocaleString('en-US');
+    document.getElementById('req_per_fan_val').innerText = Math.round(req_per_fan).toLocaleString('en-US');
 }
 
 function calculatePerformance() {
@@ -237,7 +237,7 @@ function calculatePerformance() {
         const kw = parseFloat(kwInput.value);
         if (!isNaN(kw) && kw > 0) {
             const std = area / kw;
-            stdInput.value = std.toFixed(2);
+            stdInput.value = (Math.trunc(std * 10) / 10).toFixed(1);
         } else {
             stdInput.value = "";
         }
@@ -245,7 +245,7 @@ function calculatePerformance() {
         const std = parseFloat(stdInput.value);
         if (!isNaN(std) && std > 0) {
             const kw = area / std;
-            kwInput.value = kw.toFixed(2);
+            kwInput.value = (Math.trunc(kw * 10) / 10).toFixed(1);
         } else {
             kwInput.value = "";
         }
@@ -256,7 +256,7 @@ function calculateCircuitry() {
     const C = parseFloat(document.getElementById('hang_doc').value) || 0;
     const N = parseFloat(document.getElementById('hang_ngang').value) || 0;
     const total_tubes = N * C;
-    const L_m = parseFloat(document.getElementById('l_su_dung').value) || 0;
+    const L_m = parseFloat(document.getElementById('l_su_dung').value.replace(/,/g, '.')) || 0;
 
     const circuitsInput = document.getElementById('circuits_input');
     const passesInput = document.getElementById('passes_input');
@@ -291,7 +291,7 @@ function calculateCircuitry() {
 
     if (!isNaN(passes) && passes > 0) {
         const len = passes * L_m;
-        lenEl.innerText = len.toFixed(2);
+        lenEl.innerText = (Math.trunc(len * 10) / 10).toFixed(1);
         skippedEl.innerText = skipped;
         if(skipped > 0) {
             skippedEl.style.color = "var(--accent)";
@@ -459,7 +459,7 @@ function updateMassSegThickness(matSelect, retainThick) {
 function calculateMass() {
     const loaiOng = document.getElementById('loai_ong').value;
     const C = parseFloat(document.getElementById('hang_doc').value) || 0;
-    const L_fin = parseFloat(document.getElementById('l_fin_input').value) || 0;
+    const L_fin = parseFloat(document.getElementById('l_fin_input').value.replace(/,/g, '')) || 0;
     
     let total_fin_mass = 0;
     const sourceRows = document.querySelectorAll('#segment-container .segment-row');
@@ -512,8 +512,8 @@ function calculateMass() {
     lastCalculatedFinMass = total_fin_mass;
     lastCalculatedTubeMass = total_tube_mass;
 
-    document.getElementById('res_mass_fin').innerText = total_fin_mass.toFixed(2);
-    document.getElementById('res_mass_tube').innerText = total_tube_mass.toFixed(2);
+    document.getElementById('res_mass_fin').innerText = total_fin_mass.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    document.getElementById('res_mass_tube').innerText = total_tube_mass.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 }
 
 // ==============================================

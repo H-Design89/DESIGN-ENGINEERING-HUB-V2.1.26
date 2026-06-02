@@ -1,42 +1,6 @@
-﻿// ==============================================
+// ==============================================
 // LOGIC QUẢN TRỊ ADMIN
 // ==============================================
-function promptAdminLogin() {
-    if (isAdminLoggedIn) {
-        openAdminPage();
-    } else {
-        document.getElementById('admin_user').value = '';
-        document.getElementById('admin_pass').value = '';
-        document.getElementById('admin-error').style.display = 'none';
-        document.getElementById('admin-login-modal').style.display = 'flex';
-        setTimeout(() => document.getElementById('admin_user').focus(), 100);
-    }
-}
-
-function closeAdminLogin() {
-    document.getElementById('admin-login-modal').style.display = 'none';
-}
-
-function verifyAdminLogin() {
-    const user = document.getElementById('admin_user').value;
-    const pass = document.getElementById('admin_pass').value;
-    
-    let isValid = false;
-    for (let acc of ADMIN_ACCOUNTS) {
-        if (acc.user === user && acc.pass === pass) {
-            isValid = true;
-            break;
-        }
-    }
-    
-    if (isValid) {
-        isAdminLoggedIn = true;
-        closeAdminLogin();
-        openAdminPage();
-    } else {
-        document.getElementById('admin-error').style.display = 'block';
-    }
-}
 
 function openAdminPage() {
     switchTab('admin');
@@ -44,19 +8,8 @@ function openAdminPage() {
     // Load data into inputs
     const accContainer = document.getElementById('admin-accounts-container');
     accContainer.innerHTML = '';
-    ADMIN_ACCOUNTS.forEach(acc => {
-        addAdminAccountRow(acc.user, acc.pass);
-    });
-    document.getElementById('admin_master_change').dataset.val = MASTER_KEY_CHANGE_PIN;
-    document.getElementById('admin_master_change').value = maskString(MASTER_KEY_CHANGE_PIN);
-    
-    document.getElementById('admin_master_keep').dataset.val = MASTER_KEY_KEEP_PIN;
-    document.getElementById('admin_master_keep').value = maskString(MASTER_KEY_KEEP_PIN);
-    
-    const container = document.getElementById('admin-pins-container');
-    container.innerHTML = '';
-    ROTATING_PINS.forEach(pin => {
-        addAdminPinRow(pin.hint, pin.code);
+    ACCOUNTS.forEach(acc => {
+        addAdminAccountRow(acc.user, acc.pass, acc.role, acc.tabs);
     });
 
     renderAdminTubeSpecs();
@@ -187,34 +140,40 @@ function maskString(str) {
     return str[0] + '*'.repeat(str.length - 2) + str[str.length - 1];
 }
 
-function addAdminPinRow(hint = '', code = '') {
-    const container = document.getElementById('admin-pins-container');
-    const row = document.createElement('div');
-    row.className = 'header-row';
-    row.style.gridTemplateColumns = '1fr 1fr 35px';
-    const maskedCode = maskString(code);
-    row.innerHTML = `
-        <div><label>Gợi ý (Hint)</label><input type="text" class="pin-hint-in" value="${hint}"></div>
-        <div><label>Mã PIN (Code)</label><input type="text" class="pin-code-in" data-val="${code}" value="${maskedCode}" onfocus="this.value = this.dataset.val || ''" onblur="this.dataset.val = this.value; this.value = maskString(this.value)"></div>
-        <button class="btn-remove" onclick="removeAdminPinRow(this)" style="margin-top: 15px;">X</button>
-    `;
-    container.appendChild(row);
-}
-
-function removeAdminPinRow(btn) {
-    btn.parentElement.remove();
-}
-
-function addAdminAccountRow(user = '', pass = '') {
+function addAdminAccountRow(user = '', pass = '', role = 'user', tabs = ['coil']) {
     const container = document.getElementById('admin-accounts-container');
     const row = document.createElement('div');
-    row.className = 'header-row admin-acc-card';
-    row.style.gridTemplateColumns = '1fr 1fr 35px';
+    row.className = 'admin-acc-card';
+    row.style.background = '#f8f9fa';
+    row.style.padding = '12px';
+    row.style.borderRadius = '8px';
+    row.style.border = '1px solid #ddd';
+    row.style.position = 'relative';
+
     const maskedPass = maskString(pass);
+    const coilChecked = tabs.includes('coil') ? 'checked' : '';
+    const psychroChecked = tabs.includes('psychro') ? 'checked' : '';
+    
     row.innerHTML = `
-        <div><label>Tài khoản</label><input type="text" class="acc-user-in" value="${user}"></div>
-        <div><label>Mật khẩu</label><input type="text" class="acc-pass-in" data-val="${pass}" value="${maskedPass}" onfocus="this.value = this.dataset.val || ''" onblur="this.dataset.val = this.value; this.value = maskString(this.value)"></div>
-        <button class="btn-remove" onclick="removeAdminAccountRow(this)" style="margin-top: 15px;">X</button>
+        <button class="btn-remove" onclick="removeAdminAccountRow(this)" style="position: absolute; top: 12px; right: 12px;">X</button>
+        <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+            <div><label style="font-size: 0.85rem; color: #666;">Tài khoản</label><input type="text" class="acc-user-in input-field" value="${user}"></div>
+            <div><label style="font-size: 0.85rem; color: #666;">Mật khẩu</label><input type="text" class="acc-pass-in input-field" data-val="${pass}" value="${maskedPass}" onfocus="this.value = this.dataset.val || ''" onblur="this.dataset.val = this.value; this.value = maskString(this.value)"></div>
+            <div>
+                <label style="font-size: 0.85rem; color: #666;">Phân quyền</label>
+                <select class="acc-role-in input-field">
+                    <option value="admin" ${role === 'admin' ? 'selected' : ''}>Admin (Tất cả quyền)</option>
+                    <option value="user" ${role === 'user' ? 'selected' : ''}>User (Giới hạn)</option>
+                </select>
+            </div>
+        </div>
+        <div style="margin-top: 10px;">
+            <label style="font-size: 0.85rem; color: #666; display: block; margin-bottom: 5px;">Quyền xem chức năng (Chỉ áp dụng cho User):</label>
+            <div style="display: flex; gap: 15px;">
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-coil" ${coilChecked}> DESIGN COIL</label>
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-psychro" ${psychroChecked}> BẢNG TRA PSYCHRO</label>
+            </div>
+        </div>
     `;
     container.appendChild(row);
 }
@@ -229,45 +188,30 @@ function removeAdminAccountRow(btn) {
 }
 
 function saveAdminData() {
-    const mChange = document.getElementById('admin_master_change');
-    const mKeep = document.getElementById('admin_master_keep');
-    
-    // Nếu ô đang blur thì dataset.val sẽ chứa giá trị thực, nếu đang focus thì chính value là giá trị thực
-    const newChange = mChange.dataset.val || mChange.value;
-    const newKeep = mKeep.dataset.val || mKeep.value;
-    
-    let newPins = [];
-    document.querySelectorAll('#admin-pins-container .header-row').forEach(row => {
-        const hint = row.querySelector('.pin-hint-in').value;
-        const codeInput = row.querySelector('.pin-code-in');
-        const code = codeInput.dataset.val || codeInput.value;
-        if (hint || code) {
-            newPins.push({ hint, code });
-        }
-    });
-    
-    if (newPins.length === 0) {
-        alert("Phải có ít nhất 1 mã PIN!");
-        return;
-    }
-    
-    if (!newChange || !newKeep) {
-        alert("Không được để trống Master Key!");
-        return;
-    }
-    
     let newAccounts = [];
+    let hasAdmin = false;
     document.querySelectorAll('#admin-accounts-container .admin-acc-card').forEach(row => {
         const user = row.querySelector('.acc-user-in').value.trim();
         const passInput = row.querySelector('.acc-pass-in');
         const pass = passInput.dataset.val || passInput.value;
+        const role = row.querySelector('.acc-role-in').value;
+        
+        const tabs = [];
+        if (row.querySelector('.acc-tab-coil').checked) tabs.push('coil');
+        if (row.querySelector('.acc-tab-psychro').checked) tabs.push('psychro');
+        
         if (user && pass) {
-            newAccounts.push({ user, pass });
+            newAccounts.push({ user, pass, role, tabs });
+            if (role === 'admin') hasAdmin = true;
         }
     });
     
     if (newAccounts.length === 0) {
-        alert("Danh sách tài khoản Admin không hợp lệ! Bắt buộc có ít nhất 1 tài khoản.");
+        alert("Danh sách tài khoản không hợp lệ! Bắt buộc có ít nhất 1 tài khoản.");
+        return;
+    }
+    if (!hasAdmin) {
+        alert("Cần có ít nhất 1 tài khoản Admin!");
         return;
     }
     
@@ -338,17 +282,11 @@ function saveAdminData() {
 
     TUBE_SPECS = parsedTubes;
     FIN_WEIGHT_COEFFS = parsedFins;
-    MASTER_KEY_CHANGE_PIN = newChange;
-    MASTER_KEY_KEEP_PIN = newKeep;
-    ROTATING_PINS = newPins;
-    ADMIN_ACCOUNTS = newAccounts;
+    ACCOUNTS = newAccounts;
     
     // Lưu tạm vào biến nhớ
     window.GT_CONFIG = {
-        MASTER_KEY_CHANGE_PIN: MASTER_KEY_CHANGE_PIN,
-        MASTER_KEY_KEEP_PIN: MASTER_KEY_KEEP_PIN,
-        ADMIN_ACCOUNTS: ADMIN_ACCOUNTS,
-        ROTATING_PINS: ROTATING_PINS,
+        ACCOUNTS: ACCOUNTS,
         TUBE_SPECS: TUBE_SPECS,
         FIN_WEIGHT_COEFFS: FIN_WEIGHT_COEFFS,
         FANS: parsedFans
@@ -373,18 +311,6 @@ function saveAdminData() {
     downloadAnchorNode.remove();
     
     alert("Đã tạo file config.js! Vui lòng chép đè file này vào thư mục chứa mã nguồn trên server của bạn để cập nhật cấu hình cho tất cả người dùng.");
-    
-    // Nếu app đang khoá PIN, update lại cái gợi ý hiện tại nếu có
-    const pinIndexStr = decodeData(localStorage.getItem(STORAGE_PREFIX + 'pi'));
-    let pinIndex = parseInt(pinIndexStr || "0");
-    if (pinIndex >= ROTATING_PINS.length) {
-        pinIndex = 0;
-        localStorage.setItem(STORAGE_PREFIX + 'pi', encodeData(pinIndex.toString()));
-    }
-    const currentData = ROTATING_PINS[pinIndex];
-    if (document.getElementById('pin-hint-display')) {
-        document.getElementById('pin-hint-display').innerText = currentData.hint + " - ****";
-    }
 }
 
 // =====================================

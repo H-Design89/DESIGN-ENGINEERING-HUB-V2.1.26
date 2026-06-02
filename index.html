@@ -20,24 +20,17 @@
             <img src="logo Gt.png" alt="Gia Thinh Logo" onerror="this.style.display='none'">
             <h3 id="lock-title" style="color: var(--secondary); margin: 0;">GT-DESIGN SECURE</h3>
 
-            <div id="ui-regular-pin">
-                <p style="color: #666; font-size: 0.85rem; margin-top: 5px; margin-bottom: 0;">Mã PIN:</p>
-                <div class="pin-hint" id="pin-hint-display">TL - ****</div>
-                <input type="password" id="pin-input" placeholder="* * * *" maxlength="4">
-                <button class="btn-unlock" onclick="checkRegularPIN()">ĐĂNG NHẬP</button>
-                <p id="pin-error" style="color: red; font-size: 0.85rem; display: none; margin-top: 10px;">Mã PIN không
-                    chính xác!</p>
-            </div>
-
-            <div id="ui-master-key" style="display: none;">
-                <p style="color: var(--accent); font-weight: bold; font-size: 0.9rem; margin-top: 10px;">ĐÃ HẾT HẠN SỬ
-                    DỤNG 30 NGÀY!</p>
-                <p style="color: #666; font-size: 0.8rem; margin-top: 5px;">Vui lòng nhập Master Key để kích hoạt lại
-                    chu kỳ mới.</p>
-                <input type="password" id="master-input" placeholder="MASTER KEY" maxlength="8">
-                <button class="btn-unlock btn-master" onclick="checkMasterKey()">KÍCH HOẠT LẠI</button>
-                <p id="master-error" style="color: red; font-size: 0.85rem; display: none; margin-top: 10px;">Master Key
-                    không hợp lệ!</p>
+            <div id="ui-login" style="margin-top: 15px;">
+                <div class="input-group" style="text-align: center; margin-bottom: 15px;">
+                    <label style="font-weight: 600; color: #444; font-size: 0.9rem;">Tài khoản</label>
+                    <input type="text" id="login-user" value="User" placeholder="Tài khoản..." style="transition: all 0.3s; text-align: center;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#eaeaea'" onkeypress="if(event.key==='Enter') document.getElementById('login-pass').focus()">
+                </div>
+                <div class="input-group" style="text-align: center;">
+                    <label style="font-weight: 600; color: #444; font-size: 0.9rem;">Mật khẩu</label>
+                    <input type="password" id="login-pass" placeholder="Nhập mật khẩu..." style="transition: all 0.3s; text-align: center;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#eaeaea'" onkeypress="if(event.key==='Enter') checkLogin()">
+                </div>
+                <button class="btn-unlock" onclick="checkLogin()" style="margin-top: 20px;">ĐĂNG NHẬP</button>
+                <p id="login-error" style="color: red; font-size: 0.85rem; display: none; margin-top: 10px;">Tài khoản hoặc mật khẩu không chính xác!</p>
             </div>
         </div>
     </div>
@@ -45,7 +38,13 @@
     <div id="main-app">
         <div class="container">
             <div class="header">
-                <a href="App_Installer.zip" download class="btn-install-app">💻 Install</a>
+                <div class="settings-dropdown">
+                    <button class="btn-gear" onclick="document.getElementById('settings-menu').classList.toggle('show')">⚙️</button>
+                    <div id="settings-menu" class="dropdown-menu">
+                        <a href="App_Installer.zip" download>💻 Install App</a>
+                        <a href="#" class="logout" onclick="logoutUser()">🚪 Đăng xuất</a>
+                    </div>
+                </div>
                 <div class="header-title-container">
                     <img src="logo Gt.png" class="logo-top" alt="Gia Thinh Logo" onerror="this.style.display='none'">
                     <h2>DESIGN HUB</h2>
@@ -54,6 +53,7 @@
                 <div class="nav-tabs">
                     <button class="nav-tab active" onclick="switchTab('coil')">DESIGN COIL</button>
                     <button class="nav-tab" onclick="switchTab('psychro')">BẢNG TRA PSYCHRO</button>
+                    <button class="nav-tab" onclick="openAdminPage()" style="display: none;">QUẢN TRỊ</button>
                 </div>
             </div>
 
@@ -70,7 +70,7 @@
                                     <option value="D127_31">D12.7 ĐỒNG (31.75x27.5)</option>
                                     <option value="D127_50">D12.7 ĐỒNG (50x25)</option>
                                     <option value="D96">D9.6 ĐỒNG (25.4x22)</option>
-                                    <option value="Inox16">D16 INOX (50x50)</option>
+                                    <option value="Inox16" selected>D16 INOX (50x50)</option>
                                     <option value="Inox16_45">D16 INOX (45x45)</option>
                                     <option value="Inox22">D22 INOX (60x51.96)</option>
                                 </select>
@@ -88,14 +88,14 @@
                             <div class="input-group">
                                 <!-- Ghi chú: Thêm min="0" để ngăn chặn nhập số âm gây lỗi tính toán -->
                                 <label>Ống sử dụng L (m):</label>
-                                <input type="number" step="0.01" min="0" id="l_su_dung" value="2.72"
-                                    oninput="triggerDebounceCalc()">
+                                <input type="text" id="l_su_dung" value="2.00"
+                                    oninput="triggerDebounceCalc()" onblur="if(this.value) this.value = parseFloat(this.value.replace(/,/g, '.')).toFixed(2);">
                             </div>
                             <div class="input-group">
                                 <label>L lọt lòng (mm): <span id="btn_edit_lfin" class="btn-toggle-edit"
                                         onclick="toggleLFinEdit()">[Edit]</span></label>
-                                <input type="number" id="l_fin_input" min="0" value="" readonly
-                                    style="color:var(--primary);" oninput="triggerDebounceCalc()">
+                                <input type="text" id="l_fin_input" value="" readonly
+                                    style="color:var(--primary);" oninput="triggerDebounceCalc()" onblur="if(this.value) this.value = parseFloat(this.value.replace(/,/g, '')).toLocaleString('en-US') || 0;">
                             </div>
                         </div>
 
@@ -159,8 +159,8 @@
                             <div class="input-group">
                                 <label>Lưu lượng 1 quạt (m3/h): <span id="btn_edit_gio" class="btn-toggle-edit"
                                         onclick="toggleGioEdit()">[Edit]</span></label>
-                                <input type="number" id="gio_1_quat" min="0" readonly style="color:var(--primary);"
-                                    oninput="triggerDebounceCalc()">
+                                <input type="text" id="gio_1_quat" readonly style="color:var(--primary);"
+                                    oninput="triggerDebounceCalc()" onblur="if(this.value) this.value = parseFloat(this.value.replace(/,/g, '')).toLocaleString('en-US') || 0;">
                             </div>
                             <div class="input-group"><label>Số lượng quạt:</label><input type="number" id="so_quat"
                                     min="1" value="2" oninput="syncReqFan(); triggerDebounceCalc()"></div>
@@ -210,7 +210,7 @@
                             <div class="input-group" style="margin-bottom: 0;">
                                 <label>Passes (Số ống/mạch): <span id="btn_edit_passes" class="btn-toggle-edit"
                                         onclick="toggleCircuitMode('passes')">[Edit]</span></label>
-                                <input type="number" id="passes_input" min="1" value="10"
+                                <input type="number" id="passes_input" min="1" value="14"
                                     oninput="triggerDebounceCalc()">
                             </div>
                         </div>
@@ -318,7 +318,7 @@
                                     <label style="color:var(--success);">Tiêu chuẩn (m2/kW): <span id="btn_edit_std"
                                             class="btn-toggle-edit active" onclick="togglePerfMode('std')">[Khóa
                                             lại]</span></label>
-                                    <input type="number" id="perf_std" min="0" value="3.5" step="0.1" readonly
+                                    <input type="number" id="perf_std" min="0" value="" step="0.1" readonly
                                         style="color:var(--success); border-color:#a5d6a7;"
                                         oninput="triggerDebounceCalc()">
                                 </div>
@@ -334,8 +334,7 @@
                             style="text-align: right; margin-bottom: 15px; font-size: 0.85rem; color: #5f6368; font-weight: bold;">
                             Số lượng thiết kế đã lưu: <span id="saved-count" style="color: var(--accent);">0</span>
                         </div>
-                        <div class="footer">Solution by <b onclick="promptAdminLogin()"
-                                style="cursor: pointer;">H-DESIGN</b> | GIA THINH HEAT EXCHANGE EQUIPMENT PRODUCTION
+                        <div class="footer">Solution by <b style="cursor: pointer;">H-DESIGN</b> | GIA THINH HEAT EXCHANGE EQUIPMENT PRODUCTION
                             CO.,LTD © 2026</div>
                     </div>
                 </div>
@@ -399,8 +398,7 @@
                         </tbody>
                     </table>
 
-                    <div class="footer" style="margin-top: 20px;">Solution by <b onclick="promptAdminLogin()"
-                            style="cursor: pointer;">H-DESIGN</b> | GIA THINH HEAT EXCHANGE EQUIPMENT PRODUCTION CO.,LTD
+                    <div class="footer" style="margin-top: 20px;">Solution by <b style="cursor: pointer;">H-DESIGN</b> | GIA THINH HEAT EXCHANGE EQUIPMENT PRODUCTION CO.,LTD
                         © 2026</div>
                 </div>
             </div>
@@ -411,37 +409,13 @@
     <!-- TRANG QUẢN TRỊ ADMIN -->
     <div id="page-admin" class="app-page">
         <div class="psy-container" style="max-width: 800px;">
-            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
-                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ TÀI KHOẢN ADMIN</summary>
+            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;" open>
+                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ TÀI KHOẢN</summary>
                 <div style="margin-top: 15px;">
                     <div id="admin-accounts-container" style="display: flex; flex-direction: column; gap: 10px;">
                         <!-- JS sẽ render tài khoản vào đây -->
                     </div>
                     <button class="btn-add" onclick="addAdminAccountRow()" style="margin-top: 15px;">+ THÊM TÀI KHOẢN</button>
-                </div>
-            </details>
-
-            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
-                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ MÃ PIN ĐĂNG NHẬP</summary>
-                <div style="margin-top: 15px;">
-                    <div id="admin-pins-container" style="display: flex; flex-direction: column; gap: 10px;">
-                        <!-- Javascript sẽ render mã PIN vào đây -->
-                    </div>
-                    <button class="btn-add" onclick="addAdminPinRow()" style="margin-top:15px;">+ THÊM MÃ PIN</button>
-                </div>
-            </details>
-
-            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
-                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ MASTER KEY</summary>
-                <div class="grid" style="background:#f8f9fa; padding:15px; border-radius:8px; border:1px solid #ddd; margin-top: 15px;">
-                    <div class="input-group" style="margin-bottom:0;">
-                        <label style="color:var(--primary);">Master Key Đổi PIN (Đổi sang PIN tiếp theo):</label>
-                        <input type="text" id="admin_master_change" maxlength="8" onfocus="this.value = this.dataset.val || ''" onblur="this.dataset.val = this.value; this.value = maskString(this.value)">
-                    </div>
-                    <div class="input-group" style="margin-bottom:0;">
-                        <label style="color:var(--accent);">Master Key Giữ PIN (KHÔNG đổi mã PIN):</label>
-                        <input type="text" id="admin_master_keep" maxlength="8" onfocus="this.value = this.dataset.val || ''" onblur="this.dataset.val = this.value; this.value = maskString(this.value)">
-                    </div>
                 </div>
             </details>
 
@@ -565,30 +539,6 @@
         </div>
     </div>
 
-    <!-- BẢNG ĐĂNG NHẬP ADMIN (MODAL) -->
-    <div id="admin-login-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content" style="max-width: 360px; padding: 30px 25px; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.2); text-align: center; background: #fff; border: 1px solid #eee;">
-            <div style="font-size: 3rem; margin-bottom: 10px;">🔒</div>
-            <h3 style="margin-top: 0; color: var(--primary); font-size: 1.5rem; letter-spacing: -0.5px;">Đăng nhập Quản trị</h3>
-            <p style="color: #666; font-size: 0.95rem; margin-bottom: 25px;">Vui lòng nhập thông tin để tiếp tục</p>
-            
-            <div class="input-group" style="text-align: left; margin-bottom: 15px;">
-                <label style="font-weight: 600; color: #444; font-size: 0.9rem;">Tài khoản</label>
-                <input type="text" id="admin_user" placeholder="Nhập tài khoản..." style="padding: 12px; border-radius: 8px; border: 2px solid #eaeaea; font-size: 1rem; width: 100%; box-sizing: border-box; outline: none; transition: all 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#eaeaea'">
-            </div>
-            <div class="input-group" style="text-align: left;">
-                <label style="font-weight: 600; color: #444; font-size: 0.9rem;">Mật khẩu</label>
-                <input type="password" id="admin_pass" placeholder="Nhập mật khẩu..." style="padding: 12px; border-radius: 8px; border: 2px solid #eaeaea; font-size: 1rem; width: 100%; box-sizing: border-box; outline: none; transition: all 0.3s;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#eaeaea'">
-            </div>
-            
-            <p id="admin-error" style="color: #e53935; display: none; font-size: 0.9rem; margin-top: 15px; font-weight: bold; padding: 8px; background: #ffebee; border-radius: 6px;">⚠️ Sai thông tin đăng nhập!</p>
-            
-            <div style="display: flex; gap: 12px; margin-top: 30px;">
-                <button class="btn-unlock" style="flex: 1.5; padding: 12px; font-size: 1rem; border-radius: 8px; background: var(--primary); font-weight: bold; letter-spacing: 0.5px;" onclick="verifyAdminLogin()">ĐĂNG NHẬP</button>
-                <button class="btn-unlock" style="flex: 1; padding: 12px; font-size: 1rem; border-radius: 8px; background: #9e9e9e;" onclick="closeAdminLogin()">HỦY</button>
-            </div>
-        </div>
-    </div>
 
     <!-- BẢNG CẤU HÌNH THỂ TÍCH ẨN (MODAL) -->
     <div id="vol-modal" class="modal-overlay" style="display: none;">
@@ -639,6 +589,59 @@
             
             <div style="text-align: center; margin-top: 25px;">
                 <button class="btn btn-secondary" style="padding: 8px 20px; font-size: 0.95rem; font-weight: bold; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;" onclick="document.getElementById('fan-info-modal').style.display='none'">XÁC NHẬN ĐÓNG</button>
+            </div>
+        </div>
+    </div>
+    <div id="model-generator-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Tạo Mã Model</h3>
+                <span class="btn-close" onclick="closeModelGenerator()">×</span>
+            </div>
+            <div class="modal-body" style="display: flex; flex-direction: column; gap: 15px;">
+                
+                <div>
+                    <label>Loại dàn (Đã bóc tách):</label>
+                    <input type="text" id="model-loai-dan" readonly style="background: #f1f3f4;">
+                </div>
+                
+                <div class="grid">
+                    <div>
+                        <label>Vật liệu lá:</label>
+                        <select id="model-vat-lieu-la" onchange="updateModelPreview()">
+                            <option value="N">N: Lá nhôm thường</option>
+                            <option value="M">M: Lá nhôm magie</option>
+                            <option value="E">E: Lá nhôm phủ Epoxy</option>
+                            <option value="H">H: Lá nhôm hydrophylic</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Phương pháp Xả đá:</label>
+                        <select id="model-xa-da" onchange="updateModelPreview()">
+                            <option value="E">E: Điện trở</option>
+                            <option value="H">H: Hotgas</option>
+                            <option value="A">A: Gió</option>
+                            <option value="W">W: Nước</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div>
+                    <label>Thông số ống & quạt (Đã bóc tách):</label>
+                    <input type="text" id="model-ong-quat" readonly style="background: #f1f3f4; font-size: 0.85rem;">
+                </div>
+
+                <div style="background: #e8f0fe; padding: 15px; border-radius: 8px; border: 1px dashed var(--primary);">
+                    <label style="color: var(--primary); font-size: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                        Mã Model:
+                        <span id="btn_edit_model" class="btn-toggle-edit" onclick="toggleModelEdit()">[Edit]</span>
+                    </label>
+                    <input type="text" id="model-final-preview" readonly style="font-weight: bold; font-size: 1.2rem; color: var(--secondary); margin-top: 5px; border-color: var(--primary); background: #f1f3f4;">
+                </div>
+
+                <input type="hidden" id="model-history-index">
+                
+                <button class="btn-unlock" onclick="saveGeneratedModel()" style="margin-top: 10px;">XÁC NHẬN LƯU MODEL</button>
             </div>
         </div>
     </div>

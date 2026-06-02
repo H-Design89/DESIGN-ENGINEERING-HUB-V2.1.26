@@ -250,7 +250,8 @@ function updateFanAirflow() {
         const model = document.getElementById('fan_model').value;
         const mode = document.getElementById('fan_mode').value;
         const pa = document.getElementById('fan_pressure').value;
-        document.getElementById('gio_1_quat').value = FANS[brand][model].modes[mode][pa];
+        let val = parseFloat(FANS[brand][model].modes[mode][pa]) || 0;
+        document.getElementById('gio_1_quat').value = val.toLocaleString('en-US');
     }
     triggerDebounceCalc();
 }
@@ -259,7 +260,7 @@ function checkConstraints() {
     userVolConfig.isCustom = false;
     
     const loaiOng = document.getElementById('loai_ong').value;
-    const L_m = parseFloat(document.getElementById('l_su_dung').value) || 0;
+    const L_m = parseFloat(document.getElementById('l_su_dung').value.replace(/,/g, '.')) || 0;
     const methodSelect = document.getElementById('phuong_phap');
     const optBeco = document.getElementById('opt_beco');
 

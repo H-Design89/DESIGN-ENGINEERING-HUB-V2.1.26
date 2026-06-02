@@ -1,126 +1,27 @@
-﻿// ==========================================
-// HỆ THỐNG BẢO MẬT & ĐẾM NGÀY (DRM CLIENT)
-// Ghi chú: Hệ thống này quản lý quyền truy cập bằng cách lưu thông tin vào localStorage.
-// Đã thêm hàm encodeData/decodeData (mã hóa Base64) để làm khó những ai muốn xem/sửa hạn sử dụng bằng cách mở DevTools.
 // ==========================================
-const STORAGE_PREFIX = "_gt_sec_"; // Đổi tiền tố để khó nhận biết
-function encodeData(data) { return btoa(data + "|gt_salt"); }
-function decodeData(encodedData) {
-    if (!encodedData) return null;
-    try { return atob(encodedData).split("|gt_salt")[0]; } catch (e) { return null; }
-}
+// HỆ THỐNG BẢO MẬT & ĐĂNG NHẬP
+// ==========================================
+let ACCOUNTS = (window.GT_CONFIG && window.GT_CONFIG.ACCOUNTS) ? window.GT_CONFIG.ACCOUNTS : [{ user: 'admin', pass: 'zodiac1612@', role: 'admin', tabs: ['coil', 'psychro'] }];
+let currentUser = null;
 
-let MASTER_KEY_CHANGE_PIN = (window.GT_CONFIG && window.GT_CONFIG.MASTER_KEY_CHANGE_PIN) ? window.GT_CONFIG.MASTER_KEY_CHANGE_PIN : "161289";
-let MASTER_KEY_KEEP_PIN = (window.GT_CONFIG && window.GT_CONFIG.MASTER_KEY_KEEP_PIN) ? window.GT_CONFIG.MASTER_KEY_KEEP_PIN : "061189";
-let ROTATING_PINS = (window.GT_CONFIG && window.GT_CONFIG.ROTATING_PINS) ? window.GT_CONFIG.ROTATING_PINS : [{ hint: "Mặc định", code: "1234" }];
-let ADMIN_ACCOUNTS = (window.GT_CONFIG && window.GT_CONFIG.ADMIN_ACCOUNTS) ? window.GT_CONFIG.ADMIN_ACCOUNTS : [{ user: 'admin', pass: 'zodiac1612@' }];
-let isAdminLoggedIn = false;
+function checkLogin() {
+    const user = document.getElementById('login-user').value.trim();
+    const pass = document.getElementById('login-pass').value;
 
-// Đã bỏ loadSecurityData() do dữ liệu được nạp từ config.js tĩnh
-
-const THIRTY_DAYS_MS = 30 * 24 * 60 * 60 * 1000; 
-
-function initSecuritySystem() {
-    // Lấy dữ liệu và giải mã
-    let startDate = decodeData(localStorage.getItem(STORAGE_PREFIX + 'sd'));
-    let pinIndex = decodeData(localStorage.getItem(STORAGE_PREFIX + 'pi'));
-    let isLockedOut = decodeData(localStorage.getItem(STORAGE_PREFIX + 'lo'));
-
-    if (!startDate) {
-        startDate = Date.now().toString();
-        pinIndex = "0";
-        isLockedOut = 'false';
-        // Lưu trữ dữ liệu đã mã hóa
-        localStorage.setItem(STORAGE_PREFIX + 'sd', encodeData(startDate));
-        localStorage.setItem(STORAGE_PREFIX + 'pi', encodeData(pinIndex));
-        localStorage.setItem(STORAGE_PREFIX + 'lo', encodeData(isLockedOut));
-    }
-
-    const now = Date.now();
-    let lastCheckedTime = decodeData(localStorage.getItem(STORAGE_PREFIX + 'lt'));
-    
-    // Kiểm tra lùi ngày hệ thống (Clock Tampering)
-    if (lastCheckedTime && now < parseInt(lastCheckedTime) && isLockedOut === 'false') {
-        isLockedOut = 'true';
-        localStorage.setItem(STORAGE_PREFIX + 'lo', encodeData('true'));
-        alert("Cảnh báo bảo mật: Phát hiện dấu hiệu can thiệp/lùi thời gian hệ thống! Hệ thống đã tự động khóa.");
-    } else {
-        localStorage.setItem(STORAGE_PREFIX + 'lt', encodeData(now.toString()));
-    }
-
-    const elapsed = now - parseInt(startDate);
-    if (elapsed > THIRTY_DAYS_MS && isLockedOut === 'false') {
-        isLockedOut = 'true';
-        localStorage.setItem(STORAGE_PREFIX + 'lo', encodeData('true'));
-    }
-
-    if (isLockedOut === 'true') {
-        document.getElementById('ui-regular-pin').style.display = 'none';
-        document.getElementById('ui-master-key').style.display = 'block';
-        document.getElementById('lock-box-container').classList.add('master-mode');
-        document.getElementById('lock-title').innerText = "HỆ THỐNG BỊ KHÓA";
-    } else {
-        document.getElementById('ui-regular-pin').style.display = 'block';
-        document.getElementById('ui-master-key').style.display = 'none';
-        document.getElementById('lock-box-container').classList.remove('master-mode');
-        document.getElementById('lock-title').innerText = "GT-DESIGN SECURE";
-        
-        let pIndex = parseInt(pinIndex);
-        if (isNaN(pIndex) || pIndex >= ROTATING_PINS.length || pIndex < 0) {
-            pIndex = 0; // Fallback an toàn
-            localStorage.setItem(STORAGE_PREFIX + 'pi', encodeData("0"));
+    let validAccount = null;
+    for (let acc of ACCOUNTS) {
+        if (acc.user === user && acc.pass === pass) {
+            validAccount = acc;
+            break;
         }
-        
-        const currentData = ROTATING_PINS[pIndex];
-        document.getElementById('pin-hint-display').innerText = currentData.hint + " - ****";
     }
-}
 
-initSecuritySystem();
-
-function checkRegularPIN() {
-    const pinInput = document.getElementById('pin-input').value;
-    const pinIndexStr = decodeData(localStorage.getItem(STORAGE_PREFIX + 'pi'));
-    let pinIndex = parseInt(pinIndexStr || "0");
-    if (isNaN(pinIndex) || pinIndex >= ROTATING_PINS.length || pinIndex < 0) {
-        pinIndex = 0;
-    }
-    
-    const expectedPin = ROTATING_PINS[pinIndex].code;
-
-    if (pinInput === expectedPin) {
+    if (validAccount) {
+        currentUser = validAccount;
+        document.getElementById('login-error').style.display = 'none';
         unlockApp();
     } else {
-        document.getElementById('pin-error').style.display = 'block';
-        document.getElementById('pin-input').value = "";
-    }
-}
-
-function checkMasterKey() {
-    const masterInput = document.getElementById('master-input').value;
-    
-    if (masterInput === MASTER_KEY_CHANGE_PIN) {
-        // Ghi chú: Khi nhập đúng MASTER_KEY đổi PIN, khởi tạo lại chu kỳ và mã hóa lại, đổi sang PIN tiếp theo
-        localStorage.setItem(STORAGE_PREFIX + 'sd', encodeData(Date.now().toString()));
-        const currentPinStr = decodeData(localStorage.getItem(STORAGE_PREFIX + 'pi'));
-        let nextIndex = (parseInt(currentPinStr || "0") + 1) % ROTATING_PINS.length;
-        localStorage.setItem(STORAGE_PREFIX + 'pi', encodeData(nextIndex.toString()));
-        localStorage.setItem(STORAGE_PREFIX + 'lo', encodeData('false'));
-        
-        document.getElementById('master-error').style.display = 'none';
-        document.getElementById('master-input').value = "";
-        initSecuritySystem();
-    } else if (masterInput === MASTER_KEY_KEEP_PIN) {
-        // Ghi chú: Khi nhập đúng MASTER_KEY giữ PIN, khởi tạo lại chu kỳ, KHÔNG đổi mã PIN
-        localStorage.setItem(STORAGE_PREFIX + 'sd', encodeData(Date.now().toString()));
-        localStorage.setItem(STORAGE_PREFIX + 'lo', encodeData('false'));
-        
-        document.getElementById('master-error').style.display = 'none';
-        document.getElementById('master-input').value = "";
-        initSecuritySystem();
-    } else {
-        document.getElementById('master-error').style.display = 'block';
-        document.getElementById('master-input').value = "";
+        document.getElementById('login-error').style.display = 'block';
     }
 }
 
@@ -128,16 +29,58 @@ function unlockApp() {
     document.getElementById('lock-screen').style.display = 'none';
     document.getElementById('main-app').style.display = 'block';
     
+    // Configure visible tabs
+    document.querySelectorAll('.nav-tab').forEach(tab => {
+        tab.style.display = 'none'; // Hide all by default
+    });
+    
+    // Show tabs based on permissions
+    let firstVisibleTab = null;
+    if (currentUser.tabs) {
+        currentUser.tabs.forEach(tabId => {
+            const btn = document.querySelector(`.nav-tab[onclick="switchTab('${tabId}')"]`);
+            if (btn) {
+                btn.style.display = 'inline-block';
+                if (!firstVisibleTab) firstVisibleTab = tabId;
+            }
+        });
+    }
+    
+    // Admin tab logic
+    const adminBtn = document.querySelector(`.nav-tab[onclick="openAdminPage()"]`);
+    if (currentUser.role === 'admin') {
+        if (adminBtn) adminBtn.style.display = 'inline-block';
+    } else {
+        if (adminBtn) adminBtn.style.display = 'none';
+    }
+
+    // Default to first visible tab
+    if (firstVisibleTab) {
+        switchTab(firstVisibleTab);
+    } else {
+        // If no tabs, just switch to coil as fallback if it's there
+        switchTab('coil');
+    }
+    
     updateFanModels();
+    let fanModelEl = document.getElementById('fan_model');
+    if (fanModelEl && fanModelEl.querySelector('option[value="FN050"]')) {
+        fanModelEl.value = 'FN050';
+        updateFanModes();
+        let fanPressEl = document.getElementById('fan_pressure');
+        if (fanPressEl && fanPressEl.querySelector('option[value="40"]')) {
+            fanPressEl.value = '40';
+            updateFanAirflow();
+        }
+    }
     checkConstraints();
     updateTotalN();
-    togglePerfMode('kw');
+    togglePerfMode('std');
     toggleCircuitMode('passes');
-    calculatePsychro();
+    if (firstVisibleTab === 'psychro') {
+        calculatePsychro();
+    }
 }
-
-document.getElementById('pin-input').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkRegularPIN(); });
-document.getElementById('master-input').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkMasterKey(); });
 
 
 
@@ -169,4 +112,62 @@ document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && (e.key === 'U' || e.key === 'u' || e.keyCode === 85)) {
         e.preventDefault();
     }
+    // Ctrl+S (Save As)
+    if (e.ctrlKey && (e.key === 'S' || e.key === 's' || e.keyCode === 83)) {
+        e.preventDefault();
+    }
+    // Ctrl+P (Print)
+    if (e.ctrlKey && (e.key === 'P' || e.key === 'p' || e.keyCode === 80)) {
+        e.preventDefault();
+    }
+    // Ctrl+C (Copy)
+    if (e.ctrlKey && (e.key === 'C' || e.key === 'c' || e.keyCode === 67) && !e.shiftKey) {
+        const sel = window.getSelection();
+        if (sel.rangeCount > 0) {
+            let node = sel.anchorNode;
+            while (node) {
+                if (node.classList && node.classList.contains('history-card')) return; // Cho phép
+                node = node.parentNode;
+            }
+        }
+        if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+            e.preventDefault();
+        }
+    }
 });
+
+// Chặn sự kiện Copy / Cut ngoại trừ trong thẻ Input
+document.addEventListener('copy', function(e) {
+    const sel = window.getSelection();
+    if (sel.rangeCount > 0) {
+        let node = sel.anchorNode;
+        while (node) {
+            if (node.classList && node.classList.contains('history-card')) return; // Cho phép
+            node = node.parentNode;
+        }
+    }
+    if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+    }
+});
+document.addEventListener('cut', function(e) {
+    if (document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+    }
+});
+
+function logoutUser() {
+    location.reload();
+}
+
+window.onclick = function(event) {
+    if (!event.target.matches('.btn-gear')) {
+        var dropdowns = document.getElementsByClassName("dropdown-menu");
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}

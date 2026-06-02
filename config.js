@@ -1,28 +1,16 @@
 window.GT_CONFIG = {
-    "MASTER_KEY_CHANGE_PIN": "161289",
-    "MASTER_KEY_KEEP_PIN": "061189",
-    "ADMIN_ACCOUNTS": [
+    "ACCOUNTS": [
         {
             "user": "admin",
-            "pass": "zodiac1612@"
-        }
-    ],
-    "ROTATING_PINS": [
-        {
-            "hint": "TL",
-            "code": "1997"
+            "pass": "zodiac1612@",
+            "role": "admin",
+            "tabs": ["coil", "psychro"]
         },
         {
-            "hint": "SN",
-            "code": "1612"
-        },
-        {
-            "hint": "NS",
-            "code": "1989"
-        },
-        {
-            "hint": "VSN",
-            "code": "0611"
+            "user": "User",
+            "pass": "1997",
+            "role": "user",
+            "tabs": ["coil", "psychro"]
         }
     ],
     "TUBE_SPECS": {
