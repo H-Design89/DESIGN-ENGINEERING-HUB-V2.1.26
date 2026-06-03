@@ -112,8 +112,8 @@ function confirmSaveDesign() {
         line8: `Tốc độ gió: ${vGio} m/s (${fanPressure}Pa)`,
         line9: `Tổng LL gió: ${tongGio} m3/h`,
         line10: `Thể tích chứa dịch: ${theTich} Lít`,
-        line11: `Khối lượng lá: ${massFin1.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg/bộ x ${qty} = ${totalMassFin.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg`,
-        line12: `Khối lượng ống: ${massTube1.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg/bộ x ${qty} = ${totalMassTube.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 })} kg`,
+        line11: `Khối lượng lá: ${massFin1.toLocaleString('en-US', { maximumFractionDigits: 2 })} kg/bộ x ${qty} = ${totalMassFin.toLocaleString('en-US', { maximumFractionDigits: 2 })} kg`,
+        line12: `Khối lượng ống: ${massTube1.toLocaleString('en-US', { maximumFractionDigits: 2 })} kg/bộ x ${qty} = ${totalMassTube.toLocaleString('en-US', { maximumFractionDigits: 2 })} kg`,
         createdAt: new Date().toLocaleString('vi-VN'),
         updatedAt: null
     };

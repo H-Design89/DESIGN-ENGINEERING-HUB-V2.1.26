@@ -18,9 +18,9 @@ function calculatePsychro() {
     if (!isNaN(T1) && !isNaN(RH1)) {
         let p1 = getPsyProps(T1, RH1);
         document.getElementById('psy_psat1').innerText = Math.round(p1.P_sat).toLocaleString('en-US');
-        document.getElementById('psy_h1').innerText = p1.h.toFixed(2);
-        document.getElementById('psy_w1').innerText = p1.w.toFixed(2);
-        document.getElementById('psy_tdp1').innerText = p1.T_dp.toFixed(1);
+        document.getElementById('psy_h1').innerText = Number(p1.h.toFixed(2));
+        document.getElementById('psy_w1').innerText = Number(p1.w.toFixed(2));
+        document.getElementById('psy_tdp1').innerText = Number(p1.T_dp.toFixed(1));
     } else {
         document.getElementById('psy_psat1').innerText = "---";
         document.getElementById('psy_h1').innerText = "---";
@@ -34,9 +34,9 @@ function calculatePsychro() {
     if (!isNaN(T2) && !isNaN(RH2)) {
         let p2 = getPsyProps(T2, RH2);
         document.getElementById('psy_psat2').innerText = Math.round(p2.P_sat).toLocaleString('en-US');
-        document.getElementById('psy_h2').innerText = p2.h.toFixed(2);
-        document.getElementById('psy_w2').innerText = p2.w.toFixed(2);
-        document.getElementById('psy_tdp2').innerText = p2.T_dp.toFixed(1);
+        document.getElementById('psy_h2').innerText = Number(p2.h.toFixed(2));
+        document.getElementById('psy_w2').innerText = Number(p2.w.toFixed(2));
+        document.getElementById('psy_tdp2').innerText = Number(p2.T_dp.toFixed(1));
     } else {
         document.getElementById('psy_psat2').innerText = "---";
         document.getElementById('psy_h2').innerText = "---";
@@ -76,7 +76,7 @@ function calculateAll() {
         } else {
             L_mm = (L_fin + k_co/2 + d_han + thickness_san) / (1 - h_rut);
         }
-        document.getElementById('l_su_dung').value = (L_mm / 1000).toFixed(3);
+        document.getElementById('l_su_dung').value = Number((L_mm / 1000).toFixed(3));
     }
 
     const L_m = L_mm / 1000;
@@ -110,7 +110,7 @@ function calculateAll() {
     if (avgPitchContainer) {
         if (rows.length > 1 && sum_N_over_pitch > 0 && total_N > 0) {
             const avg_pitch = total_N / sum_N_over_pitch;
-            document.getElementById('avg-pitch-val').innerText = `${total_N} x ${avg_pitch.toFixed(2)} mm`;
+            document.getElementById('avg-pitch-val').innerText = `${total_N} x ${Number(avg_pitch.toFixed(2))} mm`;
             avgPitchContainer.style.display = 'grid';
         } else {
             avgPitchContainer.style.display = 'none';
@@ -182,14 +182,14 @@ function calculateAll() {
     const v_wind = (height_m > 0 && width_m > 0) ? (tong_gio / (height_m * width_m * 3600)) : 0;
 
     document.getElementById('res_tong_gio').innerText = tong_gio.toLocaleString('en-US');
-    document.getElementById('res_v_gio').innerText = v_wind.toFixed(2);
-    document.getElementById('res_vol').innerText = vol_liter.toFixed(2);
-    document.getElementById('res_l_tong').innerText = L_tong_ong.toFixed(1);
+    document.getElementById('res_v_gio').innerText = Number(v_wind.toFixed(2));
+    document.getElementById('res_vol').innerText = Number(vol_liter.toFixed(2));
+    document.getElementById('res_l_tong').innerText = Number(L_tong_ong.toFixed(1));
     document.getElementById('res_l_fin').innerText = L_fin; 
     
-    document.getElementById('res_s_khong_dt').innerText = (Math.trunc(lastCalculatedAreaNoHeater * 10) / 10).toFixed(1);
+    document.getElementById('res_s_khong_dt').innerText = Number((Math.trunc(lastCalculatedAreaNoHeater * 10) / 10).toFixed(1));
     if (d_dt > 0) {
-        document.getElementById('res_s_co_dt').innerText = (Math.trunc(lastCalculatedAreaWithHeater * 10) / 10).toFixed(1);
+        document.getElementById('res_s_co_dt').innerText = Number((Math.trunc(lastCalculatedAreaWithHeater * 10) / 10).toFixed(1));
     } else {
         document.getElementById('res_s_co_dt').innerText = "---";
     }
@@ -237,7 +237,7 @@ function calculatePerformance() {
         const kw = parseFloat(kwInput.value);
         if (!isNaN(kw) && kw > 0) {
             const std = area / kw;
-            stdInput.value = (Math.trunc(std * 10) / 10).toFixed(1);
+            stdInput.value = Number((Math.trunc(std * 10) / 10).toFixed(1));
         } else {
             stdInput.value = "";
         }
@@ -245,7 +245,7 @@ function calculatePerformance() {
         const std = parseFloat(stdInput.value);
         if (!isNaN(std) && std > 0) {
             const kw = area / std;
-            kwInput.value = (Math.trunc(kw * 10) / 10).toFixed(1);
+            kwInput.value = Number((Math.trunc(kw * 10) / 10).toFixed(1));
         } else {
             kwInput.value = "";
         }
@@ -291,7 +291,7 @@ function calculateCircuitry() {
 
     if (!isNaN(passes) && passes > 0) {
         const len = passes * L_m;
-        lenEl.innerText = (Math.trunc(len * 10) / 10).toFixed(1);
+        lenEl.innerText = Number((Math.trunc(len * 10) / 10).toFixed(1));
         skippedEl.innerText = skipped;
         if(skipped > 0) {
             skippedEl.style.color = "var(--accent)";
@@ -512,8 +512,8 @@ function calculateMass() {
     lastCalculatedFinMass = total_fin_mass;
     lastCalculatedTubeMass = total_tube_mass;
 
-    document.getElementById('res_mass_fin').innerText = total_fin_mass.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
-    document.getElementById('res_mass_tube').innerText = total_tube_mass.toLocaleString('en-US', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+    document.getElementById('res_mass_fin').innerText = total_fin_mass.toLocaleString('en-US', { maximumFractionDigits: 2 });
+    document.getElementById('res_mass_tube').innerText = total_tube_mass.toLocaleString('en-US', { maximumFractionDigits: 2 });
 }
 
 // ==============================================

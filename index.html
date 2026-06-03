@@ -89,7 +89,7 @@
                                 <!-- Ghi chú: Thêm min="0" để ngăn chặn nhập số âm gây lỗi tính toán -->
                                 <label>Ống sử dụng L (m):</label>
                                 <input type="text" id="l_su_dung" value="2.00"
-                                    oninput="triggerDebounceCalc()" onblur="if(this.value) this.value = parseFloat(this.value.replace(/,/g, '.')).toFixed(2);">
+                                    oninput="triggerDebounceCalc()" onblur="if(this.value) this.value = Number(parseFloat(this.value.replace(/,/g, '.')).toFixed(2));">
                             </div>
                             <div class="input-group">
                                 <label>L lọt lòng (mm): <span id="btn_edit_lfin" class="btn-toggle-edit"
