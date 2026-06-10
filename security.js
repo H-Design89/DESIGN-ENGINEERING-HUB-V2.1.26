@@ -48,9 +48,12 @@ function unlockApp() {
     
     // Admin tab logic
     const adminBtn = document.querySelector(`.nav-tab[onclick="openAdminPage()"]`);
+    const tabGt = document.getElementById('tab-model-gt');
     const tabG = document.getElementById('tab-model-g');
     const tabK = document.getElementById('tab-model-k');
     
+    if (tabGt) tabGt.style.display = 'inline-block'; // Luôn hiện Standard GT
+
     if (currentUser.role === 'admin') {
         if (adminBtn) adminBtn.style.display = 'inline-block';
         if (tabG) tabG.style.display = 'inline-block';
