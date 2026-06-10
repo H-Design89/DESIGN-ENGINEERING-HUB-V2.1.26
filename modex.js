@@ -389,7 +389,31 @@ function decodeGuntnerAirCooler(code, output) {
     output.push({ label: "[05] Chế độ vận hành", value: `${match[5]} : ${modeDict[match[5]] || 'Không xác định'}` });
     output.push({ label: "[06] Đường kính quạt", value: `${match[6]} : Ø ${parseInt(match[6])} cm` });
     output.push({ label: "[07] Phiên bản", value: `Version ${match[7]}` });
-    output.push({ label: "[08] Số hàng ống theo hướng gió", value: getTubeRows(match[8]) });
+    let ngangStr = match[8].toUpperCase();
+    let ngang = (ngangStr.charCodeAt(0) >= 65 && ngangStr.charCodeAt(0) <= 78) ? (ngangStr.charCodeAt(0) - 64) : 'Không xác định';
+    
+    if (match[9] === 'F' || match[9] === 'N') {
+        let fanDiam = parseInt(match[6]) * 10;
+        let numFans = parseInt(match[10]);
+        let cao = 0;
+        let daiPerFan = 0;
+        
+        if (fanDiam === 400) { cao = 10; daiPerFan = 680; }
+        else if (fanDiam === 450) { cao = 12; daiPerFan = 890; }
+        else if (fanDiam === 500) { cao = 14; daiPerFan = 1000; }
+        else if (fanDiam === 630) { cao = 18; daiPerFan = 1200; }
+        else if (fanDiam === 710) { cao = 18; daiPerFan = 1360; }
+        else if (fanDiam === 800) { cao = 24; daiPerFan = 1600; }
+        
+        if (cao > 0 && typeof ngang === 'number') {
+            let daiTotal = (daiPerFan * numFans) / 1000;
+            output.push({ label: "[08] Cấu hình ống", value: `Ngang ${ngang}, Cao ${cao}, Dài ${daiTotal} m` });
+        } else {
+            output.push({ label: "[08] Cấu hình ống", value: `Ngang ${ngang}` });
+        }
+    } else {
+        output.push({ label: "[08] Cấu hình ống", value: `Ngang ${ngang}` });
+    }
     let finPatDict = { 'F': '12.7 tim 50x25', 'N': '16 tim 50x50', 'S': 'D22 tim 60x60', 'H': '9.6 tim 25x22', 'T': 'D22 tim 60x52' };
     output.push({ label: "[09] Kiểu cánh tản nhiệt", value: `${match[9]} : ${finPatDict[match[9]] || 'Không xác định'}` });
     output.push({ label: "[10] Số lượng quạt", value: `${match[10]} quạt` });
