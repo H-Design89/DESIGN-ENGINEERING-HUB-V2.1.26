@@ -16,7 +16,7 @@ window.GT_CONFIG = {
             "user": "User01",
             "pass": "2026",
             "role": "user",
-            "tabs": ["modex", "modex-gt", "modex-g", "modex-k"]
+            "tabs": ["modex", "modex-gt"]
         }
     ],
     "TUBE_SPECS": {
