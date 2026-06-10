@@ -48,10 +48,17 @@ function unlockApp() {
     
     // Admin tab logic
     const adminBtn = document.querySelector(`.nav-tab[onclick="openAdminPage()"]`);
+    const tabG = document.getElementById('tab-model-g');
+    const tabK = document.getElementById('tab-model-k');
+    
     if (currentUser.role === 'admin') {
         if (adminBtn) adminBtn.style.display = 'inline-block';
+        if (tabG) tabG.style.display = 'inline-block';
+        if (tabK) tabK.style.display = 'inline-block';
     } else {
         if (adminBtn) adminBtn.style.display = 'none';
+        if (tabG) tabG.style.display = 'none';
+        if (tabK) tabK.style.display = 'none';
     }
 
     // Default to first visible tab

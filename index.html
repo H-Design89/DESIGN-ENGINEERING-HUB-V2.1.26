@@ -709,6 +709,11 @@
             <div style="background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 40px 30px; box-shadow: 0 8px 16px rgba(0,0,0,0.05);">
                 <h3 style="text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 10px; font-size: 1.8rem; letter-spacing: 1px;">PHÂN TÍCH MÃ MODEL</h3>
                 <p style="text-align: center; margin-bottom: 30px; color: #666; font-size: 1.05rem;">Nhập mã Model thiết bị vào ô bên dưới để tự động phân tích và trích xuất thông số kỹ thuật.</p>
+                <div id="modex-subtabs" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 25px;">
+                    <button class="nav-tab active" id="tab-model-gt" onclick="switchModexTab('gt')" style="padding: 10px 20px; font-size: 1rem;">Standard GT</button>
+                    <button class="nav-tab" id="tab-model-g" onclick="switchModexTab('g')" style="display: none; padding: 10px 20px; font-size: 1rem; background: #e0e0e0; color: #333;">Standard G</button>
+                    <button class="nav-tab" id="tab-model-k" onclick="switchModexTab('k')" style="display: none; padding: 10px 20px; font-size: 1rem; background: #e0e0e0; color: #333;">Standard K</button>
+                </div>
                 
                 <div style="text-align: center; margin-bottom: 40px;">
                     <input type="text" id="modex-input" placeholder="VD: TD - N6.RX - 3Z50 - E6/7/S" style="width: 85%; padding: 20px; border: 2px solid var(--primary); border-radius: 10px; font-size: 1.5rem; text-transform: uppercase; text-align: center; font-weight: bold; color: var(--secondary); box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); transition: all 0.3s; background: #fdfdfd;" oninput="onModexInputChange()" onkeypress="if(event.key==='Enter') decodeModelUI()">
