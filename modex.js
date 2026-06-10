@@ -91,7 +91,7 @@ function decodeModelStr(code) {
     
     let part1 = parts[0]; 
     let loaiDanText = DICT_LOAI_DAN[part1] || "Không xác định";
-    output[0].value = `${part1} (${loaiDanText})`;
+    output[0].value = `${part1} : ${loaiDanText}`;
     
     let part2 = parts[1]; 
     let p2match = part2.match(/^([A-Z])(\d)\.([A-Z])([A-Z])$/);
@@ -101,10 +101,10 @@ function decodeModelStr(code) {
         let moiChatText = DICT_MOI_CHAT[p2match[3]] || "Không xác định";
         let vanHanhText = DICT_VAN_HANH[p2match[4]] || "Không xác định";
         
-        output[1].value = `${p2match[1]} (${vatLieuText})`;
-        output[2].value = `${p2match[2]} (${khuonText})`;
-        output[3].value = `${p2match[3]} (${moiChatText})`;
-        output[4].value = `${p2match[4]} (${vanHanhText})`;
+        output[1].value = `${p2match[1]} : ${vatLieuText}`;
+        output[2].value = `${p2match[2]} : ${khuonText}`;
+        output[3].value = `${p2match[3]} : ${moiChatText}`;
+        output[4].value = `${p2match[4]} : ${vanHanhText}`;
     } else {
         output[1].value = "Lỗi định dạng";
         output[1].error = true;
@@ -154,7 +154,7 @@ function decodeModelStr(code) {
                 xada = mainDims.charAt(0);
                 dims = mainDims.substring(1);
                 let xaDaText = DICT_XA_DA[xada] || "Không xác định";
-                output[8].value = `${xada} (${xaDaText})`;
+                output[8].value = `${xada} : ${xaDaText}`;
             } else {
                 dims = mainDims;
             }
@@ -206,7 +206,7 @@ function decodeModelStr(code) {
         }
         if (p4parts[2]) {
             let chuanText = DICT_CHUAN[p4parts[2]] || "Không xác định";
-            output[11].value = `${p4parts[2]} (${chuanText})`;
+            output[11].value = `${p4parts[2]} : ${chuanText}`;
         }
     }
     
