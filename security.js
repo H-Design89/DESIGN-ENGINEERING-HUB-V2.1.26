@@ -63,16 +63,19 @@ function unlockApp() {
     const tabG = document.getElementById('tab-model-g');
     const tabK = document.getElementById('tab-model-k');
     
-    if (tabGt) tabGt.style.display = 'inline-block'; // Luôn hiện Standard GT
-
     if (currentUser.role === 'admin') {
         if (adminBtn) adminBtn.style.display = 'inline-block';
+        if (tabGt) tabGt.style.display = 'inline-block';
         if (tabG) tabG.style.display = 'inline-block';
         if (tabK) tabK.style.display = 'inline-block';
     } else {
         if (adminBtn) adminBtn.style.display = 'none';
-        if (tabG) tabG.style.display = 'none';
-        if (tabK) tabK.style.display = 'none';
+        
+        let userTabs = currentUser.tabs || [];
+        // Support legacy 'modex' permission as giving access to 'gt' tab
+        if (tabGt) tabGt.style.display = (userTabs.includes('modex-gt') || userTabs.includes('modex')) ? 'inline-block' : 'none';
+        if (tabG) tabG.style.display = userTabs.includes('modex-g') ? 'inline-block' : 'none';
+        if (tabK) tabK.style.display = userTabs.includes('modex-k') ? 'inline-block' : 'none';
     }
 
     // Default to first visible tab

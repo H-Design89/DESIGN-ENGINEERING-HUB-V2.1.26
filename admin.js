@@ -170,10 +170,12 @@ function addAdminAccountRow(user = '', pass = '', role = 'user', tabs = ['coil']
         </div>
         <div style="margin-top: 10px;">
             <label style="font-size: 0.85rem; color: #666; display: block; margin-bottom: 5px;">Quyền xem chức năng (Chỉ áp dụng cho User):</label>
-            <div style="display: flex; gap: 15px;">
+            <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                 <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-coil" ${coilChecked}> DESIGN COIL</label>
-                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-psychro" ${psychroChecked}> BẢNG TRA PSYCHRO</label>
-                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-modex" ${tabs.includes('modex') ? 'checked' : ''}> DỊCH MÃ MODEL</label>
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-psychro" ${psychroChecked}> PSYCHRO</label>
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-modex-gt" ${tabs.includes('modex-gt') || tabs.includes('modex') ? 'checked' : ''}> MODEX: GT</label>
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-modex-g" ${tabs.includes('modex-g') ? 'checked' : ''}> MODEX: GÜNTNER</label>
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-modex-k" ${tabs.includes('modex-k') ? 'checked' : ''}> MODEX: KELVION</label>
             </div>
         </div>
     `;
@@ -201,7 +203,13 @@ function saveAdminData() {
         const tabs = [];
         if (row.querySelector('.acc-tab-coil').checked) tabs.push('coil');
         if (row.querySelector('.acc-tab-psychro').checked) tabs.push('psychro');
-        if (row.querySelector('.acc-tab-modex').checked) tabs.push('modex');
+        
+        let hasModex = false;
+        if (row.querySelector('.acc-tab-modex-gt').checked) { tabs.push('modex-gt'); hasModex = true; }
+        if (row.querySelector('.acc-tab-modex-g').checked) { tabs.push('modex-g'); hasModex = true; }
+        if (row.querySelector('.acc-tab-modex-k').checked) { tabs.push('modex-k'); hasModex = true; }
+        
+        if (hasModex) tabs.push('modex');
         
         if (user && pass) {
             newAccounts.push({ user, pass, role, tabs });

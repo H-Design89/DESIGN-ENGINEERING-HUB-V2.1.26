@@ -4,19 +4,19 @@ window.GT_CONFIG = {
             "user": "admin",
             "pass": "zodiac1612@",
             "role": "admin",
-            "tabs": ["coil", "psychro", "modex"]
+            "tabs": ["coil", "psychro", "modex", "modex-gt", "modex-g", "modex-k"]
         },
         {
             "user": "User",
             "pass": "1997",
             "role": "user",
-            "tabs": ["coil", "psychro", "modex"]
+            "tabs": ["coil", "psychro", "modex", "modex-gt"]
         },
         {
             "user": "User01",
             "pass": "2026",
             "role": "user",
-            "tabs": ["modex"]
+            "tabs": ["modex", "modex-gt", "modex-g", "modex-k"]
         }
     ],
     "TUBE_SPECS": {
