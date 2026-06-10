@@ -15,6 +15,7 @@ function openAdminPage() {
     renderAdminTubeSpecs();
     renderAdminFinCoeffs();
     renderAdminFans();
+    renderAdminStandardCoils();
 }
 
 function renderAdminTubeSpecs() {
@@ -172,6 +173,7 @@ function addAdminAccountRow(user = '', pass = '', role = 'user', tabs = ['coil']
             <div style="display: flex; gap: 15px;">
                 <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-coil" ${coilChecked}> DESIGN COIL</label>
                 <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-psychro" ${psychroChecked}> BẢNG TRA PSYCHRO</label>
+                <label style="display: flex; align-items: center; gap: 5px;"><input type="checkbox" class="acc-tab-modex" ${tabs.includes('modex') ? 'checked' : ''}> DỊCH MÃ MODEL</label>
             </div>
         </div>
     `;
@@ -199,6 +201,7 @@ function saveAdminData() {
         const tabs = [];
         if (row.querySelector('.acc-tab-coil').checked) tabs.push('coil');
         if (row.querySelector('.acc-tab-psychro').checked) tabs.push('psychro');
+        if (row.querySelector('.acc-tab-modex').checked) tabs.push('modex');
         
         if (user && pass) {
             newAccounts.push({ user, pass, role, tabs });
@@ -280,6 +283,17 @@ function saveAdminData() {
         }
     });
 
+    const parsedCoils = {};
+    document.querySelectorAll('#admin-coil-container .admin-coil-card').forEach(card => {
+        const dk = card.querySelector('.c-dk').value.trim();
+        const cao = parseInt(card.querySelector('.c-cao').value) || 0;
+        const dai1 = parseInt(card.querySelector('.c-dai1').value) || 0;
+        const dai3 = parseInt(card.querySelector('.c-dai3').value) || 0;
+        if (dk && cao && dai1) {
+            parsedCoils[dk] = { cao: cao, dai_1_quat: dai1, dai_3_quat: dai3 };
+        }
+    });
+
     TUBE_SPECS = parsedTubes;
     FIN_WEIGHT_COEFFS = parsedFins;
     ACCOUNTS = newAccounts;
@@ -289,7 +303,8 @@ function saveAdminData() {
         ACCOUNTS: ACCOUNTS,
         TUBE_SPECS: TUBE_SPECS,
         FIN_WEIGHT_COEFFS: FIN_WEIGHT_COEFFS,
-        FANS: parsedFans
+        FANS: parsedFans,
+        STANDARD_COILS: parsedCoils
     };
     
     // Cập nhật ngay trên bộ nhớ cho phần mềm chạy
@@ -436,3 +451,46 @@ function addFanMode(btnElement) {
         </div>
     `);
 }
+
+// =====================================
+// QUẢN LÝ KÍCH THƯỚC CHUẨN COIL
+// =====================================
+
+function renderAdminStandardCoils() {
+    const container = document.getElementById('admin-coil-container');
+    if(!container) return;
+    container.innerHTML = '';
+    
+    let coils = (window.GT_CONFIG && window.GT_CONFIG.STANDARD_COILS) ? window.GT_CONFIG.STANDARD_COILS : {};
+    for (let dk in coils) {
+        addAdminStandardCoilRow(dk, coils[dk]);
+    }
+}
+
+function addAdminStandardCoilRow(dk = '', data = { cao: 10, dai_1_quat: 1000, dai_3_quat: 3000 }) {
+    const container = document.getElementById('admin-coil-container');
+    if(!container) return;
+    const row = document.createElement('div');
+    row.className = 'admin-coil-card';
+    row.style.background = '#f8f9fa';
+    row.style.padding = '8px 12px';
+    row.style.borderRadius = '8px';
+    row.style.border = '1px solid #ddd';
+    
+    row.innerHTML = `
+        <details open>
+            <summary style="font-weight:bold; cursor:pointer; padding: 5px 0; outline: none; display: flex; justify-content: space-between; align-items: center;">
+                <span>Kích thước chuẩn cho ĐK Quạt: <span class="sum-key">${dk || 'Mới'}</span></span>
+                <button class="btn-remove" style="padding: 2px 8px;" onclick="this.closest('.admin-coil-card').remove(); event.preventDefault();">X</button>
+            </summary>
+            <div class="grid" style="grid-template-columns: 1fr 1fr 1fr 1fr; margin-top: 15px;">
+                <div class="input-group"><label>ĐK Quạt (VD: 400)</label><input type="text" class="c-dk" value="${dk}" oninput="this.closest('details').querySelector('.sum-key').innerText = this.value || 'Mới'"></div>
+                <div class="input-group"><label>Cao (ống)</label><input type="number" step="1" class="c-cao" value="${data.cao}"></div>
+                <div class="input-group"><label>Dài 1 quạt (mm)</label><input type="number" step="1" class="c-dai1" value="${data.dai_1_quat}"></div>
+                <div class="input-group"><label>Dài 3 quạt đặc biệt (mm)</label><input type="number" step="1" class="c-dai3" value="${data.dai_3_quat || data.dai_1_quat * 3}"></div>
+            </div>
+        </details>
+    `;
+    container.appendChild(row);
+}
+

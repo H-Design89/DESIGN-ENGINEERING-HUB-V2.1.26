@@ -4,13 +4,19 @@ window.GT_CONFIG = {
             "user": "admin",
             "pass": "zodiac1612@",
             "role": "admin",
-            "tabs": ["coil", "psychro"]
+            "tabs": ["coil", "psychro", "modex"]
         },
         {
             "user": "User",
             "pass": "1997",
             "role": "user",
-            "tabs": ["coil", "psychro"]
+            "tabs": ["coil", "psychro", "modex"]
+        },
+        {
+            "user": "User01",
+            "pass": "2026",
+            "role": "user",
+            "tabs": ["modex"]
         }
     ],
     "TUBE_SPECS": {
@@ -529,5 +535,12 @@ window.GT_CONFIG = {
                 }
             }
         }
+    },
+    "STANDARD_COILS": {
+        "400": { "cao": 10, "dai_1_quat": 750, "dai_3_quat": 2300 },
+        "450": { "cao": 12, "dai_1_quat": 850, "dai_3_quat": 2550 },
+        "500": { "cao": 14, "dai_1_quat": 1000, "dai_3_quat": 3000 },
+        "560": { "cao": 16, "dai_1_quat": 1150, "dai_3_quat": 3400 },
+        "630": { "cao": 18, "dai_1_quat": 1275, "dai_3_quat": 3700 }
     }
 };

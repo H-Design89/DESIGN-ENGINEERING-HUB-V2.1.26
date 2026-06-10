@@ -51,12 +51,13 @@ function switchTab(tabId) {
         tab.classList.remove('active');
     });
 
-    document.getElementById('page-' + tabId).classList.add('active');
-    if (event && event.currentTarget && event.currentTarget.classList && event.currentTarget.classList.contains('nav-tab')) {
-        event.currentTarget.classList.add('active');
-    }
+    const page = document.getElementById('page-' + tabId);
+    if (page) page.classList.add('active');
 
-    if(tabId === 'psychro') calculatePsychro();
+    const tabBtn = document.querySelector(`.nav-tab[onclick="switchTab('${tabId}')"]`);
+    if (tabBtn) tabBtn.classList.add('active');
+
+    if(tabId === 'psychro' && typeof calculatePsychro === 'function') calculatePsychro();
 }
 
 function triggerDebounceCalc() {

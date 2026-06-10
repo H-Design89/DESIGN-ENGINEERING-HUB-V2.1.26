@@ -53,6 +53,7 @@
                 <div class="nav-tabs">
                     <button class="nav-tab active" onclick="switchTab('coil')">DESIGN COIL</button>
                     <button class="nav-tab" onclick="switchTab('psychro')">BẢNG TRA PSYCHRO</button>
+                    <button class="nav-tab" onclick="switchTab('modex')" style="display: none;">MODEX</button>
                     <button class="nav-tab" onclick="openAdminPage()" style="display: none;">QUẢN TRỊ</button>
                 </div>
             </div>
@@ -449,6 +450,16 @@
                 </div>
             </details>
 
+            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ KÍCH THƯỚC CHUẨN COIL</summary>
+                <div style="margin-top: 15px;">
+                    <div id="admin-coil-container" style="display: flex; flex-direction: column; gap: 15px;">
+                        <!-- JS sẽ render card thông số chuẩn coil vào đây -->
+                    </div>
+                    <button class="btn-add" onclick="addAdminStandardCoilRow()" style="margin-top:10px;">+ THÊM KÍCH THƯỚC CHUẨN</button>
+                </div>
+            </details>
+
             <div class="grid" style="margin-top: 25px;">
                 <button class="btn-unlock" onclick="saveAdminData()" style="font-weight:bold; font-size:1.05rem;">LƯU VÀ TẢI FILE CONFIG.JS 📥</button>
                 <button class="btn-unlock" style="background: #757575;" onclick="switchTab('coil')">ĐÓNG & QUAY LẠI</button>
@@ -463,8 +474,8 @@
             <div id="saved-designs-container" style="display: flex; flex-direction: column; gap: 15px;">
                 <!-- Javascript sẽ render các card lịch sử vào đây -->
             </div>
-            <div style="margin-top: 25px; text-align: center;">
-                <button class="btn-unlock" style="background: #757575; max-width: 300px; margin: auto;"
+            <div style="position: sticky; bottom: 20px; z-index: 100; text-align: center; margin-top: 25px; padding: 10px 0;">
+                <button class="btn-unlock" style="background: #757575; max-width: 300px; margin: auto; box-shadow: 0 6px 16px rgba(0,0,0,0.3); border: 2px solid #fff;"
                     onclick="switchTab('coil')">ĐÓNG & QUAY LẠI</button>
             </div>
         </div>
@@ -600,34 +611,80 @@
             </div>
             <div class="modal-body" style="display: flex; flex-direction: column; gap: 15px;">
                 
-                <div>
-                    <label>Loại dàn (Đã bóc tách):</label>
-                    <input type="text" id="model-loai-dan" readonly style="background: #f1f3f4;">
-                </div>
-                
                 <div class="grid">
                     <div>
-                        <label>Vật liệu lá:</label>
-                        <select id="model-vat-lieu-la" onchange="updateModelPreview()">
-                            <option value="N">N: Lá nhôm thường</option>
-                            <option value="M">M: Lá nhôm magie</option>
-                            <option value="E">E: Lá nhôm phủ Epoxy</option>
-                            <option value="H">H: Lá nhôm hydrophylic</option>
+                        <label>Loại thiết bị [01]:</label>
+                        <select id="model-loai-dan" onchange="updateModelPreview()">
+                            <option value="">-- Chọn --</option>
+                            <option value="FCU">FCU</option>
+                            <option value="CD">CD (Đông gió)</option>
+                            <option value="TD">TD (Dàn lạnh)</option>
+                            <option value="DN">DN (Dàn ngưng)</option>
+                            <option value="DC">DC (Dàn coil)</option>
                         </select>
                     </div>
                     <div>
-                        <label>Phương pháp Xả đá:</label>
+                        <label>Vật liệu lá [02]:</label>
+                        <select id="model-vat-lieu-la" onchange="updateModelPreview()">
+                            <option value="">-- Chọn --</option>
+                            <option value="N">N: Nhôm thường</option>
+                            <option value="S">S: Inox 304</option>
+                            <option value="M">M: Nhôm Magie</option>
+                            <option value="C">C: Đồng</option>
+                            <option value="E">E: Nhôm Epoxy</option>
+                            <option value="H">H: Nhôm Hydrophylic</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div>
+                        <label>Môi chất [04]:</label>
+                        <select id="model-moi-chat" onchange="updateModelPreview()">
+                            <option value="">-- Chọn --</option>
+                            <option value="R">R: Freon</option>
+                            <option value="A">A: NH3</option>
+                            <option value="W">W: Nước</option>
+                            <option value="G">G: Glycol</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Vận hành [05]:</label>
+                        <select id="model-van-hanh" onchange="updateModelPreview()">
+                            <option value="">-- Chọn --</option>
+                            <option value="X">X: Tiết lưu</option>
+                            <option value="P">P: Bơm dịch</option>
+                            <option value="G">G: Bầu đổ/Dịch tràn</option>
+                            <option value="L">L: LVS</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <div>
+                        <label>Xả đá [09]:</label>
                         <select id="model-xa-da" onchange="updateModelPreview()">
+                            <option value="">-- Chọn --</option>
                             <option value="E">E: Điện trở</option>
-                            <option value="H">H: Hotgas</option>
+                            <option value="H">H: Gas nóng</option>
                             <option value="A">A: Gió</option>
                             <option value="W">W: Nước</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>Chuẩn thiết kế [12]:</label>
+                        <select id="model-chuan" onchange="updateModelPreview()">
+                            <option value="">-- Chọn --</option>
+                            <option value="G">G: Chuẩn G</option>
+                            <option value="Y">Y: Yêu cầu KH</option>
+                            <option value="S">S: Đặc biệt</option>
+                            <option value="T">T: Chuẩn T</option>
                         </select>
                     </div>
                 </div>
 
                 <div>
-                    <label>Thông số ống & quạt (Đã bóc tách):</label>
+                    <label>Thông số kỹ thuật (Đã bóc tách):</label>
                     <input type="text" id="model-ong-quat" readonly style="background: #f1f3f4; font-size: 0.85rem;">
                 </div>
 
@@ -645,6 +702,31 @@
             </div>
         </div>
     </div>
+
+    <!-- TRANG DỊCH MÃ MODEL (MODEX) -->
+    <div id="page-modex" class="app-page">
+        <div class="psy-container" style="max-width: 900px; margin: 0 auto; padding-top: 40px;">
+            <div style="background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 40px 30px; box-shadow: 0 8px 16px rgba(0,0,0,0.05);">
+                <h3 style="text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 10px; font-size: 1.8rem; letter-spacing: 1px;">PHÂN TÍCH MÃ MODEL</h3>
+                <p style="text-align: center; margin-bottom: 30px; color: #666; font-size: 1.05rem;">Nhập mã Model thiết bị vào ô bên dưới để tự động phân tích và trích xuất thông số kỹ thuật.</p>
+                
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <input type="text" id="modex-input" placeholder="VD: TD - N6.RX - 3Z50 - E6/7/S" style="width: 85%; padding: 20px; border: 2px solid var(--primary); border-radius: 10px; font-size: 1.5rem; text-transform: uppercase; text-align: center; font-weight: bold; color: var(--secondary); box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); transition: all 0.3s; background: #fdfdfd;" oninput="onModexInputChange()" onkeypress="if(event.key==='Enter') decodeModelUI()">
+                    <div style="margin-top: 25px;">
+                        <button id="btn-modex-generate" class="btn-unlock" onclick="decodeModelUI()" style="width: auto; padding: 15px 50px; font-size: 1.15rem; font-weight: bold; border-radius: 40px; letter-spacing: 1px; transition: all 0.3s; display: inline-block;">GENERATE DATA</button>
+                    </div>
+                </div>
+                
+                <div id="modex-result-container" style="display: none; border-top: 2px dashed #eee; padding-top: 30px;">
+                    <div style="font-weight: bold; font-size: 1.2rem; margin-bottom: 20px; color: var(--secondary); text-align: center;">KẾT QUẢ TRÍCH XUẤT THÔNG SỐ:</div>
+                    <div id="modex-result-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                        <!-- JS sẽ render các thẻ (card) kết quả vào đây -->
+                    </div>
+                    <div id="modex-error" style="color: #e53935; font-weight: bold; background: #ffebee; padding: 15px; border-radius: 6px; display: none; margin-top: 20px; text-align: center; border: 1px solid #ffcdd2;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <script src="config.js"></script>
     <script src="security.js"></script>
@@ -652,6 +734,7 @@
     <script src="calculations.js"></script>
     <script src="history.js"></script>
     <script src="admin.js"></script>
+    <script src="modex.js?v=2"></script>
 </body>
 
 </html>

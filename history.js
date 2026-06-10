@@ -53,7 +53,8 @@ function confirmSaveDesign() {
     const loaiOngText = selOng.options[selOng.selectedIndex].text;
     const N = document.getElementById('hang_ngang').value || 0;
     const C = document.getElementById('hang_doc').value || 0;
-    const L = document.getElementById('l_su_dung').value.replace(/,/g, '.') || 0;
+    let numL = parseFloat(document.getElementById('l_su_dung').value.replace(/,/g, '.')) || 0;
+    const L = Number.isInteger(numL) ? numL.toFixed(1) : numL.toString();
     
     const soQuat = document.getElementById('so_quat').value || 0;
     const selFanModel = document.getElementById('fan_model');
@@ -237,33 +238,57 @@ function openModelGenerator(index) {
     const d = savedDesigns[index];
     if (!d) return;
 
-    // 1. Loại dàn
-    let loaiDan = "TD"; // Mặc định
+    // 1. Loại thiết bị [01]
+    let loaiDan = ""; // Bỏ giá trị mặc định "TD"
     if (d.header) {
-        if (d.header.includes("Dàn lạnh")) loaiDan = "TD";
-        else if (d.header.includes("Dàn đông gió") || d.header.includes("Dàn đông gió treo")) loaiDan = "CD";
+        if (d.header.includes("FCU")) loaiDan = "FCU";
+        else if (d.header.includes("Dàn lạnh")) loaiDan = "TD";
+        else if (d.header.includes("đông gió")) loaiDan = "CD";
         else if (d.header.includes("Dàn ngưng")) loaiDan = "DN";
         else if (d.header.includes("Dàn coil")) loaiDan = "DC";
-        else if (d.header.includes("FCU")) loaiDan = "FCU";
     }
 
-    // 2. Kính ống & Vật liệu ống
-    let ongNum = "";
-    let vatLieuOng = "A"; // Đồng
+    // 2. Kính ống & Vật liệu ống -> Loại khuôn [03]
+    let loaiKhuon = "";
     if (d.title) {
-        if (d.title.includes("Inox")) vatLieuOng = "B";
-        let match = d.title.match(/(?:D|Inox)(127|96|\d+)/i);
-        if (match) {
-            if (match[1] === "127") ongNum = "12.7";
-            else if (match[1] === "96") ongNum = "9.6";
-            else ongNum = match[1];
+        let titleUpper = d.title.toUpperCase();
+        if (titleUpper.includes("D9.6") && titleUpper.includes("25.4X22")) loaiKhuon = "1";
+        else if (titleUpper.includes("D12.7") && titleUpper.includes("31.75X27.5")) loaiKhuon = "2";
+        else if (titleUpper.includes("D12.7") && titleUpper.includes("50X25")) loaiKhuon = "3";
+        else if (titleUpper.includes("D16 ĐỒNG") && titleUpper.includes("45X45")) loaiKhuon = "4";
+        else if (titleUpper.includes("D16 ĐỒNG") && titleUpper.includes("50X50")) loaiKhuon = "5";
+        else if (titleUpper.includes("D16 INOX") && titleUpper.includes("45X45")) loaiKhuon = "6";
+        else if (titleUpper.includes("D16 INOX") && titleUpper.includes("50X50")) loaiKhuon = "7";
+    }
+
+    // 4. Môi chất [04]
+    let moiChat = "";
+    if (d.header) {
+        let mcMatch = d.header.match(/Môi chất:\s*([^\n|]+)/i);
+        if (mcMatch) {
+            let mcVal = mcMatch[1].toLowerCase();
+            if (mcVal.includes("nh3") || mcVal.includes("ammonia")) moiChat = "A";
+            else if (mcVal.includes("nước") || mcVal.includes("nuoc") || mcVal.includes("water")) moiChat = "W";
+            else if (mcVal.includes("glycol")) moiChat = "G";
+            else if (mcVal.includes("r") || mcVal.includes("freon")) moiChat = "R";
         }
     }
 
-    // 5. Loại quạt, 6. Số lượng, 7. ĐK Quạt
-    let loaiQuat = "";
-    let soLuongQuat = "";
-    let dkQuat = "";
+    // 5. Vận hành [05]
+    let vanHanh = "";
+    if (d.header) {
+        let vhLower = d.header.toLowerCase();
+        if (vhLower.includes("bầu đổ") || vhLower.includes("dịch tràn")) vanHanh = "G";
+        else if (vhLower.includes("bơm dịch")) vanHanh = "P";
+        else if (vhLower.includes("lvs")) vanHanh = "L";
+        else if (vhLower.includes("tiết lưu") || vhLower.includes("van")) vanHanh = "X";
+    }
+
+    // 6. Số lượng quạt [06], 7. Loại quạt [07], 8. ĐK Quạt [08]
+    let loaiQuat = "Z";
+    let soLuongQuat = "1";
+    let dkQuat = "50";
+    let dkQuatNum = 500;
 
     if (d.line2 && d.line2.includes("quạt")) {
         let slMatch = d.line2.match(/^(\d+)\s+quạt/);
@@ -275,31 +300,76 @@ function openModelGenerator(index) {
 
         let dkMatch = d.line2.match(/Ø(\d+)/);
         if (dkMatch) {
-            let val = parseInt(dkMatch[1]);
-            dkQuat = (val / 10).toString(); 
+            dkQuatNum = parseInt(dkMatch[1]);
+            dkQuat = (dkQuatNum / 10).toString(); 
         }
     }
 
-    // 9. Cấu hình ống
-    let cauHinhOng = "";
+    // 10. Cấu hình ống
+    let ngang = 0, cao = 0, dai = 0;
     if (d.line1) {
         let ngangMatch = d.line1.match(/Ngang\s+([\d\.]+)/);
         let caoMatch = d.line1.match(/cao\s+([\d\.]+)/);
         let daiMatch = d.line1.match(/dài\s+([\d\.]+)/);
 
-        if (ngangMatch && caoMatch && daiMatch) {
-            let val = parseFloat(daiMatch[1]);
-            let dai = val.toString();
-            if (Number.isInteger(val)) dai += '.0';
-            cauHinhOng = ngangMatch[1] + caoMatch[1] + dai;
+        if (ngangMatch) ngang = parseInt(ngangMatch[1]);
+        if (caoMatch) cao = parseInt(caoMatch[1]);
+        if (daiMatch) dai = parseFloat(daiMatch[1]);
+    }
+    let dai_mm = Math.round(dai * 1000);
+
+    // 11. Khe lá
+    let kheLa = "";
+    if (d.line3) {
+        let pitchMatch = d.line3.match(/([\d\.]+)\s*mm/);
+        if (pitchMatch) kheLa = pitchMatch[1];
+    }
+
+    // Validation Rule -> [12] Chuẩn thiết kế & [10] String
+    let isStandard = false;
+    let chuan = "G";
+    if (["3", "5", "7"].includes(loaiKhuon)) {
+        let standardCoils = (window.GT_CONFIG && window.GT_CONFIG.STANDARD_COILS) ? window.GT_CONFIG.STANDARD_COILS : {
+            "400": { cao: 10, dai_1_quat: 750, dai_3_quat: 2300 },
+            "450": { cao: 12, dai_1_quat: 850, dai_3_quat: 2550 },
+            "500": { cao: 14, dai_1_quat: 1000, dai_3_quat: 3000 },
+            "560": { cao: 16, dai_1_quat: 1150, dai_3_quat: 3400 },
+            "630": { cao: 18, dai_1_quat: 1275, dai_3_quat: 3700 }
+        };
+        let dkStr = dkQuatNum.toString();
+        let qty = parseInt(soLuongQuat) || 1;
+        if (standardCoils[dkStr]) {
+            let sData = standardCoils[dkStr];
+            let expectedDai = (qty === 3 && sData.dai_3_quat) ? sData.dai_3_quat : (sData.dai_1_quat * qty);
+            if (cao === sData.cao && dai_mm === expectedDai) {
+                isStandard = true;
+            }
         }
     }
 
+    // Tạm thời Inox D22 (chưa có khuôn) cũng gán là không chuẩn
+    if (!isStandard) {
+        chuan = "S";
+    }
+
+    let ngangStr = isStandard ? ngang.toString() : `${ngang}${cao}${dai_mm / 1000}`;
+
     document.getElementById('model-history-index').value = index;
-    document.getElementById('model-loai-dan').value = loaiDan;
-    document.getElementById('model-ong-quat').value = `Ống: ${ongNum}${vatLieuOng} | Quạt: ${loaiQuat}${soLuongQuat}${dkQuat} | Cấu hình: ${cauHinhOng}`;
     
-    window.currentModelData = { loaiDan, ongNum, vatLieuOng, loaiQuat, soLuongQuat, dkQuat, cauHinhOng };
+    // Đặt lại các trường chưa parse được thành rỗng để bắt buộc chọn
+    document.getElementById('model-vat-lieu-la').value = "";
+    document.getElementById('model-xa-da').value = "";
+    
+    // Gán các giá trị dropdown cho modal
+    document.getElementById('model-loai-dan').value = loaiDan;
+    document.getElementById('model-moi-chat').value = moiChat;
+    document.getElementById('model-van-hanh').value = vanHanh;
+    document.getElementById('model-chuan').value = "";
+    
+    // Gán thông tin hiển thị phụ
+    document.getElementById('model-ong-quat').value = `Khuôn: ${loaiKhuon || '?'} | Quạt: ${soLuongQuat}x${loaiQuat} D${dkQuatNum} | Kích thước Coil: ${cao}x${dai_mm}`;
+    
+    window.currentModelData = { loaiKhuon, soLuongQuat, loaiQuat, dkQuat, ngangStr, kheLa };
     
     isModelManual = false;
     let finalInput = document.getElementById('model-final-preview');
@@ -343,35 +413,34 @@ function updateModelPreview() {
     let data = window.currentModelData;
     if (!data) return;
 
+    let loaiDan = document.getElementById('model-loai-dan').value;
     let vatLieuLa = document.getElementById('model-vat-lieu-la').value;
+    let moiChat = document.getElementById('model-moi-chat').value;
+    let vanHanh = document.getElementById('model-van-hanh').value;
     let xaDa = document.getElementById('model-xa-da').value;
+    let chuan = document.getElementById('model-chuan').value;
 
-    let part1 = data.loaiDan;
-    let part2 = data.ongNum + data.vatLieuOng + vatLieuLa;
+    let part1 = loaiDan; // [01]
+    let part2 = vatLieuLa + data.loaiKhuon + "." + moiChat + vanHanh; // [02][03].[04][05]
     
     let part3 = "";
-    if (data.loaiQuat || data.soLuongQuat || data.dkQuat) {
-        part3 = data.loaiQuat + data.soLuongQuat + data.dkQuat;
+    if (data.soLuongQuat || data.loaiQuat || data.dkQuat) {
+        part3 = data.soLuongQuat + data.loaiQuat + data.dkQuat; // [06][07][08]
     }
     
-    let part4 = xaDa;
-    let part5 = data.cauHinhOng;
+    let part4 = xaDa + data.ngangStr + "/" + data.kheLa + (chuan ? "/" + chuan : ""); // [09][10]/[11]/[12]
 
-    if (part1 === "DC") {
+    if (loaiDan === "DC") {
         part3 = ""; // Dàn coil không có quạt
-        part4 = ""; // Dàn coil không có xả đá
+        xaDa = "";  // Dàn coil không xả đá
+        part4 = data.ngangStr + "/" + data.kheLa + (chuan ? "/" + chuan : "");
     }
 
-    let finalModel = "";
+    let finalModel = `${part1} - ${part2}`;
     if (part3) {
-        finalModel = `${part1}-${part2}-${part3}${part4}${part5}`;
-    } else {
-        if (part4) {
-            finalModel = `${part1}-${part2}-${part4}${part5}`;
-        } else {
-            finalModel = `${part1}-${part2}-${part5}`;
-        }
+        finalModel += ` - ${part3}`;
     }
+    finalModel += ` - ${part4}`;
 
     document.getElementById('model-final-preview').value = finalModel;
 }
