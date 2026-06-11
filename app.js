@@ -60,9 +60,19 @@ function switchTab(tabId) {
     if(tabId === 'psychro' && typeof calculatePsychro === 'function') calculatePsychro();
 }
 
+let isAutoFilling = false;
+
 function triggerDebounceCalc() {
     const resultCol = document.getElementById('result-container');
     resultCol.classList.add('updating');
+
+    if (!isAutoFilling) {
+        let autofillInput = document.getElementById('auto_fill_model');
+        if (autofillInput && autofillInput.value) {
+            autofillInput.value = '';
+            enableAutoFillBtn();
+        }
+    }
 
     clearTimeout(debounceTimer);
     debounceTimer = setTimeout(() => {
@@ -70,6 +80,16 @@ function triggerDebounceCalc() {
         calculateAll();
         resultCol.classList.remove('updating');
     }, 600);
+}
+
+function enableAutoFillBtn() {
+    let btn = document.querySelector('button[onclick="fillFormFromModel()"]');
+    if (btn) {
+        btn.innerText = "GENERATE DATA";
+        btn.style.background = "var(--primary)";
+        btn.style.pointerEvents = "auto";
+        btn.style.opacity = "1";
+    }
 }
 
 // ==============================================
@@ -366,4 +386,139 @@ function showFanDetails() {
     } else {
         alert('Vui lòng chọn Hãng và Model quạt hợp lệ trước!');
     }
+}
+
+// ==========================================
+// TỰ ĐỘNG ĐIỀN TỪ MÃ MODEL
+// ==========================================
+function fillFormFromModel() {
+    const code = document.getElementById('auto_fill_model').value.trim();
+    if (!code) {
+        alert("Vui lòng nhập mã Model.");
+        return;
+    }
+    
+    isAutoFilling = true;
+    
+    if (typeof decodeModelStr !== 'function') {
+        alert("Không tìm thấy hàm dịch mã. Vui lòng thử lại.");
+        isAutoFilling = false;
+        return;
+    }
+    
+    let decoded = decodeModelStr(code);
+    
+    function showDecodeError() {
+        let btn = document.querySelector('button[onclick="fillFormFromModel()"]');
+        if (btn) {
+            btn.innerText = "KHÔNG NHẬN DIỆN ĐƯỢC";
+            btn.style.background = "#f57c00"; // Vàng cam báo lỗi
+            btn.style.pointerEvents = "none";
+            btn.style.opacity = "1";
+        }
+        setTimeout(() => { isAutoFilling = false; }, 100);
+    }
+
+    if (decoded.error) {
+        showDecodeError();
+        return;
+    }
+    
+    let raw = decoded.rawData;
+    if (!raw || !raw.khuon) {
+        showDecodeError();
+        return;
+    }
+
+    // Map Khuôn -> loai_ong
+    let moldMap = {
+        "1": "D96",
+        "2": "D127_31",
+        "3": "D127_50",
+        "4": "D16_45",
+        "5": "D16_50",
+        "6": "Inox16_45",
+        "7": "Inox16"
+    };
+    
+    if (raw.khuon && moldMap[raw.khuon]) {
+        let selOng = document.getElementById('loai_ong');
+        if (selOng) selOng.value = moldMap[raw.khuon];
+    }
+    
+    // Quạt
+    if (raw.loaiQuat) {
+        let selBrand = document.getElementById('fan_brand');
+        if (raw.loaiQuat === "ZA") selBrand.value = "ZA";
+        else if (raw.loaiQuat === "TQ" || raw.loaiQuat === "MAER") selBrand.value = "TQ";
+        else if (raw.loaiQuat === "KRUGER" || raw.loaiQuat === "KR") selBrand.value = "KRUGER";
+        
+        updateFanModels(); 
+        
+        let selModel = document.getElementById('fan_model');
+        if (raw.dkQuat && selModel) {
+            for (let i = 0; i < selModel.options.length; i++) {
+                if (selModel.options[i].innerText.includes(raw.dkQuat) || selModel.options[i].value.includes(raw.dkQuat)) {
+                    selModel.selectedIndex = i;
+                    break;
+                }
+            }
+        }
+        updateFanModes();
+    }
+    
+    if (raw.soQuat !== undefined) {
+        let soQuatInput = document.getElementById('so_quat');
+        if (soQuatInput) {
+            soQuatInput.value = raw.soQuat;
+            syncReqFan();
+        }
+    }
+    
+    // Kích thước (Cao, Ngang, Dài)
+    if (raw.cao !== undefined && !isNaN(raw.cao)) {
+        let hangDocInput = document.getElementById('hang_doc');
+        if (hangDocInput) hangDocInput.value = raw.cao;
+    }
+    
+    if (raw.dai !== undefined && !isNaN(raw.dai)) {
+        let lSuDungInput = document.getElementById('l_su_dung');
+        if (lSuDungInput) lSuDungInput.value = Number(raw.dai).toFixed(2);
+    }
+    
+    // Khe lá
+    if (raw.kheLa !== undefined && !isNaN(raw.kheLa)) {
+        let container = document.getElementById('segment-container');
+        if (container) {
+            container.innerHTML = `
+                <div class="segment-row">
+                    <div><label>Số ống ngang</label><input type="number" class="seg-n" min="1" value="${raw.ngang || 6}" oninput="updateTotalN(); triggerDebounceCalc();"></div>
+                    <div><label>Khe lá (mm)</label><input type="number" class="seg-pitch" min="0.1" value="${raw.kheLa}" step="0.1" oninput="triggerDebounceCalc()"></div>
+                    <button class="btn-remove" onclick="removeSegment(this)" style="margin-top: 22px;">X</button>
+                </div>
+            `;
+            updateTotalN();
+        }
+    } else if (raw.ngang !== undefined && !isNaN(raw.ngang)) {
+         let segNs = document.querySelectorAll('.seg-n');
+         if(segNs.length === 1) {
+             segNs[0].value = raw.ngang;
+             updateTotalN();
+         }
+    }
+    
+    checkConstraints();
+    triggerDebounceCalc();
+    
+    let btn = document.querySelector('button[onclick="fillFormFromModel()"]');
+    if (btn) {
+        btn.innerText = "ĐÃ ĐIỀN!";
+        btn.style.background = "#9e9e9e";
+        btn.style.pointerEvents = "none";
+        btn.style.opacity = "0.7";
+    }
+    
+    setTimeout(() => {
+        isAutoFilling = false;
+    }, 100);
 }

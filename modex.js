@@ -136,6 +136,11 @@ function decodeModelStr(code) {
     let basePart1 = part1.replace('.RH', '');
     let loaiDanText = DICT_LOAI_DAN[basePart1] || "Không xác định";
     
+    let rawData = {
+        tachAm: isTachAm,
+        loaiDan: basePart1
+    };
+    
     if (isTachAm) {
         output[0].value = `${part1} : ${loaiDanText} (Có tách ẩm)`;
     } else {
@@ -151,6 +156,11 @@ function decodeModelStr(code) {
         let khuonText = DICT_KHUON[p2match[2]] || "Không xác định";
         let moiChatText = DICT_MOI_CHAT[p2match[3]] || "Không xác định";
         let vanHanhText = DICT_VAN_HANH[p2match[4]] || "Không xác định";
+        
+        rawData.vatLieu = p2match[1];
+        rawData.khuon = p2match[2];
+        rawData.moiChat = p2match[3];
+        rawData.vanHanh = p2match[4];
         
         output[1].value = `${p2match[1]} : ${vatLieuText}`;
         output[2].value = `${p2match[2]} : ${khuonText}`;
@@ -184,6 +194,10 @@ function decodeModelStr(code) {
             fanDkStr = (parseInt(p3match[3]) * 10).toString();
             let quatText = DICT_QUAT[p3match[2]] || p3match[2];
             
+            rawData.soQuat = fanQty;
+            rawData.loaiQuat = p3match[2];
+            rawData.dkQuat = fanDkStr;
+            
             output[5].value = `${fanQty} quạt`;
             output[6].value = `${quatText}`;
             output[7].value = `Ø${fanDkStr}`;
@@ -205,6 +219,7 @@ function decodeModelStr(code) {
                 xada = mainDims.charAt(0);
                 dims = mainDims.substring(1);
                 let xaDaText = DICT_XA_DA[xada] || "Không xác định";
+                rawData.xaDa = xada;
                 output[8].value = `${xada} : ${xaDaText}`;
             } else {
                 dims = mainDims;
@@ -219,10 +234,13 @@ function decodeModelStr(code) {
             if (xMatch) ngangVal = parseInt(xMatch[1]);
         } else if (dims.length > 0 && dims.length <= 3 && !dims.includes('.')) {
             ngangVal = parseInt(dims) || 0;
+            rawData.ngang = ngangVal;
             let standardCoils = (window.GT_CONFIG && window.GT_CONFIG.STANDARD_COILS) ? window.GT_CONFIG.STANDARD_COILS : {};
             if (fanDkStr && standardCoils[fanDkStr]) {
                 let sData = standardCoils[fanDkStr];
                 let expectedDai = (fanQty === 3 && sData.dai_3_quat) ? sData.dai_3_quat : (sData.dai_1_quat * fanQty);
+                rawData.cao = sData.cao;
+                rawData.dai = expectedDai / 1000;
                 dimStr = `Ngang ${dims}, Cao ${sData.cao}, Dài ${expectedDai / 1000}m`;
             } else {
                 dimStr = `Ngang ${dims}, Cao/Dài: ---`;
@@ -234,6 +252,9 @@ function decodeModelStr(code) {
             }
             if (dimMatch) {
                 ngangVal = parseInt(dimMatch[1]);
+                rawData.ngang = ngangVal;
+                rawData.cao = parseInt(dimMatch[2]);
+                rawData.dai = parseFloat(dimMatch[3]);
                 dimStr = `Ngang ${dimMatch[1]}, Cao ${dimMatch[2]}, Dài ${dimMatch[3]}m`;
             } else {
                 dimStr = `Chuỗi: ${dims}`;
@@ -247,6 +268,7 @@ function decodeModelStr(code) {
         if (p4parts[1]) {
             let kheLaVal = p4parts[1];
             let kheLaNum = parseFloat(kheLaVal.replace(',', '.')) || 0;
+            rawData.kheLa = kheLaNum;
             let isDecimal = kheLaVal.includes('.') || kheLaVal.includes(',');
             
             if (ngangVal > 6 && (isDecimal || kheLaNum > 11)) {
@@ -257,11 +279,12 @@ function decodeModelStr(code) {
         }
         if (p4parts[2]) {
             let chuanText = DICT_CHUAN[p4parts[2]] || "Không xác định";
+            rawData.chuan = p4parts[2];
             output[11].value = `${p4parts[2]} : ${chuanText}`;
         }
     }
     
-    return { data: output };
+    return { data: output, rawData: rawData };
 }
 
 // =====================================
