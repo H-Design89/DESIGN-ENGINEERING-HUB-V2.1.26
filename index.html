@@ -495,7 +495,12 @@
                 </div>
                 <div class="grid">
                     <div class="input-group">
-                        <label>Loại dàn:</label>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <label style="margin: 0; white-space: nowrap;">Loại dàn:</label>
+                            <label style="margin: 0; font-weight: normal; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--primary); white-space: nowrap;">
+                                <input type="checkbox" id="save_tach_am"> Tách ẩm
+                            </label>
+                        </div>
                         <select id="save_type">
                             <option value="">-- Chọn loại dàn --</option>
                             <option value="Dàn lạnh">Dàn lạnh</option>
@@ -525,7 +530,7 @@
                     </div>
                 </div>
 
-                <div class="grid">
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
                     <div class="input-group">
                         <label>Tmc (°C):</label>
                         <input type="text" id="save_tmc" placeholder="VD: -5">
@@ -533,6 +538,10 @@
                     <div class="input-group">
                         <label>Tr (°C):</label>
                         <input type="text" id="save_tr" placeholder="VD: 2">
+                    </div>
+                    <div class="input-group">
+                        <label>RH phòng (%):</label>
+                        <input type="text" id="save_rh" placeholder="VD: 85">
                     </div>
                 </div>
                 <div class="input-group">
@@ -613,10 +622,15 @@
                 
                 <div class="grid">
                     <div>
-                        <label>Loại thiết bị [01]:</label>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                            <label style="margin: 0; white-space: nowrap;">Loại thiết bị [01]:</label>
+                            <label style="margin: 0; font-weight: normal; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--primary); white-space: nowrap;">
+                                <input type="checkbox" id="model-tach-am" onchange="updateModelPreview()"> Tách ẩm
+                            </label>
+                        </div>
                         <select id="model-loai-dan" onchange="updateModelPreview()">
                             <option value="">-- Chọn --</option>
-                            <option value="FCU">FCU</option>
+                            <option value="FCU">FCU (ĐHKK)</option>
                             <option value="CD">CD (Đông gió)</option>
                             <option value="TD">TD (Dàn lạnh)</option>
                             <option value="DN">DN (Dàn ngưng)</option>

@@ -132,8 +132,17 @@ function decodeModelStr(code) {
     }
     
     let part1 = parts[0]; 
-    let loaiDanText = DICT_LOAI_DAN[part1] || "Không xác định";
-    output[0].value = `${part1} : ${loaiDanText}`;
+    let isTachAm = part1.includes('.RH');
+    let basePart1 = part1.replace('.RH', '');
+    let loaiDanText = DICT_LOAI_DAN[basePart1] || "Không xác định";
+    
+    if (isTachAm) {
+        output[0].value = `${part1} : ${loaiDanText} (Có tách ẩm)`;
+    } else {
+        output[0].value = `${part1} : ${loaiDanText}`;
+    }
+    
+    part1 = basePart1; // Reset part1 to base for isDC check
     
     let part2 = parts[1]; 
     let p2match = part2.match(/^([A-Z])(\d)\.([A-Z])([A-Z])$/);

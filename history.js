@@ -27,6 +27,8 @@ function saveCurrentDesign() {
     document.getElementById('save_vanhanh').value = '';
     document.getElementById('save_tmc').value = '';
     document.getElementById('save_tr').value = '';
+    document.getElementById('save_rh').value = '';
+    if (document.getElementById('save_tach_am')) document.getElementById('save_tach_am').checked = false;
     document.getElementById('save_note').value = '';
     document.getElementById('save-prompt-modal').style.display = 'flex';
 }
@@ -40,14 +42,18 @@ function confirmSaveDesign() {
     
     let company = document.getElementById('save_company').value.trim() || '---';
     let type = document.getElementById('save_type').value || '---';
+    let tachAmSave = document.getElementById('save_tach_am') ? document.getElementById('save_tach_am').checked : false;
+    let typeDisplay = tachAmSave && type !== '---' ? type + " (Tách ẩm)" : type;
+    
     let qty = document.getElementById('save_qty').value || '---';
     let moichat = document.getElementById('save_moichat').value.trim() || '---';
     let vanhanh = document.getElementById('save_vanhanh').value.trim() || '---';
     let tmc = document.getElementById('save_tmc').value.trim() || '---';
     let tr = document.getElementById('save_tr').value.trim() || '---';
+    let rh = document.getElementById('save_rh').value.trim() || '---';
     let note = document.getElementById('save_note').value.trim() || '---';
     
-    let headerText = `Công ty: ${company}\nLoại dàn: ${type} | Số lượng: ${qty}\nMôi chất: ${moichat} | Vận hành: ${vanhanh}\nTmc: ${tmc} °C | Tr: ${tr} °C\nGhi chú: ${note}`;
+    let headerText = `Công ty: ${company}\nLoại dàn: ${typeDisplay} | Số lượng: ${qty}\nMôi chất: ${moichat} | Vận hành: ${vanhanh}\nTmc: ${tmc} °C | Tr: ${tr} °C | RH phòng: ${rh} %\nGhi chú: ${note}`;
 
     const selOng = document.getElementById('loai_ong');
     const loaiOngText = selOng.options[selOng.selectedIndex].text;
@@ -334,6 +340,7 @@ function openModelGenerator(index) {
             "450": { cao: 12, dai_1_quat: 850, dai_3_quat: 2550 },
             "500": { cao: 14, dai_1_quat: 1000, dai_3_quat: 3000 },
             "560": { cao: 16, dai_1_quat: 1150, dai_3_quat: 3400 },
+            "600": { cao: 16, dai_1_quat: 1150 },
             "630": { cao: 18, dai_1_quat: 1275, dai_3_quat: 3700 }
         };
         let dkStr = dkQuatNum.toString();
@@ -359,6 +366,9 @@ function openModelGenerator(index) {
     // Đặt lại các trường chưa parse được thành rỗng để bắt buộc chọn
     document.getElementById('model-vat-lieu-la').value = "";
     document.getElementById('model-xa-da').value = "";
+    
+    let hasTachAm = d.header && d.header.includes("(Tách ẩm)");
+    if (document.getElementById('model-tach-am')) document.getElementById('model-tach-am').checked = hasTachAm;
     
     // Gán các giá trị dropdown cho modal
     document.getElementById('model-loai-dan').value = loaiDan;
@@ -419,8 +429,12 @@ function updateModelPreview() {
     let vanHanh = document.getElementById('model-van-hanh').value;
     let xaDa = document.getElementById('model-xa-da').value;
     let chuan = document.getElementById('model-chuan').value;
+    let tachAm = document.getElementById('model-tach-am') ? document.getElementById('model-tach-am').checked : false;
 
     let part1 = loaiDan; // [01]
+    if (tachAm && part1) {
+        part1 += ".RH";
+    }
     let part2 = vatLieuLa + data.loaiKhuon + "." + moiChat + vanHanh; // [02][03].[04][05]
     
     let part3 = "";
@@ -460,7 +474,12 @@ function saveGeneratedModel() {
              if (oldBody.includes('Model:') || oldBody.includes('MODEL:')) {
                  savedDesigns[index].bodyHTML = oldBody.replace(/Model:\s*[^<]+<\/div>/i, `Model: ${finalModel}</div>`);
              } else {
-                 savedDesigns[index].bodyHTML = `<div style="font-weight: bold; color: var(--secondary); margin-bottom: 8px;">Model: ${finalModel}</div>` + oldBody;
+                 const separator = '----------</div>';
+                 if (oldBody.includes(separator)) {
+                     savedDesigns[index].bodyHTML = oldBody.replace(separator, separator + `\n                <div style="font-weight: bold; color: var(--secondary); margin-bottom: 8px;">Model: ${finalModel}</div>`);
+                 } else {
+                     savedDesigns[index].bodyHTML = `<div style="font-weight: bold; color: var(--secondary); margin-bottom: 8px;">Model: ${finalModel}</div>\n` + oldBody;
+                 }
              }
         }
         
