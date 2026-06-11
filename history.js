@@ -489,3 +489,42 @@ function saveGeneratedModel() {
     }
     closeModelGenerator();
 }
+
+function copyModelCode() {
+    const modelInput = document.getElementById('model-final-preview');
+    if (!modelInput || !modelInput.value) return;
+    
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(modelInput.value).then(() => {
+            showCopyToast();
+        }).catch(err => {
+            fallbackCopy(modelInput);
+        });
+    } else {
+        fallbackCopy(modelInput);
+    }
+}
+
+function fallbackCopy(inputElement) {
+    inputElement.removeAttribute('readonly');
+    inputElement.select();
+    inputElement.setSelectionRange(0, 99999);
+    try {
+        document.execCommand("copy");
+        showCopyToast();
+    } catch(e) {}
+    inputElement.setAttribute('readonly', 'true');
+}
+
+function showCopyToast() {
+    const copyBtn = document.querySelector('button[onclick="copyModelCode()"]');
+    if (copyBtn) {
+        const originalText = copyBtn.innerText;
+        copyBtn.innerText = 'COPIED!';
+        copyBtn.style.background = 'var(--success)';
+        setTimeout(() => {
+            copyBtn.innerText = originalText;
+            copyBtn.style.background = '';
+        }, 1500);
+    }
+}
