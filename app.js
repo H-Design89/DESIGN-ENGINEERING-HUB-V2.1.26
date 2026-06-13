@@ -271,16 +271,36 @@ function updateFanModes() {
     }
     updateFanPressures();
 }
+window.targetPressure = "40";
+
 function updateFanPressures() {
     const brand = document.getElementById('fan_brand').value;
     const model = document.getElementById('fan_model').value;
     const mode = document.getElementById('fan_mode').value;
     const pressSel = document.getElementById('fan_pressure');
+    
+    if (pressSel.value) {
+        window.targetPressure = pressSel.value;
+    }
+
     pressSel.innerHTML = "";
     const pressData = FANS[brand][model].modes[mode];
+    let hasTarget = false;
+    
     for (let pa in pressData) {
+        if (pa === window.targetPressure) hasTarget = true;
         pressSel.innerHTML += `<option value="${pa}">${pa} Pa</option>`;
     }
+    
+    if (hasTarget) {
+        pressSel.value = window.targetPressure;
+    } else if (pressData["40"]) {
+        pressSel.value = "40";
+        window.targetPressure = "40";
+    } else if (pressSel.options.length > 0) {
+        window.targetPressure = pressSel.options[0].value;
+    }
+
     updateFanAirflow();
 }
 function updateFanAirflow() {
@@ -288,7 +308,11 @@ function updateFanAirflow() {
         const brand = document.getElementById('fan_brand').value;
         const model = document.getElementById('fan_model').value;
         const mode = document.getElementById('fan_mode').value;
-        const pa = document.getElementById('fan_pressure').value;
+        const pressSel = document.getElementById('fan_pressure');
+        const pa = pressSel.value;
+        if (pa) {
+            window.targetPressure = pa;
+        }
         let val = parseFloat(FANS[brand][model].modes[mode][pa]) || 0;
         document.getElementById('gio_1_quat').value = val.toLocaleString('en-US');
     }
