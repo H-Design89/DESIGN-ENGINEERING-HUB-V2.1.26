@@ -235,8 +235,31 @@ function decodeModelStr(code) {
         } else if (dims.length > 0 && dims.length <= 3 && !dims.includes('.')) {
             ngangVal = parseInt(dims) || 0;
             rawData.ngang = ngangVal;
-            let standardCoils = (window.GT_CONFIG && window.GT_CONFIG.STANDARD_COILS) ? window.GT_CONFIG.STANDARD_COILS : {};
-            if (fanDkStr && standardCoils[fanDkStr]) {
+            let s50 = (window.GT_CONFIG && window.GT_CONFIG.STANDARD_COILS) ? window.GT_CONFIG.STANDARD_COILS : {
+                "400": { cao: 10, dai_1_quat: 750, dai_3_quat: 2300 },
+                "450": { cao: 12, dai_1_quat: 850, dai_3_quat: 2550 },
+                "500": { cao: 14, dai_1_quat: 1000, dai_3_quat: 3000 },
+                "560": { cao: 16, dai_1_quat: 1150, dai_3_quat: 3400 },
+                "600": { cao: 16, dai_1_quat: 1150 },
+                "630": { cao: 18, dai_1_quat: 1275, dai_3_quat: 3700 }
+            };
+            let s45 = {
+                "400": { cao: 12, dai_1_quat: 750, dai_3_quat: 2300 },
+                "450": { cao: 14, dai_1_quat: 850, dai_3_quat: 2550 },
+                "500": { cao: 16, dai_1_quat: 1000, dai_3_quat: 3000 },
+                "560": { cao: 18, dai_1_quat: 1150, dai_3_quat: 3400 },
+                "600": { cao: 18, dai_1_quat: 1150 },
+                "630": { cao: 20, dai_1_quat: 1275, dai_3_quat: 3700 }
+            };
+            
+            let standardCoils = null;
+            if (["3", "5", "7"].includes(rawData.khuon)) {
+                standardCoils = s50;
+            } else if (["4", "6"].includes(rawData.khuon)) {
+                standardCoils = s45;
+            }
+
+            if (fanDkStr && standardCoils && standardCoils[fanDkStr]) {
                 let sData = standardCoils[fanDkStr];
                 let expectedDai = (fanQty === 3 && sData.dai_3_quat) ? sData.dai_3_quat : (sData.dai_1_quat * fanQty);
                 rawData.cao = sData.cao;

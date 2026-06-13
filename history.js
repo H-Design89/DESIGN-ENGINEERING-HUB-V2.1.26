@@ -340,8 +340,8 @@ function openModelGenerator(index) {
     // Validation Rule -> [12] Chuẩn thiết kế & [10] String
     let isStandard = false;
     let chuan = "G";
-    if (["3", "5", "7"].includes(loaiKhuon)) {
-        let standardCoils = (window.GT_CONFIG && window.GT_CONFIG.STANDARD_COILS) ? window.GT_CONFIG.STANDARD_COILS : {
+    if (["3", "5", "7"].includes(loaiKhuon) || ["4", "6"].includes(loaiKhuon)) {
+        let s50 = (window.GT_CONFIG && window.GT_CONFIG.STANDARD_COILS) ? window.GT_CONFIG.STANDARD_COILS : {
             "400": { cao: 10, dai_1_quat: 750, dai_3_quat: 2300 },
             "450": { cao: 12, dai_1_quat: 850, dai_3_quat: 2550 },
             "500": { cao: 14, dai_1_quat: 1000, dai_3_quat: 3000 },
@@ -349,6 +349,16 @@ function openModelGenerator(index) {
             "600": { cao: 16, dai_1_quat: 1150 },
             "630": { cao: 18, dai_1_quat: 1275, dai_3_quat: 3700 }
         };
+        let s45 = {
+            "400": { cao: 12, dai_1_quat: 750, dai_3_quat: 2300 },
+            "450": { cao: 14, dai_1_quat: 850, dai_3_quat: 2550 },
+            "500": { cao: 16, dai_1_quat: 1000, dai_3_quat: 3000 },
+            "560": { cao: 18, dai_1_quat: 1150, dai_3_quat: 3400 },
+            "600": { cao: 18, dai_1_quat: 1150 },
+            "630": { cao: 20, dai_1_quat: 1275, dai_3_quat: 3700 }
+        };
+        
+        let standardCoils = ["3", "5", "7"].includes(loaiKhuon) ? s50 : s45;
         let dkStr = dkQuatNum.toString();
         let qty = parseInt(soLuongQuat) || 1;
         if (standardCoils[dkStr]) {
