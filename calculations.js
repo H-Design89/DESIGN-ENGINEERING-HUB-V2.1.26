@@ -60,21 +60,33 @@ function calculateAll() {
     let L_mm = 0;
     let L_fin = 0;
 
+    const lFinMode = document.querySelector('input[name="l_fin_mode"]:checked') ? document.querySelector('input[name="l_fin_mode"]:checked').value : 'standard';
+    
+    let calc_method = method;
+    let h_rut_calc = h_rut;
+    let d_han_calc = d_han;
+    
+    if (lFinMode === 'standard') {
+        calc_method = "Cắt";
+        h_rut_calc = 0.015; // Của Inox 16
+        d_han_calc = 70;    // Của Inox 16
+    }
+
     if (!isLFinManual) {
         L_mm = parseFloat(document.getElementById('l_su_dung').value.replace(/,/g, '.')) * 1000 || 0;
-        if (method === "Cắt") {
-            L_fin = L_mm - (L_mm * h_rut) - thickness_san - d_han;
+        if (calc_method === "Cắt") {
+            L_fin = L_mm - (L_mm * h_rut_calc) - thickness_san - d_han_calc;
         } else {
-            L_fin = ((L_mm * 2 - k_co) / 2) - d_han - (L_mm * h_rut) - thickness_san;
+            L_fin = ((L_mm * 2 - k_co) / 2) - d_han_calc - (L_mm * h_rut_calc) - thickness_san;
         }
         L_fin = Math.floor(L_fin); 
         document.getElementById('l_fin_input').value = parseFloat(L_fin).toLocaleString('en-US');
     } else {
         L_fin = Math.floor(parseFloat(document.getElementById('l_fin_input').value.replace(/,/g, '')) || 0); 
-        if (method === "Cắt") {
-            L_mm = (L_fin + thickness_san + d_han) / (1 - h_rut);
+        if (calc_method === "Cắt") {
+            L_mm = (L_fin + thickness_san + d_han_calc) / (1 - h_rut_calc);
         } else {
-            L_mm = (L_fin + k_co/2 + d_han + thickness_san) / (1 - h_rut);
+            L_mm = (L_fin + k_co/2 + d_han_calc + thickness_san) / (1 - h_rut_calc);
         }
         document.getElementById('l_su_dung').value = Number((L_mm / 1000).toFixed(3));
     }

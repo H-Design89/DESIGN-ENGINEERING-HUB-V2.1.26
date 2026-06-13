@@ -234,6 +234,24 @@ function toggleCircuitMode(mode) {
     triggerDebounceCalc();
 }
 
+window.updateLFinModeUI = function() {
+    const isStandard = document.getElementById('mode_standard').checked;
+    const lblStd = document.getElementById('lbl_mode_standard');
+    const lblCoil = document.getElementById('lbl_mode_coil');
+    
+    if (isStandard) {
+        lblStd.style.background = 'var(--primary)';
+        lblStd.style.color = 'white';
+        lblCoil.style.background = 'transparent';
+        lblCoil.style.color = '#555';
+    } else {
+        lblCoil.style.background = 'var(--primary)';
+        lblCoil.style.color = 'white';
+        lblStd.style.background = 'transparent';
+        lblStd.style.color = '#555';
+    }
+}
+
 function updateFanModels() {
     const brand = document.getElementById('fan_brand').value;
     const modelSel = document.getElementById('fan_model');

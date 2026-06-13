@@ -218,7 +218,7 @@ window.GT_CONFIG = {
     "FANS": {
         "ZA": {
             "FN040": {
-                "name": "FN040 Ø400",
+                "name": "FN040",
                 "details": "FN040-VDK.0F.V7P2 - D/Y (0.26/0.18kW - 0.5/0.29A - 1340/1020min)",
                 "modes": {
                     "Tam giác (Δ)": {
@@ -236,7 +236,7 @@ window.GT_CONFIG = {
                 }
             },
             "FN045": {
-                "name": "FN045 Ø450",
+                "name": "FN045",
                 "details": "FN045-VDK.2F.V7P2 - D/Y (0.35/0.22kW - 0.64/0.35A - 1280/970min)",
                 "modes": {
                     "Tam giác (Δ)": {
@@ -253,7 +253,7 @@ window.GT_CONFIG = {
                 }
             },
             "FN050": {
-                "name": "FN050 Ø500",
+                "name": "FN050",
                 "details": "FN050-VDK.4I.V7P1 - D/Y (0.77/0.49kW - 1.7/0.84A - 1300/1025min)",
                 "modes": {
                     "Tam giác (Δ)": {
@@ -274,7 +274,7 @@ window.GT_CONFIG = {
                 }
             },
             "FN056": {
-                "name": "FN056 Ø560",
+                "name": "FN056",
                 "details": "FN056-VDK.4M.V7P2 - D/Y (1.05/0.58kW - 2.2/1.1A - 1280/910min)",
                 "modes": {
                     "Tam giác (Δ)": {
@@ -296,7 +296,7 @@ window.GT_CONFIG = {
                 }
             },
             "FN063": {
-                "name": "FN063 Ø630",
+                "name": "FN063",
                 "details": "FN063-VDK.6N.V7P7 - D/Y (2.7/1.75kW - 5.0/3.0A - 1330/1040min)",
                 "modes": {
                     "Tam giác (Δ)": {

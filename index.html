@@ -90,6 +90,16 @@
                             </div>
                         </div>
 
+                        <div style="display: inline-flex; align-items: center; justify-content: flex-start; gap: 15px; margin-bottom: 10px; background: #f8f9fa; padding: 6px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 0.9rem;">
+                            <label style="margin: 0; color: #555; font-weight: bold;">Chế độ tính lọt lòng:</label>
+                            <div class="segmented-control" style="display: flex; background: #e0e0e0; border-radius: 20px; padding: 2px;">
+                                <input type="radio" id="mode_standard" name="l_fin_mode" value="standard" checked onchange="updateLFinModeUI(); triggerDebounceCalc()" style="display: none;">
+                                <label for="mode_standard" id="lbl_mode_standard" style="margin: 0; padding: 4px 12px; cursor: pointer; border-radius: 18px; background: var(--primary); color: white; font-weight: bold; transition: 0.3s; font-size: 0.85rem;">Standard</label>
+                                
+                                <input type="radio" id="mode_coil" name="l_fin_mode" value="coil" onchange="updateLFinModeUI(); triggerDebounceCalc()" style="display: none;">
+                                <label for="mode_coil" id="lbl_mode_coil" style="margin: 0; padding: 4px 12px; cursor: pointer; border-radius: 18px; color: #555; font-weight: bold; transition: 0.3s; font-size: 0.85rem;">Dàn Coil</label>
+                            </div>
+                        </div>
                         <div class="grid">
                             <div class="input-group">
                                 <!-- Ghi chú: Thêm min="0" để ngăn chặn nhập số âm gây lỗi tính toán -->

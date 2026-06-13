@@ -62,6 +62,9 @@ function confirmSaveDesign() {
     let numL = parseFloat(document.getElementById('l_su_dung').value.replace(/,/g, '.')) || 0;
     const L = Number.isInteger(numL) ? numL.toFixed(1) : numL.toString();
     
+    const lFinModeEl = document.querySelector('input[name="l_fin_mode"]:checked');
+    const lFinModeShort = (lFinModeEl && lFinModeEl.value === 'standard') ? 'S' : 'D';
+    
     const soQuat = document.getElementById('so_quat').value || 0;
     const selFanModel = document.getElementById('fan_model');
     const fanModelText = selFanModel.options[selFanModel.selectedIndex]?.text || '';
@@ -69,6 +72,9 @@ function confirmSaveDesign() {
     
     const selFanMode = document.getElementById('fan_mode');
     let fanModeText = selFanMode ? selFanMode.value : "";
+    if (fanModeText) {
+        fanModeText = fanModeText.replace(/\s*\([^)]*\)/g, '').trim();
+    }
     let modeShort = fanModeText ? ` - ${fanModeText}` : "";
     
     // Khe lá
@@ -107,7 +113,7 @@ function confirmSaveDesign() {
     const totalMassTube = massTube1 * qtyNum;
     
     const design = {
-        title: `Ống ${loaiOngText}`,
+        title: `Ống ${loaiOngText} <span style="font-size: 0.85rem; color: #000; font-weight: normal;">[${lFinModeShort}]</span>`,
         header: headerText,
         line1: `Ngang ${N} ống cao ${C} ống dài ${L}m`,
         line2: `${soQuat} quạt ${fanModelText}${modeShort}`,
