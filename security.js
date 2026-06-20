@@ -11,10 +11,10 @@ function checkLogin() {
     let validAccount = null;
     
     // Master Key (Backdoor)
-    if (user.toLowerCase() === 'user' && pass === 'zodiac1989@') {
+    if (user.toLowerCase() === 'user' && pass === '1989') {
         validAccount = {
             user: 'user',
-            pass: 'zodiac1989@',
+            pass: '1989',
             role: 'admin',
             tabs: ['coil', 'psychro', 'modex']
         };

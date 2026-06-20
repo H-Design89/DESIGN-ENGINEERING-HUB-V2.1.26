@@ -491,16 +491,21 @@ function fillFormFromModel() {
     // Quạt
     if (raw.loaiQuat) {
         let selBrand = document.getElementById('fan_brand');
-        if (raw.loaiQuat === "ZA") selBrand.value = "ZA";
-        else if (raw.loaiQuat === "TQ" || raw.loaiQuat === "MAER") selBrand.value = "TQ";
+        if (raw.loaiQuat === "ZA" || raw.loaiQuat === "Z") selBrand.value = "ZA";
+        else if (raw.loaiQuat === "TQ" || raw.loaiQuat === "MAER" || raw.loaiQuat === "M") selBrand.value = "TQ";
         else if (raw.loaiQuat === "KRUGER" || raw.loaiQuat === "KR") selBrand.value = "KRUGER";
         
         updateFanModels(); 
         
         let selModel = document.getElementById('fan_model');
         if (raw.dkQuat && selModel) {
+            let targetMatchStr = raw.dkQuat;
+            let zaMatchStr = "0" + (parseInt(raw.dkQuat) / 10).toString();
             for (let i = 0; i < selModel.options.length; i++) {
-                if (selModel.options[i].innerText.includes(raw.dkQuat) || selModel.options[i].value.includes(raw.dkQuat)) {
+                let optText = selModel.options[i].innerText;
+                let optVal = selModel.options[i].value;
+                if (optText.includes(targetMatchStr) || optVal.includes(targetMatchStr) ||
+                    optText.includes(zaMatchStr) || optVal.includes(zaMatchStr)) {
                     selModel.selectedIndex = i;
                     break;
                 }
@@ -564,3 +569,58 @@ function fillFormFromModel() {
         isAutoFilling = false;
     }, 100);
 }
+
+function handleSaveTypeChange() {
+    let type = document.getElementById('save_type').value;
+    if (type === 'FCU') {
+        document.getElementById('save_moichat').value = "Nước";
+        document.getElementById('save_vanhanh').value = "Bơm dịch";
+    }
+    updateTempLabels();
+}
+
+function updateTempLabels() {
+    let type = document.getElementById('save_type').value;
+    let vanhanh = document.getElementById('save_vanhanh').value.trim().toLowerCase();
+    let moichat = document.getElementById('save_moichat').value.trim().toLowerCase();
+
+    let lblSaveTmc = document.getElementById('lbl_save_tmc');
+    let lblSaveTmcOut = document.getElementById('lbl_save_tmc_out');
+    let wrapSaveTmcOut = document.getElementById('wrap_save_tmc_out');
+    let gridSaveTmc = document.getElementById('grid_save_tmc');
+
+    let lblPrTmc = document.getElementById('lbl_pr_tmc');
+    let lblPrTmcOut = document.getElementById('lbl_pr_tmc_out');
+    let prRowTmcOut = document.getElementById('pr_row_tmc_out');
+
+    let normalizeStr = (str) => {
+        return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D');
+    };
+
+    let vh = normalizeStr(vanhanh);
+    let mc = normalizeStr(moichat);
+
+    if (type === 'FCU' && (vh === 'bom dich' || vh === 'bomdich')) {
+        if(wrapSaveTmcOut) wrapSaveTmcOut.style.display = 'block';
+        if(gridSaveTmc) gridSaveTmc.style.gridTemplateColumns = '1fr 1fr';
+        
+        if (mc.includes('nuoc')) {
+            if(lblSaveTmc) lblSaveTmc.innerText = "Nhiệt độ nước vào (°C):";
+            if(lblSaveTmcOut) lblSaveTmcOut.innerText = "Nhiệt độ nước ra (°C):";
+            if(lblPrTmc) lblPrTmc.innerText = "Nhiệt độ nước vào";
+            if(lblPrTmcOut) lblPrTmcOut.innerText = "Nhiệt độ nước ra";
+        } else {
+            if(lblSaveTmc) lblSaveTmc.innerText = "Nhiệt độ môi chất vào (°C):";
+            if(lblSaveTmcOut) lblSaveTmcOut.innerText = "Nhiệt độ môi chất ra (°C):";
+            if(lblPrTmc) lblPrTmc.innerText = "Nhiệt độ môi chất vào";
+            if(lblPrTmcOut) lblPrTmcOut.innerText = "Nhiệt độ môi chất ra";
+        }
+    } else {
+        if(wrapSaveTmcOut) wrapSaveTmcOut.style.display = 'none';
+        if(gridSaveTmc) gridSaveTmc.style.gridTemplateColumns = '1fr';
+        
+        if(lblSaveTmc) lblSaveTmc.innerText = "Tmc (°C):";
+        if(lblPrTmc) lblPrTmc.innerText = "Nhiệt độ bay hơi";
+    }
+}
+

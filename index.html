@@ -23,14 +23,21 @@
             <div id="ui-login" style="margin-top: 15px;">
                 <div class="input-group" style="text-align: center; margin-bottom: 15px;">
                     <label style="font-weight: 600; color: #444; font-size: 0.9rem;">Tài khoản</label>
-                    <input type="text" id="login-user" value="User" placeholder="Tài khoản..." style="transition: all 0.3s; text-align: center;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#eaeaea'" onkeypress="if(event.key==='Enter') document.getElementById('login-pass').focus()">
+                    <input type="text" id="login-user" value="User" placeholder="Tài khoản..."
+                        style="transition: all 0.3s; text-align: center;"
+                        onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#eaeaea'"
+                        onkeypress="if(event.key==='Enter') document.getElementById('login-pass').focus()">
                 </div>
                 <div class="input-group" style="text-align: center;">
                     <label style="font-weight: 600; color: #444; font-size: 0.9rem;">Mật khẩu</label>
-                    <input type="password" id="login-pass" placeholder="Nhập mật khẩu..." style="transition: all 0.3s; text-align: center;" onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#eaeaea'" onkeypress="if(event.key==='Enter') checkLogin()">
+                    <input type="password" id="login-pass" placeholder="Nhập mật khẩu..."
+                        style="transition: all 0.3s; text-align: center;"
+                        onfocus="this.style.borderColor='var(--primary)'" onblur="this.style.borderColor='#eaeaea'"
+                        onkeypress="if(event.key==='Enter') checkLogin()">
                 </div>
                 <button class="btn-unlock" onclick="checkLogin()" style="margin-top: 20px;">ĐĂNG NHẬP</button>
-                <p id="login-error" style="color: red; font-size: 0.85rem; display: none; margin-top: 10px;">Tài khoản hoặc mật khẩu không chính xác!</p>
+                <p id="login-error" style="color: red; font-size: 0.85rem; display: none; margin-top: 10px;">Tài khoản
+                    hoặc mật khẩu không chính xác!</p>
             </div>
         </div>
     </div>
@@ -39,7 +46,8 @@
         <div class="container">
             <div class="header">
                 <div class="settings-dropdown">
-                    <button class="btn-gear" onclick="document.getElementById('settings-menu').classList.toggle('show')">⚙️</button>
+                    <button class="btn-gear"
+                        onclick="document.getElementById('settings-menu').classList.toggle('show')">⚙️</button>
                     <div id="settings-menu" class="dropdown-menu">
                         <a href="App_Installer.zip" download>💻 Install App</a>
                         <a href="#" class="logout" onclick="logoutUser()">🚪 Đăng xuất</a>
@@ -61,10 +69,17 @@
             <div id="page-coil" class="app-page active">
                 <div class="layout-wrapper">
                     <div class="left-col">
-                        <div style="background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center;">
-                            <label style="color: var(--primary); font-weight: bold; display: block; margin-bottom: 10px; font-size: 1.1rem;">TỰ ĐỘNG ĐIỀN TỪ MÃ MODEL</label>
-                            <input type="text" id="auto_fill_model" placeholder="---" style="width: 100%; padding: 15px; border: 2px solid var(--primary); border-radius: 8px; font-size: 1.2rem; text-transform: uppercase; text-align: center; font-weight: bold; color: var(--secondary); box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; background: #fdfdfd;" onkeypress="if(event.key==='Enter') fillFormFromModel()" oninput="enableAutoFillBtn()">
-                            <button class="btn-unlock" onclick="fillFormFromModel()" style="width: auto; padding: 12px 40px; font-size: 1rem; font-weight: bold; border-radius: 30px; letter-spacing: 1px; display: inline-block; transition: all 0.3s;">GENERATE DATA</button>
+                        <div
+                            style="background: #fff; padding: 20px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); text-align: center;">
+                            <label
+                                style="color: var(--primary); font-weight: bold; display: block; margin-bottom: 10px; font-size: 1.1rem;">TỰ
+                                ĐỘNG ĐIỀN TỪ MÃ MODEL</label>
+                            <input type="text" id="auto_fill_model" placeholder="---"
+                                style="width: 100%; padding: 15px; border: 2px solid var(--primary); border-radius: 8px; font-size: 1.2rem; text-transform: uppercase; text-align: center; font-weight: bold; color: var(--secondary); box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; background: #fdfdfd;"
+                                onkeypress="if(event.key==='Enter') fillFormFromModel()" oninput="enableAutoFillBtn()">
+                            <button class="btn-unlock" onclick="fillFormFromModel()"
+                                style="width: auto; padding: 12px 40px; font-size: 1rem; font-weight: bold; border-radius: 30px; letter-spacing: 1px; display: inline-block; transition: all 0.3s;">GENERATE
+                                DATA</button>
                         </div>
                         <div class="section-title">1. CẤU HÌNH COIL</div>
                         <div class="grid">
@@ -90,28 +105,36 @@
                             </div>
                         </div>
 
-                        <div style="display: inline-flex; align-items: center; justify-content: flex-start; gap: 15px; margin-bottom: 10px; background: #f8f9fa; padding: 6px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 0.9rem;">
+                        <div
+                            style="display: inline-flex; align-items: center; justify-content: flex-start; gap: 15px; margin-bottom: 10px; background: #f8f9fa; padding: 6px 15px; border-radius: 8px; border: 1px solid #ddd; font-size: 0.9rem;">
                             <label style="margin: 0; color: #555; font-weight: bold;">Chế độ tính lọt lòng:</label>
-                            <div class="segmented-control" style="display: flex; background: #e0e0e0; border-radius: 20px; padding: 2px;">
-                                <input type="radio" id="mode_standard" name="l_fin_mode" value="standard" checked onchange="updateLFinModeUI(); triggerDebounceCalc()" style="display: none;">
-                                <label for="mode_standard" id="lbl_mode_standard" style="margin: 0; padding: 4px 12px; cursor: pointer; border-radius: 18px; background: var(--primary); color: white; font-weight: bold; transition: 0.3s; font-size: 0.85rem;">Standard</label>
-                                
-                                <input type="radio" id="mode_coil" name="l_fin_mode" value="coil" onchange="updateLFinModeUI(); triggerDebounceCalc()" style="display: none;">
-                                <label for="mode_coil" id="lbl_mode_coil" style="margin: 0; padding: 4px 12px; cursor: pointer; border-radius: 18px; color: #555; font-weight: bold; transition: 0.3s; font-size: 0.85rem;">Dàn Coil</label>
+                            <div class="segmented-control"
+                                style="display: flex; background: #e0e0e0; border-radius: 20px; padding: 2px;">
+                                <input type="radio" id="mode_standard" name="l_fin_mode" value="standard" checked
+                                    onchange="updateLFinModeUI(); triggerDebounceCalc()" style="display: none;">
+                                <label for="mode_standard" id="lbl_mode_standard"
+                                    style="margin: 0; padding: 4px 12px; cursor: pointer; border-radius: 18px; background: var(--primary); color: white; font-weight: bold; transition: 0.3s; font-size: 0.85rem;">Standard</label>
+
+                                <input type="radio" id="mode_coil" name="l_fin_mode" value="coil"
+                                    onchange="updateLFinModeUI(); triggerDebounceCalc()" style="display: none;">
+                                <label for="mode_coil" id="lbl_mode_coil"
+                                    style="margin: 0; padding: 4px 12px; cursor: pointer; border-radius: 18px; color: #555; font-weight: bold; transition: 0.3s; font-size: 0.85rem;">Dàn
+                                    Coil</label>
                             </div>
                         </div>
                         <div class="grid">
                             <div class="input-group">
                                 <!-- Ghi chú: Thêm min="0" để ngăn chặn nhập số âm gây lỗi tính toán -->
                                 <label>Ống sử dụng L (m):</label>
-                                <input type="text" id="l_su_dung" value="2.00"
-                                    oninput="triggerDebounceCalc()" onblur="if(this.value) this.value = Number(parseFloat(this.value.replace(/,/g, '.')).toFixed(2));">
+                                <input type="text" id="l_su_dung" value="2.00" oninput="triggerDebounceCalc()"
+                                    onblur="if(this.value) this.value = Number(parseFloat(this.value.replace(/,/g, '.')).toFixed(2));">
                             </div>
                             <div class="input-group">
                                 <label>L lọt lòng (mm): <span id="btn_edit_lfin" class="btn-toggle-edit"
                                         onclick="toggleLFinEdit()">[Edit]</span></label>
-                                <input type="text" id="l_fin_input" value="" readonly
-                                    style="color:var(--primary);" oninput="triggerDebounceCalc()" onblur="if(this.value) this.value = parseFloat(this.value.replace(/,/g, '')).toLocaleString('en-US') || 0;">
+                                <input type="text" id="l_fin_input" value="" readonly style="color:var(--primary);"
+                                    oninput="triggerDebounceCalc()"
+                                    onblur="if(this.value) this.value = parseFloat(this.value.replace(/,/g, '')).toLocaleString('en-US') || 0;">
                             </div>
                         </div>
 
@@ -156,7 +179,11 @@
                             <div class="input-group">
                                 <label style="display: flex; align-items: center; gap: 5px;">
                                     Model / Đường kính:
-                                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" style="cursor: pointer; color: var(--primary); transition: opacity 0.2s;" onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'" onclick="showFanDetails()" title="Xem chi tiết kỹ thuật">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"
+                                        stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"
+                                        style="cursor: pointer; color: var(--primary); transition: opacity 0.2s;"
+                                        onmouseover="this.style.opacity='0.7'" onmouseout="this.style.opacity='1'"
+                                        onclick="showFanDetails()" title="Xem chi tiết kỹ thuật">
                                         <circle cx="12" cy="12" r="10"></circle>
                                         <line x1="12" y1="16" x2="12" y2="12"></line>
                                         <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -176,7 +203,8 @@
                                 <label>Lưu lượng 1 quạt (m3/h): <span id="btn_edit_gio" class="btn-toggle-edit"
                                         onclick="toggleGioEdit()">[Edit]</span></label>
                                 <input type="text" id="gio_1_quat" readonly style="color:var(--primary);"
-                                    oninput="triggerDebounceCalc()" onblur="if(this.value) this.value = parseFloat(this.value.replace(/,/g, '')).toLocaleString('en-US') || 0;">
+                                    oninput="triggerDebounceCalc()"
+                                    onblur="if(this.value) this.value = parseFloat(this.value.replace(/,/g, '')).toLocaleString('en-US') || 0;">
                             </div>
                             <div class="input-group"><label>Số lượng quạt:</label><input type="number" id="so_quat"
                                     min="1" value="2" oninput="syncReqFan(); triggerDebounceCalc()"></div>
@@ -245,21 +273,29 @@
                         <div id="mass-segments-container" style="display: flex; flex-direction: column; gap: 10px;">
                             <!-- JS sẽ render các hàng tương ứng với khe lá ở đây -->
                         </div>
-                        <div id="mass-tube-container" class="grid" style="grid-template-columns: 1fr 1fr 1fr; background: #e3f2fd; padding: 12px; border-radius: 8px; border: 1px solid #90caf9; margin-top: 10px;">
+                        <div id="mass-tube-container" class="grid"
+                            style="grid-template-columns: 1fr 1fr 1fr; background: #e3f2fd; padding: 12px; border-radius: 8px; border: 1px solid #90caf9; margin-top: 10px;">
                             <div class="input-group" style="margin-bottom: 0;">
                                 <label style="color: var(--primary);">Loại ống:</label>
-                                <div id="mass_tube_type" style="font-weight: bold; margin-top: 5px; font-size: 1.1rem;">-</div>
+                                <div id="mass_tube_type" style="font-weight: bold; margin-top: 5px; font-size: 1.1rem;">
+                                    -</div>
                             </div>
                             <div class="input-group" style="margin-bottom: 0;">
                                 <label>Độ dày ống (mm):</label>
-                                <input type="number" id="mass_tube_thick" step="0.01" disabled style="background: #f0f0f0; border-color: #ccc; color: #666;" oninput="triggerDebounceCalc()">
+                                <input type="number" id="mass_tube_thick" step="0.01" disabled
+                                    style="background: #f0f0f0; border-color: #ccc; color: #666;"
+                                    oninput="triggerDebounceCalc()">
                             </div>
                             <div class="input-group" style="margin-bottom: 0;">
-                                <label>Hệ số (kg/m): <span id="btn_edit_tube_mass" class="btn-toggle-edit" onclick="toggleTubeMassEdit()" style="float: right;">[Edit]</span></label>
-                                <input type="number" id="mass_tube_coeff" step="0.0001" disabled style="background: #f0f0f0; border-color: #ccc; color: #666;" oninput="triggerDebounceCalc()">
+                                <label>Hệ số (kg/m): <span id="btn_edit_tube_mass" class="btn-toggle-edit"
+                                        onclick="toggleTubeMassEdit()" style="float: right;">[Edit]</span></label>
+                                <input type="number" id="mass_tube_coeff" step="0.0001" disabled
+                                    style="background: #f0f0f0; border-color: #ccc; color: #666;"
+                                    oninput="triggerDebounceCalc()">
                             </div>
                         </div>
-                        <button class="btn-unlock" style="margin-top: 15px; background: var(--secondary);" onclick="calculateMass()">TÍNH KHỐI LƯỢNG</button>
+                        <button class="btn-unlock" style="margin-top: 15px; background: var(--secondary);"
+                            onclick="calculateMass()">TÍNH KHỐI LƯỢNG</button>
                     </div>
 
                     <div class="right-col" id="result-container">
@@ -302,11 +338,13 @@
                             </div>
                             <div class="stat-card">
                                 <span class="stat-label" style="color: #6a1b9a;">Khối lượng lá / bộ</span>
-                                <span class="stat-value highlight" style="color: #6a1b9a;" id="res_mass_fin">-</span><span class="stat-unit" style="color: #6a1b9a;">kg</span>
+                                <span class="stat-value highlight" style="color: #6a1b9a;"
+                                    id="res_mass_fin">-</span><span class="stat-unit" style="color: #6a1b9a;">kg</span>
                             </div>
                             <div class="stat-card">
                                 <span class="stat-label" style="color: #283593;">Khối lượng ống / bộ</span>
-                                <span class="stat-value highlight" style="color: #283593;" id="res_mass_tube">-</span><span class="stat-unit" style="color: #283593;">kg</span>
+                                <span class="stat-value highlight" style="color: #283593;"
+                                    id="res_mass_tube">-</span><span class="stat-unit" style="color: #283593;">kg</span>
                             </div>
                         </div>
 
@@ -350,7 +388,8 @@
                             style="text-align: right; margin-bottom: 15px; font-size: 0.85rem; color: #5f6368; font-weight: bold;">
                             Số lượng thiết kế đã lưu: <span id="saved-count" style="color: var(--accent);">0</span>
                         </div>
-                        <div class="footer">Solution by <b style="cursor: pointer;">H-DESIGN</b> | GIA THINH HEAT EXCHANGE EQUIPMENT PRODUCTION
+                        <div class="footer">Solution by <b style="cursor: pointer;">H-DESIGN</b> | GIA THINH HEAT
+                            EXCHANGE EQUIPMENT PRODUCTION
                             CO.,LTD © 2026</div>
                     </div>
                 </div>
@@ -414,7 +453,8 @@
                         </tbody>
                     </table>
 
-                    <div class="footer" style="margin-top: 20px;">Solution by <b style="cursor: pointer;">H-DESIGN</b> | GIA THINH HEAT EXCHANGE EQUIPMENT PRODUCTION CO.,LTD
+                    <div class="footer" style="margin-top: 20px;">Solution by <b style="cursor: pointer;">H-DESIGN</b> |
+                        GIA THINH HEAT EXCHANGE EQUIPMENT PRODUCTION CO.,LTD
                         © 2026</div>
                 </div>
             </div>
@@ -425,59 +465,82 @@
     <!-- TRANG QUẢN TRỊ ADMIN -->
     <div id="page-admin" class="app-page">
         <div class="psy-container" style="max-width: 800px;">
-            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;" open>
-                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ TÀI KHOẢN</summary>
+            <details
+                style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;"
+                open>
+                <summary
+                    style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">
+                    ▶ QUẢN LÝ TÀI KHOẢN</summary>
                 <div style="margin-top: 15px;">
                     <div id="admin-accounts-container" style="display: flex; flex-direction: column; gap: 10px;">
                         <!-- JS sẽ render tài khoản vào đây -->
                     </div>
-                    <button class="btn-add" onclick="addAdminAccountRow()" style="margin-top: 15px;">+ THÊM TÀI KHOẢN</button>
+                    <button class="btn-add" onclick="addAdminAccountRow()" style="margin-top: 15px;">+ THÊM TÀI
+                        KHOẢN</button>
                 </div>
             </details>
 
-            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
-                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ THÔNG SỐ ỐNG (TUBE SPECS)</summary>
+            <details
+                style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+                <summary
+                    style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">
+                    ▶ QUẢN LÝ THÔNG SỐ ỐNG (TUBE SPECS)</summary>
                 <div style="margin-top: 15px;">
                     <div id="admin-tube-container" style="display: flex; flex-direction: column; gap: 15px;">
                         <!-- JS sẽ render card thông số ống vào đây -->
                     </div>
-                    <button class="btn-add" onclick="addAdminTubeSpecRow()" style="margin-top:10px;">+ THÊM THÔNG SỐ ỐNG</button>
+                    <button class="btn-add" onclick="addAdminTubeSpecRow()" style="margin-top:10px;">+ THÊM THÔNG SỐ
+                        ỐNG</button>
                 </div>
             </details>
 
-            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
-                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ HỆ SỐ KHỐI LƯỢNG LÁ</summary>
+            <details
+                style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+                <summary
+                    style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">
+                    ▶ QUẢN LÝ HỆ SỐ KHỐI LƯỢNG LÁ</summary>
                 <div style="margin-top: 15px;">
                     <div id="admin-fin-container" style="display: flex; flex-direction: column; gap: 10px;">
                         <!-- JS sẽ render card hệ số khối lượng lá vào đây -->
                     </div>
-                    <button class="btn-add" onclick="addAdminFinCoeffRow()" style="margin-top:10px;">+ THÊM HỆ SỐ</button>
+                    <button class="btn-add" onclick="addAdminFinCoeffRow()" style="margin-top:10px;">+ THÊM HỆ
+                        SỐ</button>
                 </div>
             </details>
 
-            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
-                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ THÔNG SỐ QUẠT (FAN SPECS)</summary>
+            <details
+                style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+                <summary
+                    style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">
+                    ▶ QUẢN LÝ THÔNG SỐ QUẠT (FAN SPECS)</summary>
                 <div style="margin-top: 15px;">
                     <div id="admin-fan-container" style="display: flex; flex-direction: column; gap: 15px;">
                         <!-- JS sẽ render thông số quạt vào đây -->
                     </div>
-                    <button class="btn-add" onclick="addAdminFanRow()" style="margin-top:10px;">+ THÊM MODEL QUẠT</button>
+                    <button class="btn-add" onclick="addAdminFanRow()" style="margin-top:10px;">+ THÊM MODEL
+                        QUẠT</button>
                 </div>
             </details>
 
-            <details style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
-                <summary style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">▶ QUẢN LÝ KÍCH THƯỚC CHUẨN COIL</summary>
+            <details
+                style="margin-bottom: 15px; background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px;">
+                <summary
+                    style="font-weight: bold; font-size: 1.1rem; color: var(--primary); cursor: pointer; outline: none; padding: 5px 0;">
+                    ▶ QUẢN LÝ KÍCH THƯỚC CHUẨN COIL</summary>
                 <div style="margin-top: 15px;">
                     <div id="admin-coil-container" style="display: flex; flex-direction: column; gap: 15px;">
                         <!-- JS sẽ render card thông số chuẩn coil vào đây -->
                     </div>
-                    <button class="btn-add" onclick="addAdminStandardCoilRow()" style="margin-top:10px;">+ THÊM KÍCH THƯỚC CHUẨN</button>
+                    <button class="btn-add" onclick="addAdminStandardCoilRow()" style="margin-top:10px;">+ THÊM KÍCH
+                        THƯỚC CHUẨN</button>
                 </div>
             </details>
 
             <div class="grid" style="margin-top: 25px;">
-                <button class="btn-unlock" onclick="saveAdminData()" style="font-weight:bold; font-size:1.05rem;">LƯU VÀ TẢI FILE CONFIG.JS 📥</button>
-                <button class="btn-unlock" style="background: #757575;" onclick="switchTab('coil')">ĐÓNG & QUAY LẠI</button>
+                <button class="btn-unlock" onclick="saveAdminData()" style="font-weight:bold; font-size:1.05rem;">LƯU VÀ
+                    TẢI FILE CONFIG.JS 📥</button>
+                <button class="btn-unlock" style="background: #757575;" onclick="switchTab('coil')">ĐÓNG & QUAY
+                    LẠI</button>
             </div>
         </div>
     </div>
@@ -489,8 +552,10 @@
             <div id="saved-designs-container" style="display: flex; flex-direction: column; gap: 15px;">
                 <!-- Javascript sẽ render các card lịch sử vào đây -->
             </div>
-            <div style="position: sticky; bottom: 20px; z-index: 100; text-align: center; margin-top: 25px; padding: 10px 0;">
-                <button class="btn-unlock" style="background: #757575; max-width: 300px; margin: auto; box-shadow: 0 6px 16px rgba(0,0,0,0.3); border: 2px solid #fff;"
+            <div
+                style="position: sticky; bottom: 20px; z-index: 100; text-align: center; margin-top: 25px; padding: 10px 0;">
+                <button class="btn-unlock"
+                    style="background: #757575; max-width: 300px; margin: auto; box-shadow: 0 6px 16px rgba(0,0,0,0.3); border: 2px solid #fff;"
                     onclick="switchTab('coil')">ĐÓNG & QUAY LẠI</button>
             </div>
         </div>
@@ -510,13 +575,15 @@
                 </div>
                 <div class="grid">
                     <div class="input-group">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
                             <label style="margin: 0; white-space: nowrap;">Loại dàn:</label>
-                            <label style="margin: 0; font-weight: normal; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--primary); white-space: nowrap;">
+                            <label
+                                style="margin: 0; font-weight: normal; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--primary); white-space: nowrap;">
                                 <input type="checkbox" id="save_tach_am"> Tách ẩm
                             </label>
                         </div>
-                        <select id="save_type">
+                        <select id="save_type" onchange="handleSaveTypeChange()">
                             <option value="">-- Chọn loại dàn --</option>
                             <option value="Dàn lạnh">Dàn lạnh</option>
                             <option value="Đông gió TN">Đông gió TN</option>
@@ -537,21 +604,27 @@
                 <div class="grid">
                     <div class="input-group">
                         <label>Môi chất:</label>
-                        <input type="text" id="save_moichat" placeholder="VD: R404A">
+                        <input type="text" id="save_moichat" placeholder="VD: R404A" oninput="updateTempLabels()">
                     </div>
                     <div class="input-group">
                         <label>Vận hành:</label>
-                        <input type="text" id="save_vanhanh" placeholder="VD: Bơm Dịch">
+                        <input type="text" id="save_vanhanh" placeholder="VD: Bơm Dịch" oninput="updateTempLabels()">
                     </div>
                 </div>
 
-                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                <div class="grid" id="grid_save_tmc" style="grid-template-columns: 1fr;">
                     <div class="input-group">
-                        <label>Tmc (°C):</label>
+                        <label id="lbl_save_tmc">Tmc (°C):</label>
                         <input type="text" id="save_tmc" placeholder="VD: -5">
                     </div>
+                    <div class="input-group" id="wrap_save_tmc_out" style="display: none;">
+                        <label id="lbl_save_tmc_out">Tmc ra (°C):</label>
+                        <input type="text" id="save_tmc_out" placeholder="VD: 2">
+                    </div>
+                </div>
+                <div class="grid">
                     <div class="input-group">
-                        <label>Tr (°C):</label>
+                        <label id="lbl_save_tr">Tr (°C):</label>
                         <input type="text" id="save_tr" placeholder="VD: 2">
                     </div>
                     <div class="input-group">
@@ -614,16 +687,21 @@
     <!-- MODAL HIỂN THỊ THÔNG TIN CHI TIẾT QUẠT -->
     <div id="fan-info-modal" class="modal-overlay" style="display: none;">
         <div class="modal" style="max-width: 550px; padding: 25px;">
-            <div style="display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px;">
-                <h3 style="margin: 0; font-size: 1.3rem; color: #fff; background-color: var(--primary); padding: 8px 16px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" id="fan-info-title">Thông số Kỹ Thuật Quạt</h3>
+            <div
+                style="display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 1.3rem; color: #fff; background-color: var(--primary); padding: 8px 16px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
+                    id="fan-info-title">Thông số Kỹ Thuật Quạt</h3>
             </div>
-            
-            <div id="fan-info-content" style="font-size: 1.1rem; line-height: 1.6; color: #2c3e50; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border: 1px solid #ced4da; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+
+            <div id="fan-info-content"
+                style="font-size: 1.1rem; line-height: 1.6; color: #2c3e50; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border: 1px solid #ced4da; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
                 Đang tải dữ liệu...
             </div>
-            
+
             <div style="text-align: center; margin-top: 25px;">
-                <button class="btn btn-secondary" style="padding: 8px 20px; font-size: 0.95rem; font-weight: bold; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;" onclick="document.getElementById('fan-info-modal').style.display='none'">XÁC NHẬN ĐÓNG</button>
+                <button class="btn btn-secondary"
+                    style="padding: 8px 20px; font-size: 0.95rem; font-weight: bold; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;"
+                    onclick="document.getElementById('fan-info-modal').style.display='none'">XÁC NHẬN ĐÓNG</button>
             </div>
         </div>
     </div>
@@ -634,12 +712,14 @@
                 <span class="btn-close" onclick="closeModelGenerator()">×</span>
             </div>
             <div class="modal-body" style="display: flex; flex-direction: column; gap: 15px;">
-                
+
                 <div class="grid">
                     <div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
                             <label style="margin: 0; white-space: nowrap;">Loại thiết bị [01]:</label>
-                            <label style="margin: 0; font-weight: normal; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--primary); white-space: nowrap;">
+                            <label
+                                style="margin: 0; font-weight: normal; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--primary); white-space: nowrap;">
                                 <input type="checkbox" id="model-tach-am" onchange="updateModelPreview()"> Tách ẩm
                             </label>
                         </div>
@@ -718,19 +798,24 @@
                 </div>
 
                 <div style="background: #e8f0fe; padding: 15px; border-radius: 8px; border: 1px dashed var(--primary);">
-                    <label style="color: var(--primary); font-size: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                    <label
+                        style="color: var(--primary); font-size: 1rem; display: flex; justify-content: space-between; align-items: center;">
                         Mã Model:
                         <span id="btn_edit_model" class="btn-toggle-edit" onclick="toggleModelEdit()">[Edit]</span>
                     </label>
                     <div style="display: flex; gap: 8px; margin-top: 5px;">
-                        <input type="text" id="model-final-preview" readonly style="font-weight: bold; font-size: 1.2rem; color: var(--secondary); border-color: var(--primary); background: #f1f3f4; flex: 1;">
-                        <button class="btn-unlock" onclick="copyModelCode()" style="width: auto; padding: 0 15px; border-radius: 6px; font-size: 0.95rem; font-weight: bold;" title="Sao chép mã Model">COPY</button>
+                        <input type="text" id="model-final-preview" readonly
+                            style="font-weight: bold; font-size: 1.2rem; color: var(--secondary); border-color: var(--primary); background: #f1f3f4; flex: 1;">
+                        <button class="btn-unlock" onclick="copyModelCode()"
+                            style="width: auto; padding: 0 15px; border-radius: 6px; font-size: 0.95rem; font-weight: bold;"
+                            title="Sao chép mã Model">COPY</button>
                     </div>
                 </div>
 
                 <input type="hidden" id="model-history-index">
-                
-                <button class="btn-unlock" onclick="saveGeneratedModel()" style="margin-top: 10px;">XÁC NHẬN LƯU MODEL</button>
+
+                <button class="btn-unlock" onclick="saveGeneratedModel()" style="margin-top: 10px;">XÁC NHẬN LƯU
+                    MODEL</button>
             </div>
         </div>
     </div>
@@ -738,33 +823,576 @@
     <!-- TRANG DỊCH MÃ MODEL (MODEX) -->
     <div id="page-modex" class="app-page">
         <div class="psy-container" style="max-width: 900px; margin: 0 auto; padding-top: 40px;">
-            <div style="background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 40px 30px; box-shadow: 0 8px 16px rgba(0,0,0,0.05);">
-                <h3 style="text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 10px; font-size: 1.8rem; letter-spacing: 1px;">PHÂN TÍCH MÃ MODEL</h3>
-                <p style="text-align: center; margin-bottom: 30px; color: #666; font-size: 1.05rem;">Nhập mã Model thiết bị vào ô bên dưới để tự động phân tích và trích xuất thông số kỹ thuật.</p>
+            <div
+                style="background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 40px 30px; box-shadow: 0 8px 16px rgba(0,0,0,0.05);">
+                <h3
+                    style="text-align: center; color: var(--primary); margin-top: 0; margin-bottom: 10px; font-size: 1.8rem; letter-spacing: 1px;">
+                    PHÂN TÍCH MÃ MODEL</h3>
+                <p style="text-align: center; margin-bottom: 30px; color: #666; font-size: 1.05rem;">Nhập mã Model thiết
+                    bị vào ô bên dưới để tự động phân tích và trích xuất thông số kỹ thuật.</p>
                 <div id="modex-subtabs" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 25px;">
-                    <button class="nav-tab active" id="tab-model-gt" onclick="switchModexTab('gt')" style="padding: 10px 20px; font-size: 1rem;">Standard GT</button>
-                    <button class="nav-tab" id="tab-model-g" onclick="switchModexTab('g')" style="display: none; padding: 10px 20px; font-size: 1rem; background: #e0e0e0; color: #333;">Standard G</button>
-                    <button class="nav-tab" id="tab-model-k" onclick="switchModexTab('k')" style="display: none; padding: 10px 20px; font-size: 1rem; background: #e0e0e0; color: #333;">Standard K</button>
+                    <button class="nav-tab active" id="tab-model-gt" onclick="switchModexTab('gt')"
+                        style="padding: 10px 20px; font-size: 1rem;">Standard GT</button>
+                    <button class="nav-tab" id="tab-model-g" onclick="switchModexTab('g')"
+                        style="display: none; padding: 10px 20px; font-size: 1rem; background: #e0e0e0; color: #333;">Standard
+                        G</button>
+                    <button class="nav-tab" id="tab-model-k" onclick="switchModexTab('k')"
+                        style="display: none; padding: 10px 20px; font-size: 1rem; background: #e0e0e0; color: #333;">Standard
+                        K</button>
                 </div>
-                
+
                 <div style="text-align: center; margin-bottom: 40px;">
-                    <input type="text" id="modex-input" placeholder="VD: TD - N6.RX - 3Z50 - E6/7/S" style="width: 85%; padding: 20px; border: 2px solid var(--primary); border-radius: 10px; font-size: 1.5rem; text-transform: uppercase; text-align: center; font-weight: bold; color: var(--secondary); box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); transition: all 0.3s; background: #fdfdfd;" oninput="onModexInputChange()" onkeypress="if(event.key==='Enter') decodeModelUI()">
+                    <input type="text" id="modex-input" placeholder="VD: TD - N6.RX - 3Z50 - E6/7/S"
+                        style="width: 85%; padding: 20px; border: 2px solid var(--primary); border-radius: 10px; font-size: 1.5rem; text-transform: uppercase; text-align: center; font-weight: bold; color: var(--secondary); box-shadow: inset 0 2px 5px rgba(0,0,0,0.05); transition: all 0.3s; background: #fdfdfd;"
+                        oninput="onModexInputChange()" onkeypress="if(event.key==='Enter') decodeModelUI()">
                     <div style="margin-top: 25px;">
-                        <button id="btn-modex-generate" class="btn-unlock" onclick="decodeModelUI()" style="width: auto; padding: 15px 50px; font-size: 1.15rem; font-weight: bold; border-radius: 40px; letter-spacing: 1px; transition: all 0.3s; display: inline-block;">GENERATE DATA</button>
+                        <button id="btn-modex-generate" class="btn-unlock" onclick="decodeModelUI()"
+                            style="width: auto; padding: 15px 50px; font-size: 1.15rem; font-weight: bold; border-radius: 40px; letter-spacing: 1px; transition: all 0.3s; display: inline-block;">GENERATE
+                            DATA</button>
                     </div>
                 </div>
-                
+
                 <div id="modex-result-container" style="display: none; border-top: 2px dashed #eee; padding-top: 30px;">
-                    <div style="font-weight: bold; font-size: 1.2rem; margin-bottom: 20px; color: var(--secondary); text-align: center;">KẾT QUẢ TRÍCH XUẤT THÔNG SỐ:</div>
-                    <div id="modex-result-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
+                    <div
+                        style="font-weight: bold; font-size: 1.2rem; margin-bottom: 20px; color: var(--secondary); text-align: center;">
+                        KẾT QUẢ TRÍCH XUẤT THÔNG SỐ:</div>
+                    <div id="modex-result-grid"
+                        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px;">
                         <!-- JS sẽ render các thẻ (card) kết quả vào đây -->
                     </div>
-                    <div id="modex-error" style="color: #e53935; font-weight: bold; background: #ffebee; padding: 15px; border-radius: 6px; display: none; margin-top: 20px; text-align: center; border: 1px solid #ffcdd2;"></div>
+                    <div id="modex-error"
+                        style="color: #e53935; font-weight: bold; background: #ffebee; padding: 15px; border-radius: 6px; display: none; margin-top: 20px; text-align: center; border: 1px solid #ffcdd2;">
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
+    <!-- BẢNG XUẤT THÔNG SỐ KỸ THUẬT (MODAL) -->
+    <div id="export-tskt-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 650px;">
+            <div class="modal-header">
+                <h3 style="margin: 0; color: var(--secondary);">XUẤT THÔNG SỐ KỸ THUẬT (PDF)</h3>
+                <span class="btn-close" onclick="closeExportModal()">✖</span>
+            </div>
+            <div class="modal-body">
+                <div class="section-title">1. THÔNG TIN CHUNG</div>
+                <div class="grid">
+                    <div class="input-group">
+                        <label>Khách hàng:</label>
+                        <input type="text" id="exp_customer" placeholder="VD: Cty Kho Lạnh Thành Công">
+                    </div>
+                    <div class="input-group">
+                        <label>Dự án:</label>
+                        <input type="text" id="exp_project" placeholder="VD: Dàn lạnh">
+                    </div>
+                    <div class="input-group" style="grid-column: span 2;">
+                        <label>Ngày/Nơi xuất bản in:</label>
+                        <input type="text" id="exp_date">
+                    </div>
+                </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="input-group">
+                        <label>Số lượng:</label>
+                        <input type="text" id="exp_qty" placeholder="VD: 1">
+                    </div>
+                    <div class="input-group">
+                        <label>Môi chất:</label>
+                        <input type="text" id="exp_moichat" placeholder="VD: R404A">
+                    </div>
+                    <div class="input-group">
+                        <label>Vận hành:</label>
+                        <input type="text" id="exp_vanhanh" placeholder="VD: Tiết lưu">
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:15px;">2. THÔNG SỐ HOẠT ĐỘNG</div>
+                <div class="grid">
+                    <div class="input-group">
+                        <label>Nhiệt độ bay hơi / Nước vào (°C):</label>
+                        <input type="text" id="exp_tmc">
+                    </div>
+                    <div class="input-group">
+                        <label>Nhiệt độ môi chất / Nước ra (°C):</label>
+                        <input type="text" id="exp_tmc_out" placeholder="Để trống nếu không có">
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="input-group">
+                        <label>Nhiệt độ phòng (°C):</label>
+                        <input type="text" id="exp_tr">
+                    </div>
+                    <div class="input-group">
+                        <label>RH phòng (%):</label>
+                        <input type="text" id="exp_rh">
+                    </div>
+                </div>
+                <div class="grid">
+                    <div class="input-group">
+                        <label>Nhiệt độ gió ra (°C):</label>
+                        <input type="text" id="exp_t_out" placeholder="VD: -23.5">
+                    </div>
+                    <div class="input-group">
+                        <label>Độ ẩm gió ra (%):</label>
+                        <input type="text" id="exp_rh_out" placeholder="VD: 96.2">
+                    </div>
+                </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="input-group">
+                        <label>Lưu lượng gió (m³/h):</label>
+                        <input type="text" id="exp_airflow" placeholder="Mặc định theo tính toán">
+                    </div>
+                    <div class="input-group">
+                        <label>Cột áp (Pa):</label>
+                        <input type="text" id="exp_pressure" placeholder="Mặc định theo tính toán">
+                    </div>
+                    <div class="input-group">
+                        <label>Tốc độ gió (m/s):</label>
+                        <input type="text" id="exp_vwind" placeholder="Mặc định theo tính toán">
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:15px;">3. THÔNG SỐ CẤU TẠO</div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="input-group">
+                        <label>Bọc ngoài (Vỏ):</label>
+                        <input type="text" id="exp_casing" value="Inox 304">
+                    </div>
+                    <div class="input-group">
+                        <label>Vị trí gộp:</label>
+                        <input type="text" id="exp_conn_side" value="Phải" list="conn_side_options">
+                        <datalist id="conn_side_options">
+                            <option value="Trái"></option>
+                            <option value="Phải"></option>
+                            <option value="Đối đầu"></option>
+                        </datalist>
+                    </div>
+                    <div class="input-group">
+                        <label>Mặt sàn:</label>
+                        <input type="text" id="exp_floor_mat" value="Nhôm" list="floor_mat_options">
+                        <datalist id="floor_mat_options">
+                            <option value="Nhôm"></option>
+                            <option value="Inox 304"></option>
+                        </datalist>
+                    </div>
+                </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="input-group">
+                        <label>Cánh tản nhiệt:</label>
+                        <input type="text" id="exp_fin_mat" value="Nhôm" list="fin_mat_options">
+                        <datalist id="fin_mat_options">
+                            <option value="Nhôm"></option>
+                            <option value="AlMg alloy"></option>
+                            <option value="Nhôm Epoxy"></option>
+                            <option value="Nhôm Hydrophylic"></option>
+                            <option value="Đồng"></option>
+                            <option value="Inox 304"></option>
+                        </datalist>
+                    </div>
+                    <div class="input-group">
+                        <label>Áp suất thử (kgf/cm²):</label>
+                        <input type="text" id="exp_test_pressure" value="20">
+                    </div>
+                    <div class="input-group">
+                        <label>Lồng quạt:</label>
+                        <input type="text" id="exp_fan_guard" value="Inox 304">
+                    </div>
+                </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="input-group">
+                        <label>Ống gộp vào: <span
+                                onclick="document.getElementById('exp_inlet').value += 'Φ'; document.getElementById('exp_inlet').focus();"
+                                style="cursor:pointer; color:var(--primary-color); font-size:12px; font-weight:bold; margin-left:5px;">[+Φ]</span></label>
+                        <input type="text" id="exp_inlet" placeholder="VD: Φ19 (Búp sen 9 râu)">
+                    </div>
+                    <div class="input-group">
+                        <label>Ống gộp ra: <span
+                                onclick="document.getElementById('exp_outlet').value += 'Φ'; document.getElementById('exp_outlet').focus();"
+                                style="cursor:pointer; color:var(--primary-color); font-size:12px; font-weight:bold; margin-left:5px;">[+Φ]</span></label>
+                        <input type="text" id="exp_outlet" placeholder="VD: Φ54">
+                    </div>
+                </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr;">
+                    <div class="input-group">
+                        <label>Định hướng gió:</label>
+                        <input type="text" id="exp_air_guide" placeholder="Để trống nếu không có">
+                    </div>
+                    <div class="input-group">
+                        <label>Lưới lọc bụi:</label>
+                        <input type="text" id="exp_filter" placeholder="Để trống nếu không có">
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:15px;">4. HỆ THỐNG XẢ ĐÁ & BẢN VẼ</div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="input-group">
+                        <label>Ph.pháp xả đá:</label>
+                        <select id="exp_defrost_type" onchange="toggleDefrostFields()">
+                            <option value="Không">Không</option>
+                            <option value="Nước">Nước</option>
+                            <option value="Điện trở">Điện trở</option>
+                            <option value="Hot gas">Hot gas</option>
+                            <option value="Gió">Gió</option>
+                        </select>
+                    </div>
+                    <div class="input-group" id="wrap_defrost_kw" style="display: none;">
+                        <label>Công suất (kW):</label>
+                        <input type="text" id="exp_defrost_kw" placeholder="VD: 21.8">
+                    </div>
+                    <div class="input-group" id="wrap_water_tray" style="display: none;">
+                        <label>C.cao máng (mm):</label>
+                        <input type="text" id="exp_water_tray" placeholder="VD: 100">
+                    </div>
+                    <div class="input-group">
+                        <label>Hình ảnh bản vẽ:</label>
+                        <div style="display: flex; gap: 5px; width: 100%; align-items: center;">
+                            <input type="hidden" id="exp_drawing">
+                            <input type="file" id="exp_drawing_file" style="display: none;">
+                            <button type="button" onclick="openDrawingGallery()"
+                                style="padding: 5px 10px; font-size: 12px; cursor: pointer; white-space: nowrap; background: var(--primary); color: white; border: none; border-radius: 3px; flex: 1;">Mở
+                                Thư viện Bản vẽ</button>
+                        </div>
+                        <div id="selected_drawing_name"
+                            style="margin-top: 8px; font-size: 0.85rem; color: #0056b3; font-weight: bold;">Chưa chọn
+                            bản vẽ</div>
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:15px;">5. KÍCH THƯỚC BAO VỎ (mm)</div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <div class="input-group"><label>L:</label><input type="text" id="exp_dim_l"></div>
+                    <div class="input-group"><label>H:</label><input type="text" id="exp_dim_h"></div>
+                    <div class="input-group"><label>T:</label><input type="text" id="exp_dim_t"></div>
+                    <div class="input-group"><label>C:</label><input type="text" id="exp_dim_c"></div>
+                    <div class="input-group"><label>T1:</label><input type="text" id="exp_dim_t1"></div>
+                    <div class="input-group"><label>E:</label><input type="text" id="exp_dim_e"
+                            oninput="autoCalculateE()"></div>
+                    <div class="input-group" id="wrap_dim_e1"><label>E1:</label><input type="text" id="exp_dim_e1">
+                    </div>
+                    <div class="input-group" id="wrap_dim_e2"><label>E2:</label><input type="text" id="exp_dim_e2">
+                    </div>
+                    <div class="input-group" id="wrap_dim_e3"><label>E3:</label><input type="text" id="exp_dim_e3">
+                    </div>
+                </div>
+
+                <div id="preview_drawing_container"
+                    style="display: none; margin-top: 20px; border: 1px dashed #ccc; padding: 15px; background: #fafafa; text-align: center;">
+                    <img id="preview_drawing_img" style="width: 100%; max-height: 400px; object-fit: contain;">
+                </div>
+
+                <input type="hidden" id="exp_history_index">
+                <div class="grid" style="grid-template-columns: 1fr 1.2fr 1.2fr; margin-top: 20px;">
+                    <button class="btn-unlock" style="background: #757575; font-size: 0.85rem;" onclick="closeExportModal()">CANCEL</button>
+                    <button class="btn-unlock" style="background: var(--primary); font-size: 0.85rem;" onclick="window.open('https://www.ilovepdf.com/pdf_to_word', '_blank')">ĐỔI PDF SANG WORD</button>
+                    <button class="btn-unlock" style="background: var(--success); font-size: 0.85rem;" onclick="generateTechSpecAndPrint()">XÁC NHẬN VÀ IN PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DRAWING GALLERY MODAL -->
+    <div id="drawing-gallery-modal" class="modal-overlay"
+        style="display: none; z-index: 10000; align-items: flex-start; padding-top: 50px;">
+        <div class="modal-content" style="max-width: 800px; width: 90%;">
+            <h3 style="margin-top: 0; color: var(--primary);">Thư viện Bản vẽ</h3>
+            <p style="font-size: 0.9rem; color: #666; margin-top: 5px;">Click vào ảnh để chọn bản vẽ cho thiết kế này.
+            </p>
+            <div id="gallery_grid"
+                style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; max-height: 60vh; overflow-y: auto; padding: 15px; background: #f5f5f5; border-radius: 5px; border: 1px solid #ddd;">
+                <!-- Gallery items will be injected here -->
+            </div>
+            <div class="modal-footer" style="margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+                <button type="button" onclick="document.getElementById('drawing-gallery-modal').style.display='none'"
+                    style="padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; background: #6c757d; color: white;">Hủy</button>
+                <button type="button" onclick="confirmDrawingSelection()"
+                    style="padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; background: var(--primary); color: white; font-weight: bold;">Xác
+                    nhận</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PRINT SECTION -->
+    <div id="print-section" style="display: none;">
+        <div class="print-page">
+            <div class="pr-header">
+                <div class="pr-h-left">
+                    <img src="logo_print.png" alt="Logo Print" onerror="this.style.display='none'">
+                    <div class="pr-bm">BM01-QT01/KTDA</div>
+                </div>
+                <div class="pr-h-center">
+                    CÔNG TY TNHH SẢN XUẤT THIẾT BỊ TRAO ĐỔI NHIỆT<br>GIA THỊNH
+                </div>
+                <div class="pr-h-right">
+                    PHÒNG KỸ THUẬT DỰ ÁN<br>
+                    <i id="pr_date">TPHCM, ngày 15 tháng 06 năm 2026</i>
+                </div>
+            </div>
+
+            <div class="pr-title">THÔNG SỐ KỸ THUẬT</div>
+
+            <div class="pr-general">
+                <div class="pr-row">
+                    <div class="pr-col-lbl">Khách hàng :</div>
+                    <div class="pr-col-val" id="pr_customer">-</div>
+                    <div class="pr-col-lbl"></div>
+                    <div class="pr-col-val"></div>
+                </div>
+                <div class="pr-row">
+                    <div class="pr-col-lbl">Dự án :</div>
+                    <div class="pr-col-val" id="pr_project">-</div>
+                    <div class="pr-col-lbl">Số lượng:</div>
+                    <div class="pr-col-val"><span id="pr_qty">-</span> bộ</div>
+                </div>
+            </div>
+
+            <div class="pr-divider-thick"></div>
+            <div class="pr-model-line" id="pr_model">TD-N5.RX-2M60-E8/8</div>
+            <div class="pr-divider-thick"></div>
+
+            <table class="pr-data-table">
+                <colgroup>
+                    <col style="width: 22%;">
+                    <col style="width: 10%;">
+                    <col style="width: 18%;">
+                    <col style="width: 22%;">
+                    <col style="width: 10%;">
+                    <col style="width: 18%;">
+                </colgroup>
+                <tr>
+                    <td class="col-name">Công suất</td>
+                    <td class="col-unit">kW</td>
+                    <td class="col-val" id="pr_kw">-</td>
+                    <td class="col-name">Môi chất</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_moichat">-</td>
+                </tr>
+                <tr>
+                    <td class="col-name">Lưu lượng gió</td>
+                    <td class="col-unit">m³/h</td>
+                    <td class="col-val" id="pr_tong_gio">-</td>
+                    <td class="col-name">Phương pháp vận hành</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_vanhanh">-</td>
+                </tr>
+                <tr>
+                    <td class="col-name">Tốc độ gió qua dàn</td>
+                    <td class="col-unit">m/s</td>
+                    <td class="col-val" id="pr_v_gio">-</td>
+                    <td class="col-name" id="lbl_pr_tmc">Nhiệt độ bay hơi</td>
+                    <td class="col-unit">°C</td>
+                    <td class="col-val" id="pr_tmc">-</td>
+                </tr>
+                <tr id="pr_row_tmc_out">
+                    <td class="col-name">Nhiệt độ gió ra</td>
+                    <td class="col-unit">°C</td>
+                    <td class="col-val" id="pr_t_out">-</td>
+                    <td class="col-name" id="lbl_pr_tmc_out"></td>
+                    <td class="col-unit" id="unit_pr_tmc_out"></td>
+                    <td class="col-val" id="pr_tmc_out"></td>
+                </tr>
+                <tr id="pr_row_tr">
+                    <td class="col-name"></td>
+                    <td class="col-unit"></td>
+                    <td class="col-val"></td>
+                    <td class="col-name" id="lbl_pr_tr">Nhiệt độ phòng</td>
+                    <td class="col-unit">°C</td>
+                    <td class="col-val" id="pr_tr">-</td>
+                </tr>
+            </table>
+
+            <div class="pr-divider-thin"></div>
+
+            <table class="pr-data-table">
+                <colgroup>
+                    <col style="width: 22%;">
+                    <col style="width: 10%;">
+                    <col style="width: 18%;">
+                    <col style="width: 22%;">
+                    <col style="width: 10%;">
+                    <col style="width: 18%;">
+                </colgroup>
+                <tr>
+                    <td class="col-name">Khe lá</td>
+                    <td class="col-unit">mm</td>
+                    <td class="col-val" id="pr_khela">-</td>
+                    <td class="col-name">Ống</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_tube_mat">-</td>
+                </tr>
+                <tr>
+                    <td class="col-name">Diện tích trao đổi nhiệt</td>
+                    <td class="col-unit">m²</td>
+                    <td class="col-val" id="pr_area">-</td>
+                    <td class="col-name">Cánh tản nhiệt</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_fin_mat">-</td>
+                </tr>
+                <tr>
+                    <td class="col-name">Thể tích chứa dịch</td>
+                    <td class="col-unit">dm³</td>
+                    <td class="col-val" id="pr_vol">-</td>
+                    <td class="col-name">Gộp vào</td>
+                    <td class="col-unit">mm</td>
+                    <td class="col-val" id="pr_inlet">-</td>
+                </tr>
+                <tr>
+                    <td class="col-name">Áp suất thử</td>
+                    <td class="col-unit">kgf/cm²</td>
+                    <td class="col-val" id="pr_test_pressure">-</td>
+                    <td class="col-name">Gộp ra</td>
+                    <td class="col-unit">mm</td>
+                    <td class="col-val" id="pr_outlet">-</td>
+                </tr>
+                <tr>
+                    <td class="col-name">Mặt sàn</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_floor_mat">-</td>
+                    <td class="col-name">Vị trí gộp</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_conn_side">-</td>
+                </tr>
+                <tr>
+                    <td class="col-name">Bọc ngoài</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_casing">-</td>
+                    <td class="col-name" id="pr_filter_lbl">Lưới lọc bụi</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_filter">-</td>
+                </tr>
+                <tr id="pr_defrost_type_row">
+                    <td class="col-name"></td>
+                    <td class="col-unit"></td>
+                    <td class="col-val"></td>
+                    <td class="col-name" id="pr_defrost_type_lbl">Xả đá</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_defrost_type">-</td>
+                </tr>
+                <tr id="pr_defrost_kw_row">
+                    <td class="col-name"></td>
+                    <td class="col-unit"></td>
+                    <td class="col-val"></td>
+                    <td class="col-name" id="pr_defrost_kw_label">∑Công suất điện trở</td>
+                    <td class="col-unit">kW</td>
+                    <td class="col-val" id="pr_defrost_kw">-</td>
+                </tr>
+            </table>
+
+            <div class="pr-divider-thin"></div>
+
+            <table class="pr-data-table">
+                <colgroup>
+                    <col style="width: 22%;">
+                    <col style="width: 10%;">
+                    <col style="width: 18%;">
+                    <col style="width: 22%;">
+                    <col style="width: 10%;">
+                    <col style="width: 18%;">
+                </colgroup>
+                <tr>
+                    <td class="col-name" colspan="3" style="text-align: left;">Quạt : <span id="pr_fan_full"
+                            style="font-weight: normal; margin-left: 50px;">-</span></td>
+                    <td class="col-name">Số lượng</td>
+                    <td class="col-unit">bộ</td>
+                    <td class="col-val" id="pr_fan_qty">-</td>
+                </tr>
+                <tr>
+                    <td colspan="6" style="padding-top: 5px;">Thông số quạt:</td>
+                </tr>
+                <tr>
+                    <td class="col-name" style="padding-left: 20px;">Tốc độ</td>
+                    <td class="col-unit">vòng/phút</td>
+                    <td class="col-val" id="pr_fan_rpm">-</td>
+                    <td class="col-name">Đường kính cánh</td>
+                    <td class="col-unit">mm</td>
+                    <td class="col-val" id="pr_fan_dia">-</td>
+                </tr>
+                <tr>
+                    <td class="col-name" style="padding-left: 20px;">Công suất</td>
+                    <td class="col-unit">kW</td>
+                    <td class="col-val" id="pr_fan_kw">-</td>
+                    <td class="col-name">Độ ồn</td>
+                    <td class="col-unit">dB</td>
+                    <td class="col-val" id="pr_fan_db">-</td>
+                </tr>
+                <tr>
+                    <td class="col-name" style="padding-left: 20px;">Dòng</td>
+                    <td class="col-unit">A</td>
+                    <td class="col-val" id="pr_fan_a">-</td>
+                    <td class="col-name">Lồng quạt</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_fan_guard">-</td>
+                </tr>
+                <tr id="pr_air_guide_row">
+                    <td class="col-name"></td>
+                    <td class="col-unit"></td>
+                    <td class="col-val"></td>
+                    <td class="col-name">Định hướng gió</td>
+                    <td class="col-unit"></td>
+                    <td class="col-val" id="pr_air_guide">-</td>
+                </tr>
+            </table>
+
+            <div class="pr-divider-thin"></div>
+
+            <div style="margin-top: 10px; margin-bottom: 10px; font-weight: normal; font-size: 11pt;">Thông số kích
+                thước: <span id="pr_water_tray_text"></span></div>
+
+            <table class="pr-dim-table">
+                <tr>
+                    <td class="dim-lbl">L</td>
+                    <td class="dim-unit">mm</td>
+                    <td class="dim-val" id="pr_dim_l">-</td>
+                    <td class="dim-lbl">C</td>
+                    <td class="dim-unit">mm</td>
+                    <td class="dim-val" id="pr_dim_c">-</td>
+                    <td class="dim-lbl" id="lbl_pr_dim_e1">E1</td>
+                    <td class="dim-unit" id="unit_pr_dim_e1">mm</td>
+                    <td class="dim-val" id="pr_dim_e1">-</td>
+                </tr>
+                <tr>
+                    <td class="dim-lbl">H</td>
+                    <td class="dim-unit">mm</td>
+                    <td class="dim-val" id="pr_dim_h">-</td>
+                    <td class="dim-lbl">T1</td>
+                    <td class="dim-unit">mm</td>
+                    <td class="dim-val" id="pr_dim_t1">-</td>
+                    <td class="dim-lbl" id="lbl_pr_dim_e2">E2</td>
+                    <td class="dim-unit" id="unit_pr_dim_e2">mm</td>
+                    <td class="dim-val" id="pr_dim_e2">-</td>
+                </tr>
+                <tr id="pr_dim_row_3">
+                    <td class="dim-lbl" id="lbl_pr_dim_t">T</td>
+                    <td class="dim-unit" id="unit_pr_dim_t">mm</td>
+                    <td class="dim-val" id="pr_dim_t">-</td>
+                    <td class="dim-lbl" id="lbl_pr_dim_e">E</td>
+                    <td class="dim-unit" id="unit_pr_dim_e">mm</td>
+                    <td class="dim-val" id="pr_dim_e">-</td>
+                    <td class="dim-lbl" id="lbl_pr_dim_e3">E3</td>
+                    <td class="dim-unit" id="unit_pr_dim_e3">mm</td>
+                    <td class="dim-val" id="pr_dim_e3">-</td>
+                </tr>
+            </table>
+
+            <div class="pr-drawing-section">
+                <img id="pr_drawing_img" src="" alt="Drawing"
+                    onerror="this.style.display='none'; document.getElementById('pr_drawing_placeholder').style.display='block';">
+                <div id="pr_drawing_placeholder"
+                    style="display:none; text-align:center; padding: 50px; border: 1px dashed #ccc; width: 100%; margin-top: 10px;">
+                    Không có hình ảnh bản vẽ</div>
+            </div>
+
+            <div class="pr-footer">
+                <div class="pr-footer-text">
+                    <i>*Tính toán thiết kế theo tiêu chuẩn Gia Thịnh, được kiểm chứng bởi phần mềm</i><br>
+                    <i>*Tất cả mọi thắc mắc xin phản hồi về hộp thư mailbox@giathinhree.com.</i>
+                </div>
+                <div class="pr-footer-logo">
+                    <img src="assets/logos/unilab_logo.png" alt="Unilab" onerror="this.style.display='none'">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="config.js"></script>
     <script src="security.js"></script>
     <script src="app.js"></script>

@@ -219,7 +219,7 @@ window.GT_CONFIG = {
         "ZA": {
             "FN040": {
                 "name": "FN040",
-                "details": "FN040-VDK.0F.V7P2 - D/Y (0.26/0.18kW - 0.5/0.29A - 1340/1020min)",
+                "details": "FN040-VDK.0F.V7P2 (380-50Hz) - D/Y (0.26/0.18kW - 0.5/0.29A - 1340/1020min) - 74dB/67dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 4400,
@@ -237,7 +237,7 @@ window.GT_CONFIG = {
             },
             "FN045": {
                 "name": "FN045",
-                "details": "FN045-VDK.2F.V7P2 - D/Y (0.35/0.22kW - 0.64/0.35A - 1280/970min)",
+                "details": "FN045-VDK.2F.V7P2 (380-50Hz) - D/Y (0.35/0.22kW - 0.64/0.35A - 1280/970min) - 70dB/62dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 5400,
@@ -254,7 +254,7 @@ window.GT_CONFIG = {
             },
             "FN050": {
                 "name": "FN050",
-                "details": "FN050-VDK.4I.V7P1 - D/Y (0.77/0.49kW - 1.7/0.84A - 1300/1025min)",
+                "details": "FN050-VDK.4I.V7P1 (380-50Hz) - D/Y (0.77/0.49kW - 1.7/0.84A - 1300/1025min) - 78dB/72dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 8000,
@@ -275,7 +275,7 @@ window.GT_CONFIG = {
             },
             "FN056": {
                 "name": "FN056",
-                "details": "FN056-VDK.4M.V7P2 - D/Y (1.05/0.58kW - 2.2/1.1A - 1280/910min)",
+                "details": "FN056-VDK.4M.V7P2 (380-50Hz) - D/Y (1.05/0.58kW - 2.2/1.1A - 1280/910min) - 78dB/72dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 10300,
@@ -297,7 +297,7 @@ window.GT_CONFIG = {
             },
             "FN063": {
                 "name": "FN063",
-                "details": "FN063-VDK.6N.V7P7 - D/Y (2.7/1.75kW - 5.0/3.0A - 1330/1040min)",
+                "details": "FN063-VDK.6N.V7P7 (380-50Hz) - D/Y (2.7/1.75kW - 5.0/3.0A - 1330/1040min) - 86dB/80dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 17700,
@@ -325,7 +325,7 @@ window.GT_CONFIG = {
         "TQ": {
             "D300": {
                 "name": "YDWF Ø300",
-                "details": "YDWF68L35P4-360N-300PA S (cánh nhựa-lồng inox) - (0.085kW - 0.39A - 1320min) - 57dB",
+                "details": "YDWF68L35P4-360N-300PA S (220-50Hz) (cánh nhựa-lồng inox) - (0.085kW - 0.39A - 1320min) - 57dB",
                 "modes": {
                     "Mặc định": {
                         "0": 1700,
@@ -337,7 +337,7 @@ window.GT_CONFIG = {
             },
             "D350": {
                 "name": "YDWF Ø350",
-                "details": "YDWF74L34P4-422N-350PA S (cánh nhựa-lồng inox) - (0.162kW - 0.67A - 1329min) - 62dB",
+                "details": "YDWF74L34P4-422N-350PA S (220-50Hz) (cánh nhựa-lồng inox) - (0.162kW - 0.67A - 1329min) - 62dB",
                 "modes": {
                     "Mặc định": {
                         "0": 2890,
@@ -349,7 +349,7 @@ window.GT_CONFIG = {
             },
             "D400": {
                 "name": "YSWF Ø400",
-                "details": "YSWF74L60P4-470N-400S (cánh inox-lồng inox) - D/Y (0.227/0.175kW - 0.52/0.3A - 1382/1111min) - 68dB/65dB",
+                "details": "YSWF74L60P4-470N-400S (380-50Hz) (cánh inox-lồng inox) - D/Y (0.227/0.175kW - 0.52/0.3A - 1382/1111min) - 68dB/65dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 4000,
@@ -369,7 +369,7 @@ window.GT_CONFIG = {
             },
             "D450": {
                 "name": "YSWF Ø450",
-                "details": "YSWF74L60P4-522N-450S (cánh inox-lồng inox) - D/Y (0.267/0.197kW - 0.59/0.33A - 1372/1090min) - 60dB/60dB",
+                "details": "YSWF74L60P4-522N-450S (380-50Hz) (cánh inox-lồng inox) - D/Y (0.267/0.197kW - 0.59/0.33A - 1372/1090min) - 60dB/60dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 4800,
@@ -389,7 +389,7 @@ window.GT_CONFIG = {
             },
             "D500": {
                 "name": "YSWF Ø500",
-                "details": "YSWF102L50P4-570N-500S (cánh inox-lồng inox) - D/Y (0.645/0.511kW - 1.37/0.84A - 1393/1192min) - 73dB/68dB",
+                "details": "YSWF102L50P4-570N-500S (380-50Hz) (cánh inox-lồng inox) - D/Y (0.645/0.511kW - 1.37/0.84A - 1393/1192min) - 73dB/68dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 8000,
@@ -413,7 +413,7 @@ window.GT_CONFIG = {
             },
             "D550": {
                 "name": "YSWF Ø550",
-                "details": "YSWF102L50P4-625N-550S (cánh inox-lồng inox) - D/Y (0.67/0.507kW - 1.27/0.82A - 1377/1105min) - 74dB/71dB",
+                "details": "YSWF102L50P4-625N-550S (380-50Hz) (cánh inox-lồng inox) - D/Y (0.67/0.507kW - 1.27/0.82A - 1377/1105min) - 74dB/71dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 8500,
@@ -438,7 +438,7 @@ window.GT_CONFIG = {
             },
             "D600": {
                 "name": "YSWF Ø600",
-                "details": "YSWF102L60P4-675N-600S (cánh inox-lồng inox) - D/Y (0.825/0.603kW - 1.56/0.98A - 1365/1125min) - 75dB/74dB",
+                "details": "YSWF102L60P4-675N-600S (380-50Hz) (cánh inox-lồng inox) - D/Y (0.825/0.603kW - 1.56/0.98A - 1365/1125min) - 75dB/74dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 10400,
@@ -463,7 +463,7 @@ window.GT_CONFIG = {
             },
             "D630": {
                 "name": "YSWF Ø630",
-                "details": "YSWF127L65P4-753N-630S (cánh inox-lồng inox) - D/Y (1.646/1.425kW - 3.3/2.25A - 1392/1215min) - 78dB/75dB",
+                "details": "YSWF127L65P4-753N-630S (380-50Hz) (cánh inox-lồng inox) - D/Y (1.646/1.425kW - 3.3/2.25A - 1392/1215min) - 78dB/75dB",
                 "modes": {
                     "Tam giác (Δ)": {
                         "0": 15000,
@@ -492,7 +492,7 @@ window.GT_CONFIG = {
         "KRUGER": {
             "TDA630": {
                 "name": "TDA Ø630",
-                "details": "TDA630-12AA-5-5/30 - (2.2kW-5A-94db) - 55kg - L630mm x H750mm",
+                "details": "TDA630-12AA-5-5/30 (380-50Hz) - (2.2kW-5A-94db) - 55kg - L630mm x H750mm",
                 "modes": {
                     "Mặc định": {
                         "80": 15800,
@@ -503,7 +503,7 @@ window.GT_CONFIG = {
             },
             "TDA710_3": {
                 "name": "TDA Ø710 (3kW)",
-                "details": "TDA710-12AA-7-7/26  (3kW-6.8A-97db) - 80kg - L720mm x H840mm",
+                "details": "TDA710-12AA-7-7/26 (380-50Hz)  (3kW-6.8A-97db) - 80kg - L720mm x H840mm",
                 "modes": {
                     "Mặc định": {
                         "80": 22400,
@@ -514,7 +514,7 @@ window.GT_CONFIG = {
             },
             "TDA710_4": {
                 "name": "TDA Ø710 (4kW)",
-                "details": "TDA710-12AA-7-7/30  (4kW-98db) - L720mm x H840mm",
+                "details": "TDA710-12AA-7-7/30 (380-50Hz)  (4kW-98db) - L720mm x H840mm",
                 "modes": {
                     "Mặc định": {
                         "80": 25000,
@@ -525,7 +525,7 @@ window.GT_CONFIG = {
             },
             "TDA800": {
                 "name": "TDA Ø800 (5.5kW)",
-                "details": "TDA800-12AA-7-7/28  (5.5kW-11A-101db) - 110kg - L800mm x H930mm",
+                "details": "TDA800-12AA-7-7/28 (380-50Hz)  (5.5kW-11A-101db) - 110kg - L800mm x H930mm",
                 "modes": {
                     "Mặc định": {
                         "80": 34000,
@@ -543,5 +543,61 @@ window.GT_CONFIG = {
         "560": { "cao": 16, "dai_1_quat": 1150, "dai_3_quat": 3400 },
         "600": { "cao": 16, "dai_1_quat": 1150 },
         "630": { "cao": 18, "dai_1_quat": 1275, "dai_3_quat": 3700 }
-    }
+    },
+    "STANDARD_E_DIMENSIONS": {
+        "0.6": 560,
+        "0.7": 650,
+        "0.75": 700,
+        "0.85": 800,
+        "1": 950,
+        "1.15": 1100,
+        "1.2": 1150,
+        "1.275": 1220,
+        "1.5": 1440,
+        "1.7": 1640,
+        "1.86": 1800,
+        "2": 1930,
+        "2.05": 1980,
+        "2.3": 2230,
+        "2.55": 2480,
+        "3": 2920,
+        "3.4": 3310,
+        "3.7": 3610,
+        "4.1": 4000,
+        "4.6": 4500,
+        "5.1": 4990,
+        "5.6": 5480,
+        "6": 5870
+    },
+    "DRAWINGS": [
+        "dan lanh/1 quat/dan lanh 1 quat - mau 1.png", "dan lanh/1 quat/dan lanh 1 quat - mau 2.png", "dan lanh/1 quat/dan lanh 1 quat - mau 3.png", "dan lanh/1 quat/dan lanh 1 quat - mau 4.png", "dan lanh/1 quat/dan lanh 1 quat - mau 5.png",
+        "dan lanh/1 quat/dan lanh 1 quat - mau 6.png", "dan lanh/1 quat/dan lanh 1 quat - mau 7.png", "dan lanh/1 quat/dan lanh 1 quat - mau 8.png", "dan lanh/1 quat/dan lanh 1 quat - mau 9.png", "dan lanh/1 quat/dan lanh 1 quat - mau 10.png",
+        
+        "dan lanh/2 quat/dan lanh 2 quat - mau 1.png", "dan lanh/2 quat/dan lanh 2 quat - mau 2.png", "dan lanh/2 quat/dan lanh 2 quat - mau 3.png", "dan lanh/2 quat/dan lanh 2 quat - mau 4.png", "dan lanh/2 quat/dan lanh 2 quat - mau 5.png",
+        "dan lanh/2 quat/dan lanh 2 quat - mau 6.png", "dan lanh/2 quat/dan lanh 2 quat - mau 7.png", "dan lanh/2 quat/dan lanh 2 quat - mau 8.png", "dan lanh/2 quat/dan lanh 2 quat - mau 9.png", "dan lanh/2 quat/dan lanh 2 quat - mau 10.png",
+        
+        "dan lanh/3 quat/dan lanh 3 quat - mau 1.png", "dan lanh/3 quat/dan lanh 3 quat - mau 2.png", "dan lanh/3 quat/dan lanh 3 quat - mau 3.png", "dan lanh/3 quat/dan lanh 3 quat - mau 4.png", "dan lanh/3 quat/dan lanh 3 quat - mau 5.png",
+        "dan lanh/3 quat/dan lanh 3 quat - mau 6.png", "dan lanh/3 quat/dan lanh 3 quat - mau 7.png", "dan lanh/3 quat/dan lanh 3 quat - mau 8.png", "dan lanh/3 quat/dan lanh 3 quat - mau 9.png", "dan lanh/3 quat/dan lanh 3 quat - mau 10.png",
+        
+        "dan lanh/4 quat/dan lanh 4 quat - mau 1.png", "dan lanh/4 quat/dan lanh 4 quat - mau 2.png", "dan lanh/4 quat/dan lanh 4 quat - mau 3.png", "dan lanh/4 quat/dan lanh 4 quat - mau 4.png", "dan lanh/4 quat/dan lanh 4 quat - mau 5.png",
+        "dan lanh/4 quat/dan lanh 4 quat - mau 6.png", "dan lanh/4 quat/dan lanh 4 quat - mau 7.png", "dan lanh/4 quat/dan lanh 4 quat - mau 8.png", "dan lanh/4 quat/dan lanh 4 quat - mau 9.png", "dan lanh/4 quat/dan lanh 4 quat - mau 10.png",
+        
+        "dan lanh/5 quat/dan lanh 5 quat - mau 1.png", "dan lanh/5 quat/dan lanh 5 quat - mau 2.png", "dan lanh/5 quat/dan lanh 5 quat - mau 3.png", "dan lanh/5 quat/dan lanh 5 quat - mau 4.png", "dan lanh/5 quat/dan lanh 5 quat - mau 5.png",
+        "dan lanh/5 quat/dan lanh 5 quat - mau 6.png", "dan lanh/5 quat/dan lanh 5 quat - mau 7.png", "dan lanh/5 quat/dan lanh 5 quat - mau 8.png", "dan lanh/5 quat/dan lanh 5 quat - mau 9.png", "dan lanh/5 quat/dan lanh 5 quat - mau 10.png",
+        
+        "FCU/1 quat/FCU 1 quat - mau 1.png", "FCU/1 quat/FCU 1 quat - mau 2.png", "FCU/1 quat/FCU 1 quat - mau 3.png", "FCU/1 quat/FCU 1 quat - mau 4.png", "FCU/1 quat/FCU 1 quat - mau 5.png",
+        "FCU/1 quat/FCU 1 quat - mau 6.png", "FCU/1 quat/FCU 1 quat - mau 7.png", "FCU/1 quat/FCU 1 quat - mau 8.png", "FCU/1 quat/FCU 1 quat - mau 9.png", "FCU/1 quat/FCU 1 quat - mau 10.png",
+        
+        "FCU/2 quat/FCU 2 quat - mau 1.png", "FCU/2 quat/FCU 2 quat - mau 2.png", "FCU/2 quat/FCU 2 quat - mau 3.png", "FCU/2 quat/FCU 2 quat - mau 4.png", "FCU/2 quat/FCU 2 quat - mau 5.png",
+        "FCU/2 quat/FCU 2 quat - mau 6.png", "FCU/2 quat/FCU 2 quat - mau 7.png", "FCU/2 quat/FCU 2 quat - mau 8.png", "FCU/2 quat/FCU 2 quat - mau 9.png", "FCU/2 quat/FCU 2 quat - mau 10.png",
+        
+        "FCU/3 quat/FCU 3 quat - mau 1.png", "FCU/3 quat/FCU 3 quat - mau 2.png", "FCU/3 quat/FCU 3 quat - mau 3.png", "FCU/3 quat/FCU 3 quat - mau 4.png", "FCU/3 quat/FCU 3 quat - mau 5.png",
+        "FCU/3 quat/FCU 3 quat - mau 6.png", "FCU/3 quat/FCU 3 quat - mau 7.png", "FCU/3 quat/FCU 3 quat - mau 8.png", "FCU/3 quat/FCU 3 quat - mau 9.png", "FCU/3 quat/FCU 3 quat - mau 10.png",
+        
+        "FCU/4 quat/FCU 4 quat - mau 1.png", "FCU/4 quat/FCU 4 quat - mau 2.png", "FCU/4 quat/FCU 4 quat - mau 3.png", "FCU/4 quat/FCU 4 quat - mau 4.png", "FCU/4 quat/FCU 4 quat - mau 5.png",
+        "FCU/4 quat/FCU 4 quat - mau 6.png", "FCU/4 quat/FCU 4 quat - mau 7.png", "FCU/4 quat/FCU 4 quat - mau 8.png", "FCU/4 quat/FCU 4 quat - mau 9.png", "FCU/4 quat/FCU 4 quat - mau 10.png",
+        
+        "FCU/5 quat/FCU 5 quat - mau 1.png", "FCU/5 quat/FCU 5 quat - mau 2.png", "FCU/5 quat/FCU 5 quat - mau 3.png", "FCU/5 quat/FCU 5 quat - mau 4.png", "FCU/5 quat/FCU 5 quat - mau 5.png",
+        "FCU/5 quat/FCU 5 quat - mau 6.png", "FCU/5 quat/FCU 5 quat - mau 7.png", "FCU/5 quat/FCU 5 quat - mau 8.png", "FCU/5 quat/FCU 5 quat - mau 9.png", "FCU/5 quat/FCU 5 quat - mau 10.png"
+    ]
 };
