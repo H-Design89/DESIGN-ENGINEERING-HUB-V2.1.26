@@ -1309,7 +1309,21 @@ function generateTechSpecAndPrint() {
 
     // Let DOM update and print
     setTimeout(() => {
+        const originalTitle = document.title;
+        let modelCode = d.modelCode || "Unknown_Model";
+        
+        // Lấy ngày hiện tại
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
+        let dateStr = `${dd}-${mm}-${yyyy}`;
+        
+        document.title = `${modelCode} (${dateStr})`;
+        
         window.print();
+        
+        document.title = originalTitle;
     }, 300);
 }
 
