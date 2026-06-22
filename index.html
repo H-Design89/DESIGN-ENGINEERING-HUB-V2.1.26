@@ -937,6 +937,14 @@
                         <input type="text" id="exp_rh_out" placeholder="VD: 96.2">
                     </div>
                 </div>
+                <div class="grid" id="wrap_exp_water_flow" style="display: none;">
+                    <div class="input-group">
+                        <label id="lbl_exp_water_flow">Lưu lượng nước cấp (m³/h):</label>
+                        <input type="text" id="exp_water_flow" placeholder="VD: 5.5">
+                    </div>
+                    <div class="input-group">
+                    </div>
+                </div>
                 <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
                     <div class="input-group">
                         <label>Lưu lượng gió (m³/h):</label>
@@ -1191,11 +1199,11 @@
                     <td class="col-val" id="pr_tmc_out"></td>
                 </tr>
                 <tr id="pr_row_tr">
-                    <td class="col-name"></td>
-                    <td class="col-unit"></td>
-                    <td class="col-val"></td>
+                    <td class="col-name" id="lbl_pr_left_tr"></td>
+                    <td class="col-unit" id="unit_pr_left_tr"></td>
+                    <td class="col-val" id="val_pr_left_tr"></td>
                     <td class="col-name" id="lbl_pr_tr">Nhiệt độ phòng</td>
-                    <td class="col-unit">°C</td>
+                    <td class="col-unit" id="unit_pr_tr">°C</td>
                     <td class="col-val" id="pr_tr">-</td>
                 </tr>
             </table>

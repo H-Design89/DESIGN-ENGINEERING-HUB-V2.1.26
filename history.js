@@ -682,6 +682,7 @@ function openExportModal(index) {
         document.getElementById('exp_project').value = d.exportData.project || projectName;
         document.getElementById('exp_t_out').value = d.exportData.t_out || "";
         document.getElementById('exp_rh_out').value = d.exportData.rh_out || "";
+        document.getElementById('exp_water_flow').value = d.exportData.water_flow || "";
         document.getElementById('exp_airflow').value = d.exportData.airflow || "";
         document.getElementById('exp_pressure').value = d.exportData.pressure || "";
         document.getElementById('exp_vwind').value = d.exportData.vwind || "";
@@ -737,6 +738,7 @@ function openExportModal(index) {
 
     document.getElementById('exp_t_out').value = "";
     document.getElementById('exp_rh_out').value = "";
+    document.getElementById('exp_water_flow').value = "";
 
     let airflowStr = "", pressureStr = "", vwindStr = "";
     if (d.line9) { let aMatch = d.line9.match(/Tổng LL gió:\s*([\d,\.]+)/); if (aMatch) airflowStr = aMatch[1]; }
@@ -803,6 +805,22 @@ function openExportModal(index) {
         document.getElementById('exp_defrost_kw').value = "0";
     }
 
+    let wrapWaterFlow = document.getElementById('wrap_exp_water_flow');
+    let isFCU_check = projectName.toUpperCase().includes("FCU");
+    let isBomDich_check = vanhanh.toLowerCase().includes("bơm dịch") || vanhanh.toLowerCase().includes("bom dich");
+    if (isFCU_check && isBomDich_check) {
+        wrapWaterFlow.style.display = '';
+        let lblWaterFlow = document.getElementById('lbl_exp_water_flow');
+        let isWater_check = moichat.toLowerCase().includes('nước') || moichat.toLowerCase().includes('nuoc') || moichat.toLowerCase().includes('water') || moichat.toLowerCase() === 'w';
+        if (isWater_check) {
+            lblWaterFlow.innerText = "Lưu lượng nước cấp (m³/h):";
+        } else {
+            lblWaterFlow.innerText = "Lưu lượng môi chất cấp (m³/h):";
+        }
+    } else {
+        wrapWaterFlow.style.display = 'none';
+    }
+
     document.getElementById('export-tskt-modal').style.display = 'flex';
     if (typeof updateDrawingPreview === 'function') updateDrawingPreview();
 }
@@ -829,6 +847,7 @@ function generateTechSpecAndPrint() {
         project: document.getElementById('exp_project').value,
         t_out: document.getElementById('exp_t_out').value,
         rh_out: document.getElementById('exp_rh_out').value,
+        water_flow: document.getElementById('exp_water_flow').value,
         airflow: document.getElementById('exp_airflow').value,
         pressure: document.getElementById('exp_pressure').value,
         vwind: document.getElementById('exp_vwind').value,
@@ -882,56 +901,63 @@ function generateTechSpecAndPrint() {
     let unitTmcOut = document.getElementById('unit_pr_tmc_out');
     let valTmcOut = document.getElementById('pr_tmc_out');
 
+    let lblLeftTr = document.getElementById('lbl_pr_left_tr');
+    let unitLeftTr = document.getElementById('unit_pr_left_tr');
+    let valLeftTr = document.getElementById('val_pr_left_tr');
+
     let isWater = moichat.toLowerCase().includes('nước') || moichat.toLowerCase().includes('nuoc');
     let lblTmc = document.getElementById('lbl_pr_tmc');
     if (lblTmc) lblTmc.innerText = isWater ? "Nhiệt độ nước vào" : "Nhiệt độ bay hơi";
+
+    let isFCU_print = document.getElementById('exp_project').value.toUpperCase().includes("FCU");
+    let vanhanhVal = document.getElementById('exp_vanhanh').value.toLowerCase();
+    let isBomDich_print = vanhanhVal.includes("bơm dịch") || vanhanhVal.includes("bom dich");
+    let hasWaterFlow = isFCU_print && isBomDich_print;
+
+    // Reset Left Tr
+    if (lblLeftTr) lblLeftTr.innerText = "";
+    if (unitLeftTr) unitLeftTr.innerText = "";
+    if (valLeftTr) valLeftTr.innerText = "";
 
     if (tmc_out) {
         if (lblTmcOut) lblTmcOut.innerText = isWater ? "Nhiệt độ nước ra" : "Nhiệt độ môi chất ra";
         if (unitTmcOut) unitTmcOut.innerText = "°C";
         if (valTmcOut) valTmcOut.innerText = tmc_out;
+        
         document.getElementById('pr_row_tr').style.display = 'table-row';
+        document.getElementById('lbl_pr_tr').innerText = "Nhiệt độ phòng";
+        document.getElementById('unit_pr_tr').innerText = "°C";
         document.getElementById('pr_tr').innerText = `${tr} (RH: ${rh}%)`;
+        
+        if (hasWaterFlow) {
+            lblLeftTr.innerText = isWater ? "Lưu lượng nước cấp" : "Lưu lượng môi chất cấp";
+            unitLeftTr.innerText = "m³/h";
+            valLeftTr.innerText = document.getElementById('exp_water_flow').value || "-";
+        }
     } else {
-        if (lblTmcOut) lblTmcOut.innerText = "Nhiệt độ phòng";
-        if (unitTmcOut) unitTmcOut.innerText = "°C";
-        if (valTmcOut) valTmcOut.innerText = `${tr} (RH: ${rh}%)`;
-        document.getElementById('pr_row_tr').style.display = 'none';
+        if (hasWaterFlow) {
+            // No TmcOut but has WaterFlow -> hide TmcOut row content, show Tr row with both
+            if (lblTmcOut) lblTmcOut.innerText = "";
+            if (unitTmcOut) unitTmcOut.innerText = "";
+            if (valTmcOut) valTmcOut.innerText = "";
+            
+            document.getElementById('pr_row_tr').style.display = 'table-row';
+            lblLeftTr.innerText = isWater ? "Lưu lượng nước cấp" : "Lưu lượng môi chất cấp";
+            unitLeftTr.innerText = "m³/h";
+            valLeftTr.innerText = document.getElementById('exp_water_flow').value || "-";
+            
+            document.getElementById('lbl_pr_tr').innerText = "Nhiệt độ phòng";
+            document.getElementById('unit_pr_tr').innerText = "°C";
+            document.getElementById('pr_tr').innerText = `${tr} (RH: ${rh}%)`;
+        } else {
+            // No TmcOut, No WaterFlow
+            if (lblTmcOut) lblTmcOut.innerText = "Nhiệt độ phòng";
+            if (unitTmcOut) unitTmcOut.innerText = "°C";
+            if (valTmcOut) valTmcOut.innerText = `${tr} (RH: ${rh}%)`;
+            document.getElementById('pr_row_tr').style.display = 'none';
+        }
     }
     document.getElementById('pr_model').innerText = d.modelCode || "N/A";
-
-    // Operating Data
-    let kw = "-", airflow = "-", vwind = "-", pressureStr = "";
-    if (d.line5) { let kMatch = d.line5.match(/([\d\.]+)/); if (kMatch) kw = kMatch[1]; }
-    if (d.line9) { let aMatch = d.line9.match(/Tổng LL gió:\s*([\d,\.]+)/); if (aMatch) airflow = aMatch[1]; }
-    if (d.line8) {
-        let vMatch = d.line8.match(/Tốc độ gió:\s*([\d\.]+)/); if (vMatch) vwind = vMatch[1];
-        let pMatch = d.line8.match(/\(([^)]+)\)/); if (pMatch) pressureStr = pMatch[1].replace('Pa', '').trim();
-    }
-
-    document.getElementById('pr_kw').innerText = kw;
-
-    let userAirflow = document.getElementById('exp_airflow').value.trim() || airflow;
-    let userPressure = document.getElementById('exp_pressure').value.trim();
-    if (!userPressure && pressureStr) userPressure = pressureStr;
-    let userVwind = document.getElementById('exp_vwind').value.trim() || vwind;
-
-    document.getElementById('pr_tong_gio').innerText = userPressure ? `${userAirflow} (${userPressure}Pa)` : userAirflow;
-    document.getElementById('pr_v_gio').innerText = userVwind;
-
-    const formatTempPrint = (val) => {
-        if (!val || val === '-' || val === '---') return val;
-        if (!isNaN(val) && val.trim() !== '') {
-            let num = parseFloat(val);
-            if (num > 0 && !val.startsWith('+')) return '+' + val;
-        }
-        return val;
-    };
-
-    let tOutRaw = document.getElementById('exp_t_out').value.trim();
-    let tOut = formatTempPrint(tOutRaw);
-    let rhOut = document.getElementById('exp_rh_out').value;
-    document.getElementById('pr_t_out').innerText = tOut ? `${tOut} (RH: ${rhOut}%)` : "-";
 
     // Coil Data
     let khela = "-", area = "-", vol = "-";
