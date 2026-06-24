@@ -897,6 +897,20 @@ function generateTechSpecAndPrint() {
     document.getElementById('pr_vanhanh').innerText = vanhanh;
     document.getElementById('pr_tmc').innerText = tmc;
 
+    let kw = "-";
+    if (d.line5) {
+        let kwMatch = d.line5.match(/Công suất:\s*([\d\.]+)/);
+        if (kwMatch) kw = kwMatch[1];
+    }
+    document.getElementById('pr_kw').innerText = kw;
+    document.getElementById('pr_tong_gio').innerText = document.getElementById('exp_airflow').value || "-";
+    document.getElementById('pr_v_gio').innerText = document.getElementById('exp_vwind').value || "-";
+
+    let t_out_val = document.getElementById('exp_t_out').value;
+    let rh_out_val = document.getElementById('exp_rh_out').value;
+    let t_out_str = t_out_val ? t_out_val + (rh_out_val ? ` (RH: ${rh_out_val}%)` : "") : "-";
+    document.getElementById('pr_t_out').innerText = t_out_str;
+
     let lblTmcOut = document.getElementById('lbl_pr_tmc_out');
     let unitTmcOut = document.getElementById('unit_pr_tmc_out');
     let valTmcOut = document.getElementById('pr_tmc_out');
