@@ -907,13 +907,17 @@
                 </div>
 
                 <div class="section-title" style="margin-top:15px;">2. THÔNG SỐ HOẠT ĐỘNG</div>
-                <div class="grid">
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
                     <div class="input-group">
-                        <label>Nhiệt độ bay hơi / Nước vào (°C):</label>
+                        <label>Công suất (kW):</label>
+                        <input type="text" id="exp_kw" placeholder="Mặc định theo tính toán">
+                    </div>
+                    <div class="input-group">
+                        <label>Nhiệt độ bay hơi/vào (°C):</label>
                         <input type="text" id="exp_tmc">
                     </div>
                     <div class="input-group">
-                        <label>Nhiệt độ môi chất / Nước ra (°C):</label>
+                        <label>Nhiệt độ môi chất/ra (°C):</label>
                         <input type="text" id="exp_tmc_out" placeholder="Để trống nếu không có">
                     </div>
                 </div>

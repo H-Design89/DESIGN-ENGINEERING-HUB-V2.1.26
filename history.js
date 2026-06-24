@@ -668,7 +668,14 @@ function openExportModal(index) {
     let defaultFin = isFCU ? "AlMg alloy" : "Nhôm";
     let defaultFilter = isFCU ? "Có" : "";
 
+    let kwStr = "";
+    if (d.line5) {
+        let kwMatch = d.line5.match(/Công suất:\s*([\d\.]+)/);
+        if (kwMatch) kwStr = kwMatch[1];
+    }
+
     if (d.exportData) {
+        document.getElementById('exp_kw').value = d.exportData.kw || kwStr;
         document.getElementById('exp_qty').value = d.exportData.qty || qty;
         document.getElementById('exp_moichat').value = d.exportData.moichat || moichat;
         document.getElementById('exp_vanhanh').value = d.exportData.vanhanh || vanhanh;
@@ -719,6 +726,7 @@ function openExportModal(index) {
 
 
     // Khởi tạo các giá trị mặc định cho Modal
+    document.getElementById('exp_kw').value = kwStr;
     document.getElementById('exp_qty').value = qty;
     document.getElementById('exp_moichat').value = moichat;
     document.getElementById('exp_vanhanh').value = vanhanh;
@@ -835,6 +843,7 @@ function generateTechSpecAndPrint() {
     if (!d) return;
 
     d.exportData = {
+        kw: document.getElementById('exp_kw').value,
         qty: document.getElementById('exp_qty').value,
         moichat: document.getElementById('exp_moichat').value,
         vanhanh: document.getElementById('exp_vanhanh').value,
@@ -897,10 +906,15 @@ function generateTechSpecAndPrint() {
     document.getElementById('pr_vanhanh').innerText = vanhanh;
     document.getElementById('pr_tmc').innerText = tmc;
 
-    let kw = "-";
-    if (d.line5) {
-        let kwMatch = d.line5.match(/Công suất:\s*([\d\.]+)/);
-        if (kwMatch) kw = kwMatch[1];
+    let kw = document.getElementById('exp_kw').value;
+    if (!kw || kw.trim() === "") {
+        if (d.line5) {
+            let kwMatch = d.line5.match(/Công suất:\s*([\d\.]+)/);
+            if (kwMatch) kw = kwMatch[1];
+            else kw = "-";
+        } else {
+            kw = "-";
+        }
     }
     document.getElementById('pr_kw').innerText = kw;
     document.getElementById('pr_tong_gio').innerText = document.getElementById('exp_airflow').value || "-";
