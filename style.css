@@ -348,13 +348,14 @@ input[readonly] { background: #e9ecef; color: #202124; font-weight: bold; cursor
         max-width: 100%;
         max-height: 230px;
         object-fit: contain;
+        transform: translateX(-5%);
     }
     
     .pr-footer {
         display: flex;
         justify-content: flex-start;
-        align-items: flex-end;
-        gap: 8px;
+        align-items: flex-start;
+        gap: 4px;
         margin-top: 2px;
         font-size: 9pt;
     }
@@ -364,10 +365,11 @@ input[readonly] { background: #e9ecef; color: #202124; font-weight: bold; cursor
     }
     .pr-footer-logo {
         display: flex;
-        align-items: flex-end;
+        align-items: flex-start;
     }
     .pr-footer-logo img {
-        height: 45px;
-        margin-bottom: 2px;
+        height: 38px;
+        margin-top: -6px;
+        margin-bottom: 0px;
     }
 }

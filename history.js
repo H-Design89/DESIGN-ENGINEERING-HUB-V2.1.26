@@ -30,6 +30,16 @@ function saveCurrentDesign() {
     document.getElementById('save_rh').value = '';
     if (document.getElementById('save_tach_am')) document.getElementById('save_tach_am').checked = false;
     document.getElementById('save_note').value = '';
+
+    const pasteBtn = document.getElementById('btn_paste_to_save');
+    if (pasteBtn) {
+        if (localStorage.getItem('copiedTSKTData')) {
+            pasteBtn.style.display = 'block';
+        } else {
+            pasteBtn.style.display = 'none';
+        }
+    }
+
     document.getElementById('save-prompt-modal').style.display = 'flex';
 }
 
@@ -165,6 +175,54 @@ function confirmSaveDesign() {
     localStorage.setItem(STORAGE_PREFIX + 'designs', JSON.stringify(savedDesigns));
 
     updateSavedCount();
+}
+
+function pasteToSavePrompt() {
+    const saved = localStorage.getItem('copiedTSKTData');
+    if (!saved) return;
+    
+    try {
+        const data = JSON.parse(saved);
+        
+        // Mapping copied TSKT data to Save Design form inputs
+        if (data.exp_customer && document.getElementById('save_company')) document.getElementById('save_company').value = data.exp_customer;
+        
+        // Map Project Name to Loại dàn dropdown if it matches exactly, or leave as is if no exact match
+        if (data.exp_project && document.getElementById('save_type')) {
+            const saveTypeSelect = document.getElementById('save_type');
+            let found = false;
+            for (let i = 0; i < saveTypeSelect.options.length; i++) {
+                if (saveTypeSelect.options[i].value === data.exp_project) {
+                    saveTypeSelect.selectedIndex = i;
+                    found = true;
+                    break;
+                }
+            }
+            if(found && typeof handleSaveTypeChange === 'function') {
+                handleSaveTypeChange();
+            }
+        }
+        
+        if (data.exp_qty && document.getElementById('save_qty')) document.getElementById('save_qty').value = data.exp_qty;
+        if (data.exp_moichat && document.getElementById('save_moichat')) {
+            document.getElementById('save_moichat').value = data.exp_moichat;
+            if(typeof updateTempLabels === 'function') updateTempLabels();
+        }
+        if (data.exp_vanhanh && document.getElementById('save_vanhanh')) {
+            document.getElementById('save_vanhanh').value = data.exp_vanhanh;
+            if(typeof updateTempLabels === 'function') updateTempLabels();
+        }
+        
+        if (data.exp_tmc && document.getElementById('save_tmc')) document.getElementById('save_tmc').value = data.exp_tmc;
+        if (data.exp_tmc_out && document.getElementById('save_tmc_out')) document.getElementById('save_tmc_out').value = data.exp_tmc_out;
+        if (data.exp_tr && document.getElementById('save_tr')) document.getElementById('save_tr').value = data.exp_tr;
+        if (data.exp_rh && document.getElementById('save_rh')) document.getElementById('save_rh').value = data.exp_rh;
+        
+        alert("Đã dán dữ liệu chung từ TSKT thành công!");
+    } catch(e) {
+        console.error(e);
+        alert("Lỗi khi dán dữ liệu!");
+    }
 }
 
 function openHistoryTab() {
@@ -379,7 +437,7 @@ function openModelGenerator(index) {
         let tbMatch = d.line3.match(/\(TB:\s*([\d\.]+)\s*mm\)/);
         if (tbMatch) {
             let tbValue = parseFloat(tbMatch[1]);
-            let tbTruncated = Math.floor(tbValue * 10) / 10;
+            let tbTruncated = Math.round(tbValue * 10) / 10;
             kheLa = tbTruncated.toString();
         } else {
             let pitches = [];
@@ -394,7 +452,7 @@ function openModelGenerator(index) {
                 } else {
                     let sum = pitches.reduce((a, b) => a + b, 0);
                     let avg = sum / pitches.length;
-                    let avgTruncated = Math.floor(avg * 10) / 10;
+                    let avgTruncated = Math.round(avg * 10) / 10;
                     kheLa = avgTruncated.toString();
                 }
             } else {
@@ -837,6 +895,67 @@ function closeExportModal() {
     document.getElementById('export-tskt-modal').style.display = 'none';
 }
 
+function copyTSKTData() {
+    const dataToCopy = {};
+    const tsktFields = [
+        'exp_customer', 'exp_project', 'exp_date', 'exp_qty', 'exp_moichat', 'exp_vanhanh',
+        'exp_kw', 'exp_tmc', 'exp_tmc_out', 'exp_tr', 'exp_rh', 'exp_t_out', 'exp_rh_out',
+        'exp_water_flow', 'exp_airflow', 'exp_pressure', 'exp_vwind', 'exp_throw_dist',
+        'exp_casing', 'exp_conn_side', 'exp_floor_mat', 'exp_fin_mat', 'exp_test_pressure',
+        'exp_fan_guard', 'exp_inlet', 'exp_outlet', 'exp_air_guide', 'exp_filter',
+        'exp_defrost_type', 'exp_defrost_kw', 'exp_water_tray',
+        'exp_dim_l', 'exp_dim_h', 'exp_dim_t', 'exp_dim_c', 'exp_dim_t1',
+        'exp_dim_e', 'exp_dim_e1', 'exp_dim_e2', 'exp_dim_e3', 'exp_drawing'
+    ];
+    
+    tsktFields.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            dataToCopy[id] = el.value;
+        }
+    });
+
+    const drawingEl = document.getElementById('exp_drawing');
+    if (drawingEl) {
+        dataToCopy['fanQty'] = drawingEl.getAttribute('data-fan-qty') || "2";
+    }
+
+    localStorage.setItem('copiedTSKTData', JSON.stringify(dataToCopy));
+    alert("Đã copy toàn bộ dữ liệu bảng xuất thông số kỹ thuật!");
+}
+
+function pasteTSKTData() {
+    const saved = localStorage.getItem('copiedTSKTData');
+    if (!saved) {
+        alert("Chưa có dữ liệu nào được copy!");
+        return;
+    }
+    
+    try {
+        const data = JSON.parse(saved);
+        for (const [id, value] of Object.entries(data)) {
+            if (id === 'fanQty') continue;
+            const el = document.getElementById(id);
+            if (el) {
+                el.value = value;
+            }
+        }
+        
+        const drawingEl = document.getElementById('exp_drawing');
+        if (drawingEl && data['fanQty']) {
+            drawingEl.setAttribute('data-fan-qty', data['fanQty']);
+        }
+        
+        toggleDefrostFields();
+        if (typeof updateDrawingPreview === 'function') updateDrawingPreview();
+        
+        alert("Đã dán dữ liệu thành công!");
+    } catch (e) {
+        console.error(e);
+        alert("Có lỗi xảy ra khi dán dữ liệu!");
+    }
+}
+
 function generateTechSpecAndPrint() {
     const index = document.getElementById('exp_history_index').value;
     const d = savedDesigns[index];
@@ -859,6 +978,7 @@ function generateTechSpecAndPrint() {
         water_flow: document.getElementById('exp_water_flow').value,
         airflow: document.getElementById('exp_airflow').value,
         pressure: document.getElementById('exp_pressure').value,
+        throw_dist: document.getElementById('exp_throw_dist').value,
         vwind: document.getElementById('exp_vwind').value,
         casing: document.getElementById('exp_casing').value,
         filter: document.getElementById('exp_filter').value,
@@ -941,6 +1061,12 @@ function generateTechSpecAndPrint() {
     let vanhanhVal = document.getElementById('exp_vanhanh').value.toLowerCase();
     let isBomDich_print = vanhanhVal.includes("bơm dịch") || vanhanhVal.includes("bom dich");
     let hasWaterFlow = isFCU_print && isBomDich_print;
+    let isNH3_print = moichat.toLowerCase().includes('nh3') || moichat.toLowerCase() === 'a' || moichat.toLowerCase().includes('ammonia');
+
+    // Force remove tmc_out if FCU + NH3 + Bơm dịch
+    if (isFCU_print && isBomDich_print && isNH3_print) {
+        tmc_out = "";
+    }
 
     // Reset Left Tr
     if (lblLeftTr) lblLeftTr.innerText = "";
@@ -964,19 +1090,29 @@ function generateTechSpecAndPrint() {
         }
     } else {
         if (hasWaterFlow) {
-            // No TmcOut but has WaterFlow -> hide TmcOut row content, show Tr row with both
-            if (lblTmcOut) lblTmcOut.innerText = "";
-            if (unitTmcOut) unitTmcOut.innerText = "";
-            if (valTmcOut) valTmcOut.innerText = "";
-            
-            document.getElementById('pr_row_tr').style.display = 'table-row';
-            lblLeftTr.innerText = isWater ? "Lưu lượng nước cấp" : "Lưu lượng môi chất cấp";
-            unitLeftTr.innerText = "m³/h";
-            valLeftTr.innerText = document.getElementById('exp_water_flow').value || "-";
-            
-            document.getElementById('lbl_pr_tr').innerText = "Nhiệt độ phòng";
-            document.getElementById('unit_pr_tr').innerText = "°C";
-            document.getElementById('pr_tr').innerText = `${tr} (RH: ${rh}%)`;
+            if (isNH3_print) {
+                // FCU + NH3 + Bơm dịch: Đưa nhiệt độ phòng lên thay thế nhiệt độ môi chất ra
+                if (lblTmcOut) lblTmcOut.innerText = "Nhiệt độ phòng";
+                if (unitTmcOut) unitTmcOut.innerText = "°C";
+                if (valTmcOut) valTmcOut.innerText = `${tr} (RH: ${rh}%)`;
+                
+                // Ẩn hoàn toàn dòng lưu lượng
+                document.getElementById('pr_row_tr').style.display = 'none';
+            } else {
+                // No TmcOut but has WaterFlow (Water/Glycol...) -> hide TmcOut row content, show Tr row with both
+                if (lblTmcOut) lblTmcOut.innerText = "";
+                if (unitTmcOut) unitTmcOut.innerText = "";
+                if (valTmcOut) valTmcOut.innerText = "";
+                
+                document.getElementById('pr_row_tr').style.display = 'table-row';
+                lblLeftTr.innerText = isWater ? "Lưu lượng nước cấp" : "Lưu lượng môi chất cấp";
+                unitLeftTr.innerText = "m³/h";
+                valLeftTr.innerText = document.getElementById('exp_water_flow').value || "-";
+                
+                document.getElementById('lbl_pr_tr').innerText = "Nhiệt độ phòng";
+                document.getElementById('unit_pr_tr').innerText = "°C";
+                document.getElementById('pr_tr').innerText = `${tr} (RH: ${rh}%)`;
+            }
         } else {
             // No TmcOut, No WaterFlow
             if (lblTmcOut) lblTmcOut.innerText = "Nhiệt độ phòng";
@@ -991,6 +1127,7 @@ function generateTechSpecAndPrint() {
     let khela = "-", area = "-", vol = "-";
     if (d.line3) {
         khela = d.line3.replace('Khe lá: ', '')
+            .replace(/\(TB:[^\)]+\)/gi, '')
             .replace(/mm/gi, '')
             .replace(/\s+/g, '')
             .replace(/;/g, '; ');
@@ -1230,6 +1367,16 @@ function generateTechSpecAndPrint() {
     document.getElementById('pr_fan_db').innerText = fanDb;
     document.getElementById('pr_fan_dia').innerText = fanDia;
     document.getElementById('pr_fan_guard').innerText = document.getElementById('exp_fan_guard').value || "-";
+
+    const throwDist = document.getElementById('exp_throw_dist').value.trim();
+    if (throwDist) {
+        document.getElementById('pr_throw_dist').innerText = throwDist;
+        document.getElementById('pr_row_throw_dist').style.display = 'table-row';
+        document.getElementById('pr_throw_note').style.display = 'block';
+    } else {
+        document.getElementById('pr_row_throw_dist').style.display = 'none';
+        document.getElementById('pr_throw_note').style.display = 'none';
+    }
 
     // Dimensions
     document.getElementById('pr_dim_h').innerText = document.getElementById('exp_dim_h').value || "-";
