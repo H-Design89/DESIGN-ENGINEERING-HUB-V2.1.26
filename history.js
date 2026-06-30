@@ -726,6 +726,15 @@ function openExportModal(index) {
     let defaultFin = isFCU ? "AlMg alloy" : "Nhôm";
     let defaultFilter = isFCU ? "Có" : "";
 
+    let khelaStr = "";
+    if (d.line3) {
+        khelaStr = d.line3.replace('Khe lá: ', '')
+            .replace(/\(TB:[^\)]+\)/gi, '')
+            .replace(/mm/gi, '')
+            .replace(/\s+/g, '')
+            .replace(/;/g, '; ');
+    }
+
     let kwStr = "";
     if (d.line5) {
         let kwMatch = d.line5.match(/Công suất:\s*([\d\.]+)/);
@@ -751,6 +760,7 @@ function openExportModal(index) {
         document.getElementById('exp_airflow').value = d.exportData.airflow || "";
         document.getElementById('exp_pressure').value = d.exportData.pressure || "";
         document.getElementById('exp_vwind').value = d.exportData.vwind || "";
+        document.getElementById('exp_khela').value = d.exportData.khela || "";
         document.getElementById('exp_casing').value = d.exportData.casing || defaultCasing;
         document.getElementById('exp_floor_mat').value = d.exportData.floor_mat || defaultFloor;
         document.getElementById('exp_fin_mat').value = d.exportData.fin_mat || defaultFin;
@@ -816,6 +826,7 @@ function openExportModal(index) {
     document.getElementById('exp_airflow').value = airflowStr;
     document.getElementById('exp_pressure').value = pressureStr;
     document.getElementById('exp_vwind').value = vwindStr;
+    document.getElementById('exp_khela').value = khelaStr;
 
     document.getElementById('exp_casing').value = defaultCasing;
     document.getElementById('exp_floor_mat').value = defaultFloor;
@@ -900,7 +911,7 @@ function copyTSKTData() {
     const tsktFields = [
         'exp_customer', 'exp_project', 'exp_date', 'exp_qty', 'exp_moichat', 'exp_vanhanh',
         'exp_kw', 'exp_tmc', 'exp_tmc_out', 'exp_tr', 'exp_rh', 'exp_t_out', 'exp_rh_out',
-        'exp_water_flow', 'exp_airflow', 'exp_pressure', 'exp_vwind', 'exp_throw_dist',
+        'exp_water_flow', 'exp_airflow', 'exp_pressure', 'exp_vwind', 'exp_throw_dist', 'exp_khela',
         'exp_casing', 'exp_conn_side', 'exp_floor_mat', 'exp_fin_mat', 'exp_test_pressure',
         'exp_fan_guard', 'exp_inlet', 'exp_outlet', 'exp_air_guide', 'exp_filter',
         'exp_defrost_type', 'exp_defrost_kw', 'exp_water_tray',
@@ -980,6 +991,7 @@ function generateTechSpecAndPrint() {
         pressure: document.getElementById('exp_pressure').value,
         throw_dist: document.getElementById('exp_throw_dist').value,
         vwind: document.getElementById('exp_vwind').value,
+        khela: document.getElementById('exp_khela').value,
         casing: document.getElementById('exp_casing').value,
         filter: document.getElementById('exp_filter').value,
         floor_mat: document.getElementById('exp_floor_mat').value,
@@ -1037,7 +1049,15 @@ function generateTechSpecAndPrint() {
         }
     }
     document.getElementById('pr_kw').innerText = kw;
-    document.getElementById('pr_tong_gio').innerText = document.getElementById('exp_airflow').value || "-";
+    
+    let airflowVal = document.getElementById('exp_airflow').value;
+    let pressureVal = document.getElementById('exp_pressure').value;
+    let prAirflowStr = airflowVal || "-";
+    if (airflowVal && pressureVal && pressureVal !== "0" && pressureVal !== "-") {
+        prAirflowStr = `${airflowVal} (${pressureVal}Pa)`;
+    }
+    document.getElementById('pr_tong_gio').innerText = prAirflowStr;
+    
     document.getElementById('pr_v_gio').innerText = document.getElementById('exp_vwind').value || "-";
 
     let t_out_val = document.getElementById('exp_t_out').value;
@@ -1124,14 +1144,7 @@ function generateTechSpecAndPrint() {
     document.getElementById('pr_model').innerText = d.modelCode || "N/A";
 
     // Coil Data
-    let khela = "-", area = "-", vol = "-";
-    if (d.line3) {
-        khela = d.line3.replace('Khe lá: ', '')
-            .replace(/\(TB:[^\)]+\)/gi, '')
-            .replace(/mm/gi, '')
-            .replace(/\s+/g, '')
-            .replace(/;/g, '; ');
-    }
+    let area = "-", vol = "-";
     if (d.line4) { let sMatch = d.line4.match(/([\d\.]+)/); if (sMatch) area = sMatch[1]; }
     if (d.line10) {
         let voMatch = d.line10.match(/([\d\.]+)/);
@@ -1141,7 +1154,7 @@ function generateTechSpecAndPrint() {
         }
     }
 
-    let tubeMat = d.title.includes("INOX") ? "Inox" : (d.title.includes("ĐỒNG") ? "Đồng" : "Đồng");
+    let tubeMat = d.title.includes("INOX") ? "Inox 304L" : (d.title.includes("ĐỒNG") ? "Đồng" : "Đồng");
 
     document.getElementById('pr_tube_mat').innerText = tubeMat;
     document.getElementById('pr_fin_mat').innerText = document.getElementById('exp_fin_mat').value || "-";
@@ -1161,7 +1174,7 @@ function generateTechSpecAndPrint() {
     // Dynamically assigned below
 
     document.getElementById('pr_floor_mat').innerText = document.getElementById('exp_floor_mat').value || "-";
-    document.getElementById('pr_khela').innerText = khela;
+    document.getElementById('pr_khela').innerText = document.getElementById('exp_khela').value || "-";
     document.getElementById('pr_area').innerText = area;
     document.getElementById('pr_vol').innerText = vol;
 
@@ -1315,6 +1328,17 @@ function generateTechSpecAndPrint() {
         if (foundFan && foundFan.details) {
             let detailStr = foundFan.details;
             let isStar = d.line2 && d.line2.toLowerCase().includes("sao");
+
+            // Ưu tiên lấy đường kính chuẩn từ tên trong config để tránh lỗi lấy nhầm (vd: Maer 300/350)
+            if (foundFan.name) {
+                if (foundFan.name.includes('Ø')) {
+                    let nMatch = foundFan.name.match(/Ø(\d+)/);
+                    if (nMatch) fanDia = nMatch[1];
+                } else if (foundFan.name.startsWith('FN')) {
+                    let nMatch = foundFan.name.match(/FN0(\d{2})/);
+                    if (nMatch) fanDia = (parseInt(nMatch[1], 10) * 10).toString();
+                }
+            }
 
             // Cập nhật lại fanModel thành tên đầy đủ cho bản in PDF
             fanModel = detailStr.split(' - ')[0];

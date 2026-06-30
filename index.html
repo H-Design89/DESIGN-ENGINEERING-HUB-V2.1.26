@@ -62,6 +62,7 @@
                     <button class="nav-tab active" onclick="switchTab('coil')">DESIGN COIL</button>
                     <button class="nav-tab" onclick="switchTab('psychro')">BẢNG TRA PSYCHRO</button>
                     <button class="nav-tab" onclick="switchTab('modex')" style="display: none;">MODEX</button>
+                    <button class="nav-tab" onclick="switchTab('heater')" id="tab-heater" style="display: none;">HEATER</button>
                     <button class="nav-tab" onclick="openAdminPage()" style="display: none;">QUẢN TRỊ</button>
                 </div>
             </div>
@@ -459,6 +460,48 @@
                 </div>
             </div>
 
+        </div>
+    </div>
+
+    <!-- TRANG HEATER -->
+    <div id="page-heater" class="app-page">
+        <div class="psy-container" style="max-width: 800px;">
+            <div id="admin_heater_section" style="display: block;">
+                <div class="section-title">TÍNH TOÁN ĐIỆN TRỞ</div>
+                <div class="grid" style="background: #f8f9fa; padding: 20px; border-radius: 8px; border: 1px solid #ddd; gap: 15px;">
+                    <div class="input-group">
+                        <label>Đường kính quạt (mm):</label>
+                        <select id="heater_fan_diameter" onchange="calculateHeaterPower()" style="font-size: 1.1rem; padding: 10px;">
+                            <option value="400">400 mm</option>
+                            <option value="450">450 mm</option>
+                            <option value="500">500 mm</option>
+                            <option value="550">550 mm</option>
+                            <option value="560">560 mm</option>
+                            <option value="600">600 mm</option>
+                            <option value="630">630 mm</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Số lượng quạt:</label>
+                        <input type="number" id="heater_fan_count" min="1" value="2" oninput="calculateHeaterPower()" style="font-size: 1.1rem; padding: 10px;">
+                    </div>
+                    <div class="input-group" style="grid-column: 1 / -1;">
+                        <label>Điện trở sưởi miệng quạt:</label>
+                        <select id="heater_type" onchange="calculateHeaterPower()" style="font-size: 1.1rem; padding: 10px;">
+                            <option value="standard">Tiêu chuẩn</option>
+                            <option value="slc">Dòng SLC</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Công suất / Quạt (W):</label>
+                        <input type="text" id="heater_per_fan" readonly style="color: var(--primary); font-weight: bold; font-size: 1.1rem;">
+                    </div>
+                    <div class="input-group">
+                        <label>Tổng công suất (kW):</label>
+                        <input type="text" id="heater_total_kw" readonly style="color: var(--accent); font-weight: bold; font-size: 1.1rem;">
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -983,7 +1026,11 @@
                 </div>
 
                 <div class="section-title" style="margin-top:15px;">3. THÔNG SỐ CẤU TẠO</div>
-                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+                    <div class="input-group">
+                        <label>Khe lá (mm):</label>
+                        <input type="text" id="exp_khela" placeholder="VD: 4.0">
+                    </div>
                     <div class="input-group">
                         <label>Bọc ngoài (Vỏ):</label>
                         <input type="text" id="exp_casing" value="Inox 304">

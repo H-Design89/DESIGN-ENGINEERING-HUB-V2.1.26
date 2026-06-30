@@ -209,6 +209,7 @@ function calculateAll() {
     calculateRequiredAirflow();
     calculatePerformance();
     calculateCircuitry();
+    if (typeof calculateHeaterPower === 'function') calculateHeaterPower();
 }
 
 function calculateRequiredAirflow() {
@@ -664,5 +665,45 @@ function resetVolumeSettings() {
     // triggerDebounceCalc(); // Don't trigger calc yet, let them hit Save if they want to apply, or we can just apply immediately.
     // Actually, setting isCustom = false means if we calculate now, it uses defaults. Let's do it immediately for better UX.
     triggerDebounceCalc();
+}
+
+// ==============================================
+// LOGIC ĐIỆN TRỞ SƯỞI MIỆNG QUẠT (ADMIN ONLY)
+// ==============================================
+const HEATER_DATA = {
+    "standard": {
+        400: 600, 450: 600, 500: 600, 550: 800, 560: 800, 600: 800, 630: 800
+    },
+    "slc": {
+        400: 215, 450: 252, 500: 279, 560: 313, 600: 351, 630: 351
+    }
+};
+
+function calculateHeaterPower() {
+    const adminHeater = document.getElementById('admin_heater_section');
+    if (!adminHeater || adminHeater.style.display === 'none') return;
+
+    const diameter = parseInt(document.getElementById('heater_fan_diameter').value) || 0;
+    const type = document.getElementById('heater_type').value; // "standard" or "slc"
+    const fanCount = parseFloat(document.getElementById('heater_fan_count').value) || 0;
+
+    let perFanPower = 0;
+    if (diameter > 0 && HEATER_DATA[type] && HEATER_DATA[type][diameter] !== undefined) {
+        perFanPower = HEATER_DATA[type][diameter];
+    }
+
+    const totalKw = (perFanPower * fanCount) / 1000;
+
+    if (perFanPower > 0) {
+        document.getElementById('heater_per_fan').value = perFanPower.toLocaleString('en-US');
+    } else {
+        document.getElementById('heater_per_fan').value = "N/A";
+    }
+
+    if (totalKw > 0) {
+        document.getElementById('heater_total_kw').value = Number(totalKw.toFixed(2)).toLocaleString('en-US');
+    } else {
+        document.getElementById('heater_total_kw').value = "N/A";
+    }
 }
 

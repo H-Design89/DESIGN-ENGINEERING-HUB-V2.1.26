@@ -104,6 +104,19 @@ function unlockApp() {
     if (firstVisibleTab === 'psychro') {
         calculatePsychro();
     }
+    
+    // Admin features
+    const adminHeater = document.getElementById('admin_heater_section');
+    const tabHeater = document.getElementById('tab-heater');
+    
+    if (currentUser.role === 'admin') {
+        if (adminHeater) adminHeater.style.display = 'block';
+        if (tabHeater) tabHeater.style.display = 'inline-block';
+        if (typeof calculateHeaterPower === 'function') calculateHeaterPower();
+    } else {
+        if (adminHeater) adminHeater.style.display = 'none';
+        if (tabHeater) tabHeater.style.display = 'none';
+    }
 }
 
 
