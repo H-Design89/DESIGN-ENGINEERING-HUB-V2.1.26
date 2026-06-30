@@ -1319,11 +1319,13 @@ function generateTechSpecAndPrint() {
 
         let allFansObj = window.GT_CONFIG.FANS[configKey] || {};
         let baseModel = fanModel.split(' ')[0];
-        let foundFan = Object.values(allFansObj).find(f => {
-            if (f.name && fanModel.includes(f.name)) return true;
-            if (f.details && f.details.includes(baseModel)) return true;
-            return false;
-        });
+        // Ưu tiên khớp chính xác theo tên trước (ví dụ YDWF Ø350)
+        let foundFan = Object.values(allFansObj).find(f => f.name && fanModel.includes(f.name));
+        
+        // Nếu không có, mới tìm theo chuỗi đầu tiên (dành cho ZA hoặc Kruger)
+        if (!foundFan) {
+            foundFan = Object.values(allFansObj).find(f => f.details && f.details.includes(baseModel));
+        }
 
         if (foundFan && foundFan.details) {
             let detailStr = foundFan.details;
