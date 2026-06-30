@@ -676,6 +676,119 @@ function showCopyToast() {
 }
 
 // ==============================================
+function extractFanDataFromDesign(d) {
+    let fanQty = "-", fanModel = "-";
+    if (d.line2) {
+        let fMatch = d.line2.match(/^(\d+)\s+quạt\s+(.*)/);
+        if (fMatch) {
+            fanQty = fMatch[1];
+            let fullStr = fMatch[2].trim();
+            let hzMatch = fullStr.match(/^(.*?Hz\))/);
+            if (hzMatch) {
+                fanModel = hzMatch[1];
+            } else {
+                fanModel = fullStr.split(' - ')[0];
+            }
+        }
+    }
+
+    let fanBrand = "---", fanKw = "-", fanA = "-", fanRpm = "-", fanDb = "-", fanDia = "-";
+    let fanKwUnit = "kW";
+    if (fanModel.includes("FN")) fanBrand = "ZIEHL-ABEGG";
+    else if (fanModel.includes("YSWF") || fanModel.includes("YDWF")) fanBrand = "MAER";
+    else if (fanModel.includes("TDA")) fanBrand = "KRUGER";
+
+    let diaMatch = fanModel.match(/(\d{3})/);
+    if (diaMatch) {
+        fanDia = diaMatch[1];
+        if (fanDia.startsWith('0')) {
+            fanDia = (parseInt(fanDia, 10) * 10).toString();
+        }
+    }
+
+    if (window.GT_CONFIG && window.GT_CONFIG.FANS) {
+        let configKey = "";
+        if (fanBrand === "ZIEHL-ABEGG") configKey = "ZA";
+        else if (fanBrand === "MAER") configKey = "TQ";
+        else if (fanBrand === "KRUGER") configKey = "KRUGER";
+
+        let allFansObj = window.GT_CONFIG.FANS[configKey] || {};
+        let baseModel = fanModel.split(' ')[0];
+        
+        let foundFan = Object.values(allFansObj).find(f => f.name && fanModel.includes(f.name));
+        if (!foundFan) {
+            foundFan = Object.values(allFansObj).find(f => f.details && f.details.includes(baseModel));
+        }
+
+        if (foundFan && foundFan.details) {
+            let detailStr = foundFan.details;
+            let isStar = d.line2 && d.line2.toLowerCase().includes("sao");
+
+            if (foundFan.name) {
+                if (foundFan.name.includes('Ø')) {
+                    let nMatch = foundFan.name.match(/Ø(\d+)/);
+                    if (nMatch) fanDia = nMatch[1];
+                } else if (foundFan.name.startsWith('FN')) {
+                    let nMatch = foundFan.name.match(/FN0(\d{2})/);
+                    if (nMatch) fanDia = (parseInt(nMatch[1], 10) * 10).toString();
+                }
+            }
+
+            fanModel = detailStr.split(' - ')[0];
+            fanModel = fanModel.replace(/\s*\(cánh[^)]+\)/gi, '');
+
+            let pMatch = detailStr.match(/([\d\.\/]+)\s*kW/i);
+            if (pMatch) {
+                let parts = pMatch[1].split('/');
+                fanKw = (isStar && parts.length > 1) ? parts[1] : parts[0];
+                
+                if (fanBrand === "MAER" && (fanDia === "300" || fanDia === "350")) {
+                    fanKw = (parseFloat(fanKw) * 1000).toString();
+                    fanKwUnit = "W";
+                }
+            }
+
+            let aMatch = detailStr.match(/([\d\.\/]+)\s*A/);
+            if (aMatch) {
+                let parts = aMatch[1].split('/');
+                fanA = (isStar && parts.length > 1) ? parts[1] : parts[0];
+            }
+
+            let rpmMatch = detailStr.match(/([\d\/]+)\s*(?:rpm|min)/i);
+            if (rpmMatch) {
+                let parts = rpmMatch[1].split('/');
+                fanRpm = (isStar && parts.length > 1) ? parts[1] : parts[0];
+                if (!isNaN(fanRpm)) {
+                    fanRpm = parseInt(fanRpm, 10).toLocaleString('en-US');
+                }
+            }
+
+            let dbMatch = detailStr.match(/([\d\.]+(?:dB\/[\d\.]+)?)\s*dB/i);
+            if (dbMatch) {
+                let parts = dbMatch[1].replace(/dB/ig, '').split('/');
+                fanDb = (isStar && parts.length > 1) ? parts[1] : parts[0];
+            }
+        }
+    }
+
+    if (parseInt(fanQty) > 1) {
+        if (fanKw !== "-") fanKw = `${fanKw} x ${fanQty}`;
+        if (fanA !== "-") fanA = `${fanA} x ${fanQty}`;
+    }
+
+    return {
+        full: fanModel,
+        qty: fanQty,
+        kw: fanKw,
+        kw_unit: fanKwUnit,
+        a: fanA,
+        rpm: fanRpm,
+        db: fanDb,
+        dia: fanDia
+    };
+}
+
+// ==============================================
 // XUẤT THÔNG SỐ KỸ THUẬT (PDF)
 // ==============================================
 function toggleDefrostFields() {
@@ -742,6 +855,16 @@ function openExportModal(index) {
     }
 
     if (d.exportData) {
+        let extFan = extractFanDataFromDesign(d);
+        document.getElementById('exp_fan_full').value = d.exportData.fan_full || extFan.full;
+        document.getElementById('exp_fan_qty').value = d.exportData.fan_qty || extFan.qty;
+        document.getElementById('exp_fan_kw').value = d.exportData.fan_kw || extFan.kw;
+        document.getElementById('exp_fan_kw_unit').value = d.exportData.fan_kw_unit || extFan.kw_unit;
+        document.getElementById('exp_fan_a').value = d.exportData.fan_a || extFan.a;
+        document.getElementById('exp_fan_rpm').value = d.exportData.fan_rpm || extFan.rpm;
+        document.getElementById('exp_fan_db').value = d.exportData.fan_db || extFan.db;
+        document.getElementById('exp_fan_dia').value = d.exportData.fan_dia || extFan.dia;
+
         document.getElementById('exp_kw').value = d.exportData.kw || kwStr;
         document.getElementById('exp_qty').value = d.exportData.qty || qty;
         document.getElementById('exp_moichat').value = d.exportData.moichat || moichat;
@@ -794,6 +917,16 @@ function openExportModal(index) {
 
 
     // Khởi tạo các giá trị mặc định cho Modal
+    let extFan = extractFanDataFromDesign(d);
+    document.getElementById('exp_fan_full').value = extFan.full;
+    document.getElementById('exp_fan_qty').value = extFan.qty;
+    document.getElementById('exp_fan_kw').value = extFan.kw;
+    document.getElementById('exp_fan_kw_unit').value = extFan.kw_unit;
+    document.getElementById('exp_fan_a').value = extFan.a;
+    document.getElementById('exp_fan_rpm').value = extFan.rpm;
+    document.getElementById('exp_fan_db').value = extFan.db;
+    document.getElementById('exp_fan_dia').value = extFan.dia;
+
     document.getElementById('exp_kw').value = kwStr;
     document.getElementById('exp_qty').value = qty;
     document.getElementById('exp_moichat').value = moichat;
@@ -914,6 +1047,7 @@ function copyTSKTData() {
         'exp_water_flow', 'exp_airflow', 'exp_pressure', 'exp_vwind', 'exp_throw_dist', 'exp_khela',
         'exp_casing', 'exp_conn_side', 'exp_floor_mat', 'exp_fin_mat', 'exp_test_pressure',
         'exp_fan_guard', 'exp_inlet', 'exp_outlet', 'exp_air_guide', 'exp_filter',
+        'exp_fan_full', 'exp_fan_qty', 'exp_fan_kw', 'exp_fan_kw_unit', 'exp_fan_a', 'exp_fan_rpm', 'exp_fan_db', 'exp_fan_dia',
         'exp_defrost_type', 'exp_defrost_kw', 'exp_water_tray',
         'exp_dim_l', 'exp_dim_h', 'exp_dim_t', 'exp_dim_c', 'exp_dim_t1',
         'exp_dim_e', 'exp_dim_e1', 'exp_dim_e2', 'exp_dim_e3', 'exp_drawing'
@@ -999,6 +1133,14 @@ function generateTechSpecAndPrint() {
         test_pressure: document.getElementById('exp_test_pressure').value,
         fan_guard: document.getElementById('exp_fan_guard').value,
         air_guide: document.getElementById('exp_air_guide').value,
+        fan_full: document.getElementById('exp_fan_full').value,
+        fan_qty: document.getElementById('exp_fan_qty').value,
+        fan_kw: document.getElementById('exp_fan_kw').value,
+        fan_kw_unit: document.getElementById('exp_fan_kw_unit').value,
+        fan_a: document.getElementById('exp_fan_a').value,
+        fan_rpm: document.getElementById('exp_fan_rpm').value,
+        fan_db: document.getElementById('exp_fan_db').value,
+        fan_dia: document.getElementById('exp_fan_dia').value,
         defrost_type: document.getElementById('exp_defrost_type').value,
         defrost_kw: document.getElementById('exp_defrost_kw').value,
         water_tray: document.getElementById('exp_water_tray').value,
@@ -1280,133 +1422,19 @@ function generateTechSpecAndPrint() {
         }
     }
 
-    // Fan Data
-    let fanQty = "-", fanModel = "-";
-    if (d.line2) {
-        let fMatch = d.line2.match(/^(\d+)\s+quạt\s+(.*)/);
-        if (fMatch) {
-            fanQty = fMatch[1];
-            let fullStr = fMatch[2].trim();
-            let hzMatch = fullStr.match(/^(.*?Hz\))/);
-            if (hzMatch) {
-                fanModel = hzMatch[1];
-            } else {
-                fanModel = fullStr.split(' - ')[0];
-            }
-        }
-    }
-
-    let fanBrand = "---", fanKw = "-", fanA = "-", fanRpm = "-", fanDb = "-", fanDia = "-";
-    if (fanModel.includes("FN")) fanBrand = "ZIEHL-ABEGG";
-    else if (fanModel.includes("YSWF") || fanModel.includes("YDWF")) fanBrand = "MAER";
-    else if (fanModel.includes("TDA")) fanBrand = "KRUGER";
-
-    // Extract diameter from model if possible
-    let diaMatch = fanModel.match(/(\d{3})/);
-    if (diaMatch) {
-        fanDia = diaMatch[1];
-        if (fanDia.startsWith('0')) {
-            fanDia = (parseInt(fanDia, 10) * 10).toString();
-        }
-    }
-
-    // Extract details from GT_CONFIG.FANS
-    if (window.GT_CONFIG && window.GT_CONFIG.FANS) {
-        let configKey = "";
-        if (fanBrand === "ZIEHL-ABEGG") configKey = "ZA";
-        else if (fanBrand === "MAER") configKey = "TQ";
-        else if (fanBrand === "KRUGER") configKey = "KRUGER";
-
-        let allFansObj = window.GT_CONFIG.FANS[configKey] || {};
-        let baseModel = fanModel.split(' ')[0];
-        // Ưu tiên khớp chính xác theo tên trước (ví dụ YDWF Ø350)
-        let foundFan = Object.values(allFansObj).find(f => f.name && fanModel.includes(f.name));
-        
-        // Nếu không có, mới tìm theo chuỗi đầu tiên (dành cho ZA hoặc Kruger)
-        if (!foundFan) {
-            foundFan = Object.values(allFansObj).find(f => f.details && f.details.includes(baseModel));
-        }
-
-        if (foundFan && foundFan.details) {
-            let detailStr = foundFan.details;
-            let isStar = d.line2 && d.line2.toLowerCase().includes("sao");
-
-            // Ưu tiên lấy đường kính chuẩn từ tên trong config để tránh lỗi lấy nhầm (vd: Maer 300/350)
-            if (foundFan.name) {
-                if (foundFan.name.includes('Ø')) {
-                    let nMatch = foundFan.name.match(/Ø(\d+)/);
-                    if (nMatch) fanDia = nMatch[1];
-                } else if (foundFan.name.startsWith('FN')) {
-                    let nMatch = foundFan.name.match(/FN0(\d{2})/);
-                    if (nMatch) fanDia = (parseInt(nMatch[1], 10) * 10).toString();
-                }
-            }
-
-            // Cập nhật lại fanModel thành tên đầy đủ cho bản in PDF
-            fanModel = detailStr.split(' - ')[0];
-            fanModel = fanModel.replace(/\s*\(cánh[^)]+\)/gi, '');
-
-            // Regex to match "0.26/0.18kW" or "1.1kW"
-            let pMatch = detailStr.match(/([\d\.\/]+)\s*kW/i);
-            if (pMatch) {
-                let parts = pMatch[1].split('/');
-                fanKw = (isStar && parts.length > 1) ? parts[1] : parts[0];
-                
-                // Nếu là quạt Maer 300 hoặc 350 thì đổi từ kW sang W
-                if (fanBrand === "MAER" && (fanDia === "300" || fanDia === "350")) {
-                    fanKw = (parseFloat(fanKw) * 1000).toString();
-                }
-            }
-
-            // Regex to match "0.5/0.29A" or "2.5A"
-            let aMatch = detailStr.match(/([\d\.\/]+)\s*A/);
-            if (aMatch) {
-                let parts = aMatch[1].split('/');
-                fanA = (isStar && parts.length > 1) ? parts[1] : parts[0];
-            }
-
-            // Regex to match "1340/1020min" or "1400rpm"
-            let rpmMatch = detailStr.match(/([\d\/]+)\s*(?:rpm|min)/i);
-            if (rpmMatch) {
-                let parts = rpmMatch[1].split('/');
-                fanRpm = (isStar && parts.length > 1) ? parts[1] : parts[0];
-                if (!isNaN(fanRpm)) {
-                    fanRpm = parseInt(fanRpm, 10).toLocaleString('en-US');
-                }
-            }
-
-            // Regex to match "70dB" or "78dB/75dB"
-            let dbMatch = detailStr.match(/([\d\.]+(?:dB\/[\d\.]+)?)\s*dB/i);
-            if (dbMatch) {
-                let parts = dbMatch[1].replace(/dB/ig, '').split('/');
-                fanDb = (isStar && parts.length > 1) ? parts[1] : parts[0];
-            }
-        }
-    }
-
-    // Format fan stats if there are multiple fans
-    if (parseInt(fanQty) > 1) {
-        if (fanKw !== "-") fanKw = `${fanKw} x ${fanQty}`;
-        if (fanA !== "-") fanA = `${fanA} x ${fanQty}`;
-    }
-
-    // Cập nhật hiển thị đơn vị Công suất (W thay vì kW cho Maer 300/350)
+    // Lấy dữ liệu quạt từ form nhập liệu (đã được sửa/bổ sung bởi user)
     let fanKwUnitEl = document.getElementById('pr_fan_kw_unit');
     if (fanKwUnitEl) {
-        if (fanBrand === "MAER" && (fanDia === "300" || fanDia === "350")) {
-            fanKwUnitEl.innerText = "W";
-        } else {
-            fanKwUnitEl.innerText = "kW";
-        }
+        fanKwUnitEl.innerText = document.getElementById('exp_fan_kw_unit').value || "kW";
     }
 
-    document.getElementById('pr_fan_full').innerText = fanModel;
-    document.getElementById('pr_fan_qty').innerText = fanQty;
-    document.getElementById('pr_fan_kw').innerText = fanKw;
-    document.getElementById('pr_fan_a').innerText = fanA;
-    document.getElementById('pr_fan_rpm').innerText = fanRpm;
-    document.getElementById('pr_fan_db').innerText = fanDb;
-    document.getElementById('pr_fan_dia').innerText = fanDia;
+    document.getElementById('pr_fan_full').innerText = document.getElementById('exp_fan_full').value || "-";
+    document.getElementById('pr_fan_qty').innerText = document.getElementById('exp_fan_qty').value || "-";
+    document.getElementById('pr_fan_kw').innerText = document.getElementById('exp_fan_kw').value || "-";
+    document.getElementById('pr_fan_a').innerText = document.getElementById('exp_fan_a').value || "-";
+    document.getElementById('pr_fan_rpm').innerText = document.getElementById('exp_fan_rpm').value || "-";
+    document.getElementById('pr_fan_db').innerText = document.getElementById('exp_fan_db').value || "-";
+    document.getElementById('pr_fan_dia').innerText = document.getElementById('exp_fan_dia').value || "-";
     document.getElementById('pr_fan_guard').innerText = document.getElementById('exp_fan_guard').value || "-";
 
     const throwDist = document.getElementById('exp_throw_dist').value.trim();
