@@ -1351,6 +1351,11 @@ function generateTechSpecAndPrint() {
             if (pMatch) {
                 let parts = pMatch[1].split('/');
                 fanKw = (isStar && parts.length > 1) ? parts[1] : parts[0];
+                
+                // Nếu là quạt Maer 300 hoặc 350 thì đổi từ kW sang W
+                if (fanBrand === "MAER" && (fanDia === "300" || fanDia === "350")) {
+                    fanKw = (parseFloat(fanKw) * 1000).toString();
+                }
             }
 
             // Regex to match "0.5/0.29A" or "2.5A"
@@ -1383,6 +1388,16 @@ function generateTechSpecAndPrint() {
     if (parseInt(fanQty) > 1) {
         if (fanKw !== "-") fanKw = `${fanKw} x ${fanQty}`;
         if (fanA !== "-") fanA = `${fanA} x ${fanQty}`;
+    }
+
+    // Cập nhật hiển thị đơn vị Công suất (W thay vì kW cho Maer 300/350)
+    let fanKwUnitEl = document.getElementById('pr_fan_kw_unit');
+    if (fanKwUnitEl) {
+        if (fanBrand === "MAER" && (fanDia === "300" || fanDia === "350")) {
+            fanKwUnitEl.innerText = "W";
+        } else {
+            fanKwUnitEl.innerText = "kW";
+        }
     }
 
     document.getElementById('pr_fan_full').innerText = fanModel;
