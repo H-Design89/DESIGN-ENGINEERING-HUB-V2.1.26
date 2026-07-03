@@ -569,35 +569,17 @@ window.GT_CONFIG = {
         "5.6": 5480,
         "6": 5870
     },
-    "DRAWINGS": [
-        "dan lanh/1 quat/dan lanh 1 quat - mau 1.png", "dan lanh/1 quat/dan lanh 1 quat - mau 2.png", "dan lanh/1 quat/dan lanh 1 quat - mau 3.png", "dan lanh/1 quat/dan lanh 1 quat - mau 4.png", "dan lanh/1 quat/dan lanh 1 quat - mau 5.png",
-        "dan lanh/1 quat/dan lanh 1 quat - mau 6.png", "dan lanh/1 quat/dan lanh 1 quat - mau 7.png", "dan lanh/1 quat/dan lanh 1 quat - mau 8.png", "dan lanh/1 quat/dan lanh 1 quat - mau 9.png", "dan lanh/1 quat/dan lanh 1 quat - mau 10.png",
-        
-        "dan lanh/2 quat/dan lanh 2 quat - mau 1.png", "dan lanh/2 quat/dan lanh 2 quat - mau 2.png", "dan lanh/2 quat/dan lanh 2 quat - mau 3.png", "dan lanh/2 quat/dan lanh 2 quat - mau 4.png", "dan lanh/2 quat/dan lanh 2 quat - mau 5.png",
-        "dan lanh/2 quat/dan lanh 2 quat - mau 6.png", "dan lanh/2 quat/dan lanh 2 quat - mau 7.png", "dan lanh/2 quat/dan lanh 2 quat - mau 8.png", "dan lanh/2 quat/dan lanh 2 quat - mau 9.png", "dan lanh/2 quat/dan lanh 2 quat - mau 10.png",
-        
-        "dan lanh/3 quat/dan lanh 3 quat - mau 1.png", "dan lanh/3 quat/dan lanh 3 quat - mau 2.png", "dan lanh/3 quat/dan lanh 3 quat - mau 3.png", "dan lanh/3 quat/dan lanh 3 quat - mau 4.png", "dan lanh/3 quat/dan lanh 3 quat - mau 5.png",
-        "dan lanh/3 quat/dan lanh 3 quat - mau 6.png", "dan lanh/3 quat/dan lanh 3 quat - mau 7.png", "dan lanh/3 quat/dan lanh 3 quat - mau 8.png", "dan lanh/3 quat/dan lanh 3 quat - mau 9.png", "dan lanh/3 quat/dan lanh 3 quat - mau 10.png",
-        
-        "dan lanh/4 quat/dan lanh 4 quat - mau 1.png", "dan lanh/4 quat/dan lanh 4 quat - mau 2.png", "dan lanh/4 quat/dan lanh 4 quat - mau 3.png", "dan lanh/4 quat/dan lanh 4 quat - mau 4.png", "dan lanh/4 quat/dan lanh 4 quat - mau 5.png",
-        "dan lanh/4 quat/dan lanh 4 quat - mau 6.png", "dan lanh/4 quat/dan lanh 4 quat - mau 7.png", "dan lanh/4 quat/dan lanh 4 quat - mau 8.png", "dan lanh/4 quat/dan lanh 4 quat - mau 9.png", "dan lanh/4 quat/dan lanh 4 quat - mau 10.png",
-        
-        "dan lanh/5 quat/dan lanh 5 quat - mau 1.png", "dan lanh/5 quat/dan lanh 5 quat - mau 2.png", "dan lanh/5 quat/dan lanh 5 quat - mau 3.png", "dan lanh/5 quat/dan lanh 5 quat - mau 4.png", "dan lanh/5 quat/dan lanh 5 quat - mau 5.png",
-        "dan lanh/5 quat/dan lanh 5 quat - mau 6.png", "dan lanh/5 quat/dan lanh 5 quat - mau 7.png", "dan lanh/5 quat/dan lanh 5 quat - mau 8.png", "dan lanh/5 quat/dan lanh 5 quat - mau 9.png", "dan lanh/5 quat/dan lanh 5 quat - mau 10.png",
-        
-        "FCU/1 quat/FCU 1 quat - mau 1.png", "FCU/1 quat/FCU 1 quat - mau 2.png", "FCU/1 quat/FCU 1 quat - mau 3.png", "FCU/1 quat/FCU 1 quat - mau 4.png", "FCU/1 quat/FCU 1 quat - mau 5.png",
-        "FCU/1 quat/FCU 1 quat - mau 6.png", "FCU/1 quat/FCU 1 quat - mau 7.png", "FCU/1 quat/FCU 1 quat - mau 8.png", "FCU/1 quat/FCU 1 quat - mau 9.png", "FCU/1 quat/FCU 1 quat - mau 10.png",
-        
-        "FCU/2 quat/FCU 2 quat - mau 1.png", "FCU/2 quat/FCU 2 quat - mau 2.png", "FCU/2 quat/FCU 2 quat - mau 3.png", "FCU/2 quat/FCU 2 quat - mau 4.png", "FCU/2 quat/FCU 2 quat - mau 5.png",
-        "FCU/2 quat/FCU 2 quat - mau 6.png", "FCU/2 quat/FCU 2 quat - mau 7.png", "FCU/2 quat/FCU 2 quat - mau 8.png", "FCU/2 quat/FCU 2 quat - mau 9.png", "FCU/2 quat/FCU 2 quat - mau 10.png",
-        
-        "FCU/3 quat/FCU 3 quat - mau 1.png", "FCU/3 quat/FCU 3 quat - mau 2.png", "FCU/3 quat/FCU 3 quat - mau 3.png", "FCU/3 quat/FCU 3 quat - mau 4.png", "FCU/3 quat/FCU 3 quat - mau 5.png",
-        "FCU/3 quat/FCU 3 quat - mau 6.png", "FCU/3 quat/FCU 3 quat - mau 7.png", "FCU/3 quat/FCU 3 quat - mau 8.png", "FCU/3 quat/FCU 3 quat - mau 9.png", "FCU/3 quat/FCU 3 quat - mau 10.png",
-        
-        "FCU/4 quat/FCU 4 quat - mau 1.png", "FCU/4 quat/FCU 4 quat - mau 2.png", "FCU/4 quat/FCU 4 quat - mau 3.png", "FCU/4 quat/FCU 4 quat - mau 4.png", "FCU/4 quat/FCU 4 quat - mau 5.png",
-        "FCU/4 quat/FCU 4 quat - mau 6.png", "FCU/4 quat/FCU 4 quat - mau 7.png", "FCU/4 quat/FCU 4 quat - mau 8.png", "FCU/4 quat/FCU 4 quat - mau 9.png", "FCU/4 quat/FCU 4 quat - mau 10.png",
-        
-        "FCU/5 quat/FCU 5 quat - mau 1.png", "FCU/5 quat/FCU 5 quat - mau 2.png", "FCU/5 quat/FCU 5 quat - mau 3.png", "FCU/5 quat/FCU 5 quat - mau 4.png", "FCU/5 quat/FCU 5 quat - mau 5.png",
-        "FCU/5 quat/FCU 5 quat - mau 6.png", "FCU/5 quat/FCU 5 quat - mau 7.png", "FCU/5 quat/FCU 5 quat - mau 8.png", "FCU/5 quat/FCU 5 quat - mau 9.png", "FCU/5 quat/FCU 5 quat - mau 10.png"
-    ]
+    "DRAWINGS": (function() {
+        let list = [];
+        let types = ["dan lanh", "FCU"];
+        let fans = [1, 2, 3, 4, 5];
+        for (let t of types) {
+            for (let f of fans) {
+                for (let i = 1; i <= 50; i++) {
+                    list.push(`${t}/${f} quat/${t} ${f} quat - mau ${i}.png`);
+                }
+            }
+        }
+        return list;
+    })()
 };
