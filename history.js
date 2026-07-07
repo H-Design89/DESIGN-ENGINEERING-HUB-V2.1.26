@@ -1323,13 +1323,7 @@ function generateTechSpecAndPrint() {
     document.getElementById('pr_test_pressure').innerText = document.getElementById('exp_test_pressure').value || "-";
     document.getElementById('pr_fan_guard').innerText = document.getElementById('exp_fan_guard').value || "-";
 
-    let airGuideVal = document.getElementById('exp_air_guide').value;
-    if (!airGuideVal || airGuideVal.trim() === "" || airGuideVal.trim() === "-") {
-        document.getElementById('pr_air_guide_row').style.display = 'none';
-    } else {
-        document.getElementById('pr_air_guide_row').style.display = 'table-row';
-        document.getElementById('pr_air_guide').innerText = airGuideVal;
-    }
+    // Định hướng gió và Khoảng thổi xa logic is combined below
 
     let inletVal = document.getElementById('exp_inlet').value;
     let outletVal = document.getElementById('exp_outlet').value;
@@ -1438,12 +1432,34 @@ function generateTechSpecAndPrint() {
     document.getElementById('pr_fan_guard').innerText = document.getElementById('exp_fan_guard').value || "-";
 
     const throwDist = document.getElementById('exp_throw_dist').value.trim();
-    if (throwDist) {
-        document.getElementById('pr_throw_dist').innerText = throwDist;
-        document.getElementById('pr_row_throw_dist').style.display = 'table-row';
-        document.getElementById('pr_throw_note').style.display = 'block';
+    let airGuideVal = document.getElementById('exp_air_guide').value.trim();
+    let hasThrowDist = throwDist && throwDist !== "-";
+    let hasAirGuide = airGuideVal && airGuideVal !== "-";
+    let rowThrowGuide = document.getElementById('pr_row_throw_guide');
+    
+    if (hasThrowDist || hasAirGuide) {
+        rowThrowGuide.style.display = 'table-row';
+        if (hasThrowDist) {
+            document.getElementById('pr_lbl_throw_dist').innerText = "Khoảng thổi xa (*)";
+            document.getElementById('pr_unit_throw_dist').innerText = "m";
+            document.getElementById('pr_throw_dist').innerText = throwDist;
+            document.getElementById('pr_throw_note').style.display = 'block';
+        } else {
+            document.getElementById('pr_lbl_throw_dist').innerText = "";
+            document.getElementById('pr_unit_throw_dist').innerText = "";
+            document.getElementById('pr_throw_dist').innerText = "";
+            document.getElementById('pr_throw_note').style.display = 'none';
+        }
+        
+        if (hasAirGuide) {
+            document.getElementById('pr_lbl_air_guide').innerText = "Định hướng gió";
+            document.getElementById('pr_air_guide').innerText = airGuideVal;
+        } else {
+            document.getElementById('pr_lbl_air_guide').innerText = "";
+            document.getElementById('pr_air_guide').innerText = "";
+        }
     } else {
-        document.getElementById('pr_row_throw_dist').style.display = 'none';
+        rowThrowGuide.style.display = 'none';
         document.getElementById('pr_throw_note').style.display = 'none';
     }
 
