@@ -660,10 +660,14 @@
                     </div>
                 </div>
 
-                <div class="grid" id="grid_save_tmc" style="grid-template-columns: 1fr;">
+                <div class="grid" id="grid_save_tmc" style="grid-template-columns: 1fr 1fr;">
                     <div class="input-group">
                         <label id="lbl_save_tmc">Tmc (°C):</label>
                         <input type="text" id="save_tmc" placeholder="VD: -5">
+                    </div>
+                    <div class="input-group" id="wrap_save_conn_side">
+                        <label id="lbl_save_conn_side">Vị trí gộp:</label>
+                        <input type="text" id="save_conn_side" placeholder="VD: Trái/Phải">
                     </div>
                     <div class="input-group" id="wrap_save_tmc_out" style="display: none;">
                         <label id="lbl_save_tmc_out">Tmc ra (°C):</label>
@@ -686,91 +690,12 @@
                         style="width: 100%; padding: 8px; border: 1px solid #dadce0; border-radius: 6px; box-sizing: border-box; font-size: 0.9rem; font-family: inherit; resize: vertical;"
                         placeholder="Ghi chú thêm..."></textarea>
                 </div>
-                <div class="grid" style="margin-top: 20px;">
-                    <button class="btn-unlock" style="background: #757575;" onclick="cancelSaveDesign()">CANCEL</button>
-                    <button class="btn-unlock" style="background: var(--success);" onclick="confirmSaveDesign()">OK
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
 
-
-    <!-- BẢNG CẤU HÌNH THỂ TÍCH ẨN (MODAL) -->
-    <div id="vol-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 style="margin: 0; color: var(--secondary);">CẤU HÌNH THỂ TÍCH CHỨA DỊCH</h3>
-                <span class="btn-close" onclick="closeVolumeSettings()">✖</span>
-            </div>
-            <div class="modal-body">
-                <div class="section-title">1. THÔNG SỐ ỐNG THẲNG</div>
-                <div class="grid">
-                    <div class="input-group" style="margin-bottom:0;">
-                        <label>Độ dày ống (mm):</label>
-                        <input type="number" id="vol_tube_thick" min="0.1" step="0.01">
-                    </div>
-                </div>
-
-                <div class="section-title" style="margin-top:15px;">2. THÔNG SỐ ỐNG CO (U-BEND)</div>
-                <div id="ubend-container">
-                    <!-- Javascript sẽ render các ống co vào đây -->
-                </div>
-                <button class="btn-add" onclick="addUBendRow()" style="margin-top:10px;">+ THÊM ỐNG CO</button>
-
-                <div class="section-title" style="margin-top:5px;">3. THÔNG SỐ ỐNG GỘP (HEADER)</div>
-                <div id="header-container">
-                    <!-- Chứa các ống gộp -->
-                </div>
-                <button class="btn-add" onclick="addHeaderPipe()" style="margin-top:10px;">+ THÊM ỐNG GỘP</button>
-            </div>
-            <div class="modal-footer" style="margin-top: 15px; display: flex; gap: 10px;">
-                <button class="btn-unlock" onclick="applyVolumeSettings()" style="flex: 2;">LƯU VÀ TÍNH LẠI</button>
-                <button class="btn-unlock" onclick="resetVolumeSettings()" style="flex: 1; background: #757575;">MẶC
-                    ĐỊNH</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL HIỂN THỊ THÔNG TIN CHI TIẾT QUẠT -->
-    <div id="fan-info-modal" class="modal-overlay" style="display: none;">
-        <div class="modal" style="max-width: 550px; padding: 25px;">
-            <div
-                style="display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px;">
-                <h3 style="margin: 0; font-size: 1.3rem; color: #fff; background-color: var(--primary); padding: 8px 16px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
-                    id="fan-info-title">Thông số Kỹ Thuật Quạt</h3>
-            </div>
-
-            <div id="fan-info-content"
-                style="font-size: 1.1rem; line-height: 1.6; color: #2c3e50; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border: 1px solid #ced4da; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
-                Đang tải dữ liệu...
-            </div>
-
-            <div style="text-align: center; margin-top: 25px;">
-                <button class="btn btn-secondary"
-                    style="padding: 8px 20px; font-size: 0.95rem; font-weight: bold; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;"
-                    onclick="document.getElementById('fan-info-modal').style.display='none'">XÁC NHẬN ĐÓNG</button>
-            </div>
-        </div>
-    </div>
-    <div id="model-generator-modal" class="modal-overlay" style="display: none;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Tạo Mã Model</h3>
-                <span class="btn-close" onclick="closeModelGenerator()">×</span>
-            </div>
-            <div class="modal-body" style="display: flex; flex-direction: column; gap: 15px;">
-
+                <div class="section-title" style="margin-top: 15px; border-bottom: 2px solid var(--accent); color: var(--accent);">THÔNG SỐ TẠO MÃ MODEL</div>
+                
                 <div class="grid">
                     <div>
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
-                            <label style="margin: 0; white-space: nowrap;">Loại thiết bị [01]:</label>
-                            <label
-                                style="margin: 0; font-weight: normal; font-size: 0.85rem; display: flex; align-items: center; gap: 4px; cursor: pointer; color: var(--primary); white-space: nowrap;">
-                                <input type="checkbox" id="model-tach-am" onchange="updateModelPreview()"> Tách ẩm
-                            </label>
-                        </div>
+                        <label>Loại thiết bị [01]:</label>
                         <select id="model-loai-dan" onchange="updateModelPreview()">
                             <option value="">-- Chọn --</option>
                             <option value="FCU">FCU (ĐHKK)</option>
@@ -841,13 +766,12 @@
                 </div>
 
                 <div>
-                    <label>Thông số kỹ thuật (Đã bóc tách):</label>
-                    <input type="text" id="model-ong-quat" readonly style="background: #f1f3f4; font-size: 0.85rem;">
+                    <label>Thông số bóc tách tự động:</label>
+                    <input type="text" id="model-ong-quat" readonly style="background: #f1f3f4; font-size: 0.85rem; border: none; padding: 5px; color: #5f6368;">
                 </div>
 
-                <div style="background: #e8f0fe; padding: 15px; border-radius: 8px; border: 1px dashed var(--primary);">
-                    <label
-                        style="color: var(--primary); font-size: 1rem; display: flex; justify-content: space-between; align-items: center;">
+                <div style="background: #e8f0fe; padding: 15px; border-radius: 8px; border: 1px dashed var(--primary); margin-top: 10px;">
+                    <label style="color: var(--primary); font-size: 1rem; display: flex; justify-content: space-between; align-items: center;">
                         Mã Model:
                         <span id="btn_edit_model" class="btn-toggle-edit" onclick="toggleModelEdit()">[Edit]</span>
                     </label>
@@ -860,10 +784,70 @@
                     </div>
                 </div>
 
-                <input type="hidden" id="model-history-index">
+                <div class="grid" style="margin-top: 20px;">
+                    <button class="btn-unlock" style="background: #757575;" onclick="cancelSaveDesign()">CANCEL</button>
+                    <button class="btn-unlock" style="background: var(--success);" onclick="confirmSaveDesign()">LƯU TẤT CẢ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                <button class="btn-unlock" onclick="saveGeneratedModel()" style="margin-top: 10px;">XÁC NHẬN LƯU
-                    MODEL</button>
+
+    <!-- BẢNG CẤU HÌNH THỂ TÍCH ẨN (MODAL) -->
+    <div id="vol-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 style="margin: 0; color: var(--secondary);">CẤU HÌNH THỂ TÍCH CHỨA DỊCH</h3>
+                <span class="btn-close" onclick="closeVolumeSettings()">✖</span>
+            </div>
+            <div class="modal-body">
+                <div class="section-title">1. THÔNG SỐ ỐNG THẲNG</div>
+                <div class="grid">
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label>Độ dày ống (mm):</label>
+                        <input type="number" id="vol_tube_thick" min="0.1" step="0.01">
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:15px;">2. THÔNG SỐ ỐNG CO (U-BEND)</div>
+                <div id="ubend-container">
+                    <!-- Javascript sẽ render các ống co vào đây -->
+                </div>
+                <button class="btn-add" onclick="addUBendRow()" style="margin-top:10px;">+ THÊM ỐNG CO</button>
+
+                <div class="section-title" style="margin-top:5px;">3. THÔNG SỐ ỐNG GỘP (HEADER)</div>
+                <div id="header-container">
+                    <!-- Chứa các ống gộp -->
+                </div>
+                <button class="btn-add" onclick="addHeaderPipe()" style="margin-top:10px;">+ THÊM ỐNG GỘP</button>
+            </div>
+            <div class="modal-footer" style="margin-top: 15px; display: flex; gap: 10px;">
+                <button class="btn-unlock" onclick="applyVolumeSettings()" style="flex: 2;">LƯU VÀ TÍNH LẠI</button>
+                <button class="btn-unlock" onclick="resetVolumeSettings()" style="flex: 1; background: #757575;">MẶC
+                    ĐỊNH</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL HIỂN THỊ THÔNG TIN CHI TIẾT QUẠT -->
+    <div id="fan-info-modal" class="modal-overlay" style="display: none;">
+        <div class="modal" style="max-width: 550px; padding: 25px;">
+            <div
+                style="display: flex; align-items: center; justify-content: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px;">
+                <h3 style="margin: 0; font-size: 1.3rem; color: #fff; background-color: var(--primary); padding: 8px 16px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"
+                    id="fan-info-title">Thông số Kỹ Thuật Quạt</h3>
+            </div>
+
+            <div id="fan-info-content"
+                style="font-size: 1.1rem; line-height: 1.6; color: #2c3e50; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 20px; border-radius: 12px; border: 1px solid #ced4da; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
+                Đang tải dữ liệu...
+            </div>
+
+            <div style="text-align: center; margin-top: 25px;">
+                <button class="btn btn-secondary"
+                    style="padding: 8px 20px; font-size: 0.95rem; font-weight: bold; border-radius: 6px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); cursor: pointer;"
+                    onclick="document.getElementById('fan-info-modal').style.display='none'">XÁC NHẬN ĐÓNG</button>
             </div>
         </div>
     </div>
@@ -1099,6 +1083,26 @@
                         <input type="text" id="exp_filter" placeholder="Để trống nếu không có">
                     </div>
                 </div>
+                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
+                    <div class="input-group">
+                        <label>Ph.pháp xả đá:</label>
+                        <select id="exp_defrost_type" onchange="toggleDefrostFields()">
+                            <option value="Không">Không</option>
+                            <option value="Nước">Nước</option>
+                            <option value="Điện trở">Điện trở</option>
+                            <option value="Hot gas">Hot gas</option>
+                            <option value="Gió">Gió</option>
+                        </select>
+                    </div>
+                    <div class="input-group" id="wrap_defrost_kw" style="display: none;">
+                        <label>Công suất (kW):</label>
+                        <input type="text" id="exp_defrost_kw" placeholder="VD: 21.8">
+                    </div>
+                    <div class="input-group" id="wrap_water_tray" style="display: none;">
+                        <label>C.cao máng (mm):</label>
+                        <input type="text" id="exp_water_tray" placeholder="VD: 100">
+                    </div>
+                </div>
 
                 <div class="section-title" style="margin-top:15px;">4. THÔNG SỐ QUẠT</div>
                 <div class="grid" style="grid-template-columns: 1fr 1fr;">
@@ -1141,33 +1145,15 @@
                     </div>
                 </div>
 
-                <div class="section-title" style="margin-top:15px;">5. HỆ THỐNG XẢ ĐÁ & BẢN VẼ</div>
-                <div class="grid" style="grid-template-columns: 1fr 1fr 1fr;">
-                    <div class="input-group">
-                        <label>Ph.pháp xả đá:</label>
-                        <select id="exp_defrost_type" onchange="toggleDefrostFields()">
-                            <option value="Không">Không</option>
-                            <option value="Nước">Nước</option>
-                            <option value="Điện trở">Điện trở</option>
-                            <option value="Hot gas">Hot gas</option>
-                            <option value="Gió">Gió</option>
-                        </select>
-                    </div>
-                    <div class="input-group" id="wrap_defrost_kw" style="display: none;">
-                        <label>Công suất (kW):</label>
-                        <input type="text" id="exp_defrost_kw" placeholder="VD: 21.8">
-                    </div>
-                    <div class="input-group" id="wrap_water_tray" style="display: none;">
-                        <label>C.cao máng (mm):</label>
-                        <input type="text" id="exp_water_tray" placeholder="VD: 100">
-                    </div>
+                <div class="section-title" style="margin-top:15px;">5. BẢN VẼ</div>
+                <div class="grid" style="grid-template-columns: 1fr;">
                     <div class="input-group">
                         <label>Hình ảnh bản vẽ:</label>
                         <div style="display: flex; gap: 5px; width: 100%; align-items: center;">
                             <input type="hidden" id="exp_drawing">
                             <input type="file" id="exp_drawing_file" style="display: none;">
                             <button type="button" onclick="openDrawingGallery()"
-                                style="padding: 5px 10px; font-size: 12px; cursor: pointer; white-space: nowrap; background: var(--primary); color: white; border: none; border-radius: 3px; flex: 1;">Mở
+                                style="padding: 5px 10px; font-size: 12px; cursor: pointer; white-space: nowrap; background: var(--primary); color: white; border: none; border-radius: 3px;">Mở
                                 Thư viện Bản vẽ</button>
                         </div>
                         <div id="selected_drawing_name"

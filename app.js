@@ -617,7 +617,7 @@ function updateTempLabels() {
         }
     } else {
         if(wrapSaveTmcOut) wrapSaveTmcOut.style.display = 'none';
-        if(gridSaveTmc) gridSaveTmc.style.gridTemplateColumns = '1fr';
+        if(gridSaveTmc) gridSaveTmc.style.gridTemplateColumns = '1fr 1fr';
         
         if(lblSaveTmc) lblSaveTmc.innerText = "Tmc (°C):";
         if(lblPrTmc) lblPrTmc.innerText = "Nhiệt độ bay hơi";

@@ -18,6 +18,170 @@ function updateSavedCount() {
     }
 }
 
+function syncModelFields() {
+    let val = document.getElementById('save_type').value;
+    let modelLoaiDan = "";
+    if (val === "FCU") modelLoaiDan = "FCU";
+    else if (val === "Dàn lạnh") modelLoaiDan = "TD";
+    else if (val === "Đông gió TN" || val === "Đông gió TT" || val === "Đông gió treo" || val === "Dàn coil đông gió") modelLoaiDan = "CD";
+    else if (val === "Dàn ngưng") modelLoaiDan = "DN";
+    else if (val === "Dàn coil") modelLoaiDan = "DC";
+    document.getElementById('model-loai-dan').value = modelLoaiDan;
+
+    let mcVal = document.getElementById('save_moichat').value.toLowerCase();
+    let moiChat = "";
+    if (mcVal.includes("nh3") || mcVal.includes("ammonia")) moiChat = "A";
+    else if (mcVal.includes("nước") || mcVal.includes("nuoc") || mcVal.includes("water")) moiChat = "W";
+    else if (mcVal.includes("glycol")) moiChat = "G";
+    else if (mcVal.includes("r") || mcVal.includes("freon")) moiChat = "R";
+    document.getElementById('model-moi-chat').value = moiChat;
+
+    let vhVal = document.getElementById('save_vanhanh').value.toLowerCase();
+    let vanHanh = "";
+    if (vhVal.includes("bầu đổ") || vhVal.includes("dịch tràn")) vanHanh = "G";
+    else if (vhVal.includes("bơm dịch")) vanHanh = "P";
+    else if (vhVal.includes("lvs")) vanHanh = "L";
+    else if (vhVal.includes("tiết lưu") || vhVal.includes("van")) vanHanh = "X";
+    document.getElementById('model-van-hanh').value = vanHanh;
+
+    let tachAmSave = document.getElementById('save_tach_am') ? document.getElementById('save_tach_am').checked : false;
+    if (document.getElementById('model-tach-am')) document.getElementById('model-tach-am').checked = tachAmSave;
+
+    updateModelPreview();
+}
+
+function preFillModelDataFromUI() {
+    let loaiKhuon = "";
+    const selOng = document.getElementById('loai_ong');
+    if (selOng) {
+        let loaiOngText = selOng.options[selOng.selectedIndex]?.text.toUpperCase() || "";
+        if (loaiOngText.includes("D9.6") && loaiOngText.includes("25.4X22")) loaiKhuon = "1";
+        else if (loaiOngText.includes("D12.7") && loaiOngText.includes("31.75X27.5")) loaiKhuon = "2";
+        else if (loaiOngText.includes("D12.7") && loaiOngText.includes("50X25")) loaiKhuon = "3";
+        else if (loaiOngText.includes("D16 ĐỒNG") && loaiOngText.includes("45X45")) loaiKhuon = "4";
+        else if (loaiOngText.includes("D16 ĐỒNG") && loaiOngText.includes("50X50")) loaiKhuon = "5";
+        else if (loaiOngText.includes("D16 INOX") && loaiOngText.includes("45X45")) loaiKhuon = "6";
+        else if (loaiOngText.includes("D16 INOX") && loaiOngText.includes("50X50")) loaiKhuon = "7";
+    }
+
+    let loaiQuat = "Z";
+    let soLuongQuat = document.getElementById('so_quat')?.value || "1";
+    let dkQuat = "50";
+    let dkQuatNum = 500;
+
+    const fanBrandVal = document.getElementById('fan_brand')?.value || "";
+    const fanModelVal = document.getElementById('fan_model')?.value || "";
+    let fanModelText = "";
+    const FANS_DB = (window.GT_CONFIG && window.GT_CONFIG.FANS) ? window.GT_CONFIG.FANS : null;
+    if (FANS_DB && FANS_DB[fanBrandVal] && FANS_DB[fanBrandVal][fanModelVal]) {
+        fanModelText = FANS_DB[fanBrandVal][fanModelVal].name;
+    } else {
+        const selFanModel = document.getElementById('fan_model');
+        if (selFanModel) fanModelText = selFanModel.options[selFanModel.selectedIndex]?.text || '';
+    }
+
+    if (fanModelText.includes("FN")) loaiQuat = "Z";
+    else if (fanModelText.includes("TDA")) loaiQuat = "KR";
+    else if (fanModelText.includes("YSWF") || fanModelText.includes("YDWF")) loaiQuat = "M";
+
+    let dkMatch = fanModelText.match(/Ø(\d+)/);
+    if (dkMatch) {
+        dkQuatNum = parseInt(dkMatch[1]);
+        dkQuat = (dkQuatNum / 10).toString();
+    } else {
+        let fnMatch = fanModelText.match(/FN0(\d{2})/);
+        if (fnMatch) {
+            dkQuatNum = parseInt(fnMatch[1]) * 10;
+            dkQuat = (dkQuatNum / 10).toString();
+        } else {
+            let tdaMatch = fanModelText.match(/TDA(\d{3})/);
+            if (tdaMatch) {
+                dkQuatNum = parseInt(tdaMatch[1]);
+                dkQuat = (dkQuatNum / 10).toString();
+            }
+        }
+    }
+
+    let ngang = parseInt(document.getElementById('hang_ngang')?.value || 0);
+    let cao = parseInt(document.getElementById('hang_doc')?.value || 0);
+    let dai_m_num = parseFloat(document.getElementById('l_su_dung')?.value.replace(/,/g, '.') || 0);
+    let dai_mm = Math.round(dai_m_num * 1000);
+
+    let kheLa = "";
+    const avgPitchEl = document.getElementById('avg-pitch-val');
+    if (avgPitchEl && avgPitchEl.innerText !== '-') {
+        const avgMatch = avgPitchEl.innerText.match(/x\s*([\d\.]+)\s*mm/);
+        if (avgMatch) {
+            let tbValue = parseFloat(avgMatch[1]);
+            let tbTruncated = Math.floor(tbValue * 10) / 10;
+            kheLa = tbTruncated.toString();
+        }
+    }
+    if (!kheLa) {
+        let firstPitch = document.querySelector('.seg-pitch');
+        if (firstPitch) {
+            let pVal = parseFloat(firstPitch.value);
+            if (!isNaN(pVal)) kheLa = (Math.floor(pVal * 10) / 10).toString();
+        }
+    }
+
+    let isStandard = false;
+    let chuan = "G";
+    if (["3", "5", "7"].includes(loaiKhuon) || ["4", "6"].includes(loaiKhuon)) {
+        let s50 = (window.GT_CONFIG && window.GT_CONFIG.STANDARD_COILS) ? window.GT_CONFIG.STANDARD_COILS : {
+            "400": { cao: 10, dai_1_quat: 750, dai_3_quat: 2300 },
+            "450": { cao: 12, dai_1_quat: 850, dai_3_quat: 2550 },
+            "500": { cao: 14, dai_1_quat: 1000, dai_3_quat: 3000 },
+            "560": { cao: 16, dai_1_quat: 1150, dai_3_quat: 3400 },
+            "600": { cao: 16, dai_1_quat: 1150 },
+            "630": { cao: 18, dai_1_quat: 1275, dai_3_quat: 3700 }
+        };
+        let s45 = {
+            "400": { cao: 12, dai_1_quat: 750, dai_3_quat: 2300 },
+            "450": { cao: 14, dai_1_quat: 850, dai_3_quat: 2550 },
+            "500": { cao: 16, dai_1_quat: 1000, dai_3_quat: 3000 },
+            "560": { cao: 18, dai_1_quat: 1150, dai_3_quat: 3400 },
+            "600": { cao: 18, dai_1_quat: 1150 },
+            "630": { cao: 20, dai_1_quat: 1275, dai_3_quat: 3700 }
+        };
+
+        let standardCoils = ["3", "5", "7"].includes(loaiKhuon) ? s50 : s45;
+        let dkStr = dkQuatNum.toString();
+        let qty = parseInt(soLuongQuat) || 1;
+        if (standardCoils[dkStr]) {
+            let sData = standardCoils[dkStr];
+            let expectedDai = (qty === 3 && sData.dai_3_quat) ? sData.dai_3_quat : (sData.dai_1_quat * qty);
+            if (cao === sData.cao && dai_mm === expectedDai) {
+                isStandard = true;
+            }
+        }
+    }
+
+    if (!isStandard) chuan = "S";
+
+    let daiStr = Number.isInteger(dai_m_num) ? dai_m_num.toFixed(1) : dai_m_num.toString();
+    let ngangStr = isStandard ? ngang.toString() : `${ngang}${cao}${daiStr}`;
+
+    document.getElementById('model-vat-lieu-la').value = "";
+    document.getElementById('model-xa-da').value = "";
+    document.getElementById('model-chuan').value = "";
+
+    document.getElementById('model-ong-quat').value = `Khuôn: ${loaiKhuon || '?'} | Quạt: ${soLuongQuat}x${loaiQuat} D${dkQuatNum} | Kích thước Coil: ${cao}x${dai_mm}`;
+
+    window.currentModelData = { loaiKhuon, soLuongQuat, loaiQuat, dkQuat, ngangStr, kheLa };
+    
+    isModelManual = false;
+    let finalInput = document.getElementById('model-final-preview');
+    let btnEdit = document.getElementById('btn_edit_model');
+    if (finalInput && btnEdit) {
+        finalInput.setAttribute('readonly', true);
+        finalInput.style.backgroundColor = '#f1f3f4';
+        finalInput.style.borderColor = 'var(--primary)';
+        btnEdit.innerText = '[Edit]';
+        btnEdit.classList.remove('active');
+    }
+}
+
 function saveCurrentDesign() {
     // Hiển thị modal để nhập thông tin bổ sung
     document.getElementById('save_company').value = '';
@@ -26,10 +190,19 @@ function saveCurrentDesign() {
     document.getElementById('save_moichat').value = '';
     document.getElementById('save_vanhanh').value = '';
     document.getElementById('save_tmc').value = '';
+    document.getElementById('save_conn_side').value = '';
     document.getElementById('save_tr').value = '';
     document.getElementById('save_rh').value = '';
     if (document.getElementById('save_tach_am')) document.getElementById('save_tach_am').checked = false;
     document.getElementById('save_note').value = '';
+
+    preFillModelDataFromUI();
+    syncModelFields();
+
+    document.getElementById('save_type').addEventListener('change', syncModelFields);
+    document.getElementById('save_moichat').addEventListener('input', syncModelFields);
+    document.getElementById('save_vanhanh').addEventListener('input', syncModelFields);
+    document.getElementById('save_tach_am').addEventListener('change', syncModelFields);
 
     const pasteBtn = document.getElementById('btn_paste_to_save');
     if (pasteBtn) {
@@ -72,10 +245,11 @@ function confirmSaveDesign() {
     let tmc_out = (tmcOutEl && tmcOutEl.closest('.input-group').style.display !== 'none') ? formatTemp(tmcOutEl.value.trim()) : '';
     let tr = formatTemp(document.getElementById('save_tr').value.trim()) || '---';
     let rh = document.getElementById('save_rh').value.trim() || '---';
+    let conn_side = document.getElementById('save_conn_side') ? (document.getElementById('save_conn_side').value.trim() || '---') : '---';
     let note = document.getElementById('save_note').value.trim() || '---';
 
     let tmcStr = tmc_out ? `Tmc: ${tmc} °C | Tmc ra: ${tmc_out} °C` : `Tmc: ${tmc} °C`;
-    let headerText = `Công ty: ${company}\nLoại dàn: ${typeDisplay} | Số lượng: ${qty}\nMôi chất: ${moichat} | Vận hành: ${vanhanh}\n${tmcStr} | Tr: ${tr} °C | RH phòng: ${rh} %\nGhi chú: ${note}`;
+    let headerText = `Công ty: ${company}\nLoại dàn: ${typeDisplay} | Số lượng: ${qty}\nMôi chất: ${moichat} | Vận hành: ${vanhanh}\n${tmcStr} | Tr: ${tr} °C | RH phòng: ${rh} %\nVị trí gộp: ${conn_side}\nGhi chú: ${note}`;
 
     const selOng = document.getElementById('loai_ong');
     const loaiOngText = selOng.options[selOng.selectedIndex].text;
@@ -152,9 +326,12 @@ function confirmSaveDesign() {
     const totalMassFin = massFin1 * qtyNum;
     const totalMassTube = massTube1 * qtyNum;
 
+    let finalModel = document.getElementById('model-final-preview').value;
+
     const design = {
         title: `Ống ${loaiOngText} <span style="font-size: 0.85rem; color: #000; font-weight: normal;">[${lFinModeShort}]</span>`,
         header: headerText,
+        modelCode: finalModel,
         line1: `Ngang ${N} ống cao ${C} ống dài ${L}m`,
         line2: `${soQuat} quạt ${fanModelText}${modeShort}`,
         line3: `Khe lá: ${kheLaStr}`,
@@ -217,6 +394,9 @@ function pasteToSavePrompt() {
         if (data.exp_tmc_out && document.getElementById('save_tmc_out')) document.getElementById('save_tmc_out').value = data.exp_tmc_out;
         if (data.exp_tr && document.getElementById('save_tr')) document.getElementById('save_tr').value = data.exp_tr;
         if (data.exp_rh && document.getElementById('save_rh')) document.getElementById('save_rh').value = data.exp_rh;
+        if (data.exp_conn_side && document.getElementById('save_conn_side')) document.getElementById('save_conn_side').value = data.exp_conn_side;
+        
+        if(typeof syncModelFields === 'function') syncModelFields();
         
         alert("Đã dán dữ liệu chung từ TSKT thành công!");
     } catch(e) {
@@ -282,8 +462,7 @@ function renderSavedDesigns() {
             <div style="text-align: right; margin-top: 10px; font-size: 0.75rem; color: #999; user-select: none; border-top: 1px dashed #eee; padding-top: 5px;">
                 Đã lưu: ${d.createdAt || 'N/A'} ${d.updatedAt ? `| Sửa lần cuối: ${d.updatedAt}` : ''}
             </div>
-            <button class="btn-unlock" style="position: absolute; top: 10px; right: 200px; width: 95px; height: 35px; padding: 0; font-size: 0.8rem; border-radius: 4px; background: var(--secondary);" onclick="openExportModal(${originalIndex})">XUẤT TSKT</button>
-            <button class="btn-unlock" style="position: absolute; top: 10px; right: 105px; width: 85px; height: 35px; padding: 0; font-size: 0.8rem; border-radius: 4px; background: var(--success);" onmouseover="this.style.background='#0b7a44'" onmouseout="this.style.background='var(--success)'" onclick="openModelGenerator(${originalIndex})">TẠO MODEL</button>
+            <button class="btn-unlock" style="position: absolute; top: 10px; right: 105px; width: 95px; height: 35px; padding: 0; font-size: 0.8rem; border-radius: 4px; background: var(--secondary);" onclick="openExportModal(${originalIndex})">XUẤT TSKT</button>
             <button class="btn-unlock" style="position: absolute; top: 10px; right: 55px; width: 45px; height: 35px; padding: 0; font-size: 0.8rem; border-radius: 4px;" onclick="editSavedDesign(this, ${originalIndex})">SỬA</button>
             <button class="btn-remove" style="position: absolute; top: 10px; right: 10px; width: 35px; height: 35px;" onclick="removeSavedDesign(${originalIndex})">X</button>
         `;
@@ -335,212 +514,7 @@ function removeSavedDesign(index) {
     }
 }
 
-function openModelGenerator(index) {
-    const d = savedDesigns[index];
-    if (!d) return;
 
-    // 1. Loại thiết bị [01]
-    let loaiDan = ""; // Bỏ giá trị mặc định "TD"
-    if (d.header) {
-        if (d.header.includes("FCU")) loaiDan = "FCU";
-        else if (d.header.includes("Dàn lạnh")) loaiDan = "TD";
-        else if (d.header.includes("đông gió")) loaiDan = "CD";
-        else if (d.header.includes("Dàn ngưng")) loaiDan = "DN";
-        else if (d.header.includes("Dàn coil")) loaiDan = "DC";
-    }
-
-    // 2. Kính ống & Vật liệu ống -> Loại khuôn [03]
-    let loaiKhuon = "";
-    if (d.title) {
-        let titleUpper = d.title.toUpperCase();
-        if (titleUpper.includes("D9.6") && titleUpper.includes("25.4X22")) loaiKhuon = "1";
-        else if (titleUpper.includes("D12.7") && titleUpper.includes("31.75X27.5")) loaiKhuon = "2";
-        else if (titleUpper.includes("D12.7") && titleUpper.includes("50X25")) loaiKhuon = "3";
-        else if (titleUpper.includes("D16 ĐỒNG") && titleUpper.includes("45X45")) loaiKhuon = "4";
-        else if (titleUpper.includes("D16 ĐỒNG") && titleUpper.includes("50X50")) loaiKhuon = "5";
-        else if (titleUpper.includes("D16 INOX") && titleUpper.includes("45X45")) loaiKhuon = "6";
-        else if (titleUpper.includes("D16 INOX") && titleUpper.includes("50X50")) loaiKhuon = "7";
-    }
-
-    // 4. Môi chất [04]
-    let moiChat = "";
-    if (d.header) {
-        let mcMatch = d.header.match(/Môi chất:\s*([^\n|]+)/i);
-        if (mcMatch) {
-            let mcVal = mcMatch[1].toLowerCase();
-            if (mcVal.includes("nh3") || mcVal.includes("ammonia")) moiChat = "A";
-            else if (mcVal.includes("nước") || mcVal.includes("nuoc") || mcVal.includes("water")) moiChat = "W";
-            else if (mcVal.includes("glycol")) moiChat = "G";
-            else if (mcVal.includes("r") || mcVal.includes("freon")) moiChat = "R";
-        }
-    }
-
-    // 5. Vận hành [05]
-    let vanHanh = "";
-    if (d.header) {
-        let vhLower = d.header.toLowerCase();
-        if (vhLower.includes("bầu đổ") || vhLower.includes("dịch tràn")) vanHanh = "G";
-        else if (vhLower.includes("bơm dịch")) vanHanh = "P";
-        else if (vhLower.includes("lvs")) vanHanh = "L";
-        else if (vhLower.includes("tiết lưu") || vhLower.includes("van")) vanHanh = "X";
-    }
-
-    // 6. Số lượng quạt [06], 7. Loại quạt [07], 8. ĐK Quạt [08]
-    let loaiQuat = "Z";
-    let soLuongQuat = "1";
-    let dkQuat = "50";
-    let dkQuatNum = 500;
-
-    if (d.line2 && d.line2.includes("quạt")) {
-        let slMatch = d.line2.match(/^(\d+)\s+quạt/);
-        if (slMatch) soLuongQuat = slMatch[1];
-
-        if (d.line2.includes("FN")) loaiQuat = "Z";
-        else if (d.line2.includes("TDA")) loaiQuat = "KR";
-        else if (d.line2.includes("YSWF") || d.line2.includes("YDWF")) loaiQuat = "M";
-
-        let dkMatch = d.line2.match(/Ø(\d+)/);
-        if (dkMatch) {
-            dkQuatNum = parseInt(dkMatch[1]);
-            dkQuat = (dkQuatNum / 10).toString();
-        } else {
-            let fnMatch = d.line2.match(/FN0(\d{2})/);
-            if (fnMatch) {
-                dkQuatNum = parseInt(fnMatch[1]) * 10;
-                dkQuat = (dkQuatNum / 10).toString();
-            } else {
-                let tdaMatch = d.line2.match(/TDA(\d{3})/);
-                if (tdaMatch) {
-                    dkQuatNum = parseInt(tdaMatch[1]);
-                    dkQuat = (dkQuatNum / 10).toString();
-                }
-            }
-        }
-    }
-
-    // 10. Cấu hình ống
-    let ngang = 0, cao = 0, dai = 0;
-    if (d.line1) {
-        let ngangMatch = d.line1.match(/Ngang\s+([\d\.]+)/);
-        let caoMatch = d.line1.match(/cao\s+([\d\.]+)/);
-        let daiMatch = d.line1.match(/dài\s+([\d\.]+)/);
-
-        if (ngangMatch) ngang = parseInt(ngangMatch[1]);
-        if (caoMatch) cao = parseInt(caoMatch[1]);
-        if (daiMatch) dai = parseFloat(daiMatch[1]);
-    }
-    let dai_mm = Math.round(dai * 1000);
-
-    // 11. Khe lá
-    let kheLa = "";
-    if (d.line3) {
-        let tbMatch = d.line3.match(/\(TB:\s*([\d\.]+)\s*mm\)/);
-        if (tbMatch) {
-            let tbValue = parseFloat(tbMatch[1]);
-            let tbTruncated = Math.round(tbValue * 10) / 10;
-            kheLa = tbTruncated.toString();
-        } else {
-            let pitches = [];
-            let pitchRegex = /x\s*([\d\.]+)/g;
-            let match;
-            while ((match = pitchRegex.exec(d.line3)) !== null) {
-                pitches.push(parseFloat(match[1]));
-            }
-            if (pitches.length > 0) {
-                if (pitches.length === 1) {
-                    kheLa = pitches[0].toString();
-                } else {
-                    let sum = pitches.reduce((a, b) => a + b, 0);
-                    let avg = sum / pitches.length;
-                    let avgTruncated = Math.round(avg * 10) / 10;
-                    kheLa = avgTruncated.toString();
-                }
-            } else {
-                let kheLaStr = d.line3.replace(/Khe lá:/gi, '').replace(/mm/gi, '').trim();
-                let numbers = kheLaStr.match(/[\d\.]+/g);
-                if (numbers && numbers.length > 0) {
-                    kheLa = numbers[numbers.length - 1]; // Lấy số cuối cùng nếu không có 'x'
-                }
-            }
-        }
-    }
-
-    // Validation Rule -> [12] Chuẩn thiết kế & [10] String
-    let isStandard = false;
-    let chuan = "G";
-    if (["3", "5", "7"].includes(loaiKhuon) || ["4", "6"].includes(loaiKhuon)) {
-        let s50 = (window.GT_CONFIG && window.GT_CONFIG.STANDARD_COILS) ? window.GT_CONFIG.STANDARD_COILS : {
-            "400": { cao: 10, dai_1_quat: 750, dai_3_quat: 2300 },
-            "450": { cao: 12, dai_1_quat: 850, dai_3_quat: 2550 },
-            "500": { cao: 14, dai_1_quat: 1000, dai_3_quat: 3000 },
-            "560": { cao: 16, dai_1_quat: 1150, dai_3_quat: 3400 },
-            "600": { cao: 16, dai_1_quat: 1150 },
-            "630": { cao: 18, dai_1_quat: 1275, dai_3_quat: 3700 }
-        };
-        let s45 = {
-            "400": { cao: 12, dai_1_quat: 750, dai_3_quat: 2300 },
-            "450": { cao: 14, dai_1_quat: 850, dai_3_quat: 2550 },
-            "500": { cao: 16, dai_1_quat: 1000, dai_3_quat: 3000 },
-            "560": { cao: 18, dai_1_quat: 1150, dai_3_quat: 3400 },
-            "600": { cao: 18, dai_1_quat: 1150 },
-            "630": { cao: 20, dai_1_quat: 1275, dai_3_quat: 3700 }
-        };
-
-        let standardCoils = ["3", "5", "7"].includes(loaiKhuon) ? s50 : s45;
-        let dkStr = dkQuatNum.toString();
-        let qty = parseInt(soLuongQuat) || 1;
-        if (standardCoils[dkStr]) {
-            let sData = standardCoils[dkStr];
-            let expectedDai = (qty === 3 && sData.dai_3_quat) ? sData.dai_3_quat : (sData.dai_1_quat * qty);
-            if (cao === sData.cao && dai_mm === expectedDai) {
-                isStandard = true;
-            }
-        }
-    }
-
-    // Tạm thời Inox D22 (chưa có khuôn) cũng gán là không chuẩn
-    if (!isStandard) {
-        chuan = "S";
-    }
-
-    let dai_m = dai_mm / 1000;
-    let daiStr = Number.isInteger(dai_m) ? dai_m.toFixed(1) : dai_m.toString();
-    let ngangStr = isStandard ? ngang.toString() : `${ngang}${cao}${daiStr}`;
-
-    document.getElementById('model-history-index').value = index;
-
-    // Đặt lại các trường chưa parse được thành rỗng để bắt buộc chọn
-    document.getElementById('model-vat-lieu-la').value = "";
-    document.getElementById('model-xa-da').value = loaiDan === "FCU" ? "A" : "";
-
-    let hasTachAm = d.header && d.header.includes("(Tách ẩm)");
-    if (document.getElementById('model-tach-am')) document.getElementById('model-tach-am').checked = hasTachAm;
-
-    // Gán các giá trị dropdown cho modal
-    document.getElementById('model-loai-dan').value = loaiDan;
-    document.getElementById('model-moi-chat').value = moiChat;
-    document.getElementById('model-van-hanh').value = vanHanh;
-    document.getElementById('model-chuan').value = "";
-
-    // Gán thông tin hiển thị phụ
-    document.getElementById('model-ong-quat').value = `Khuôn: ${loaiKhuon || '?'} | Quạt: ${soLuongQuat}x${loaiQuat} D${dkQuatNum} | Kích thước Coil: ${cao}x${dai_mm}`;
-
-    window.currentModelData = { loaiKhuon, soLuongQuat, loaiQuat, dkQuat, ngangStr, kheLa };
-
-    isModelManual = false;
-    let finalInput = document.getElementById('model-final-preview');
-    let btnEdit = document.getElementById('btn_edit_model');
-    if (finalInput && btnEdit) {
-        finalInput.setAttribute('readonly', true);
-        finalInput.style.backgroundColor = '#f1f3f4';
-        finalInput.style.borderColor = 'var(--primary)';
-        btnEdit.innerText = '[Edit]';
-        btnEdit.classList.remove('active');
-    }
-
-    updateModelPreview();
-    document.getElementById('model-generator-modal').style.display = 'flex';
-}
 
 let isModelManual = false;
 
@@ -603,37 +577,6 @@ function updateModelPreview() {
     finalModel += ` - ${part4}`;
 
     document.getElementById('model-final-preview').value = finalModel;
-}
-
-function closeModelGenerator() {
-    document.getElementById('model-generator-modal').style.display = 'none';
-}
-
-function saveGeneratedModel() {
-    let index = document.getElementById('model-history-index').value;
-    let finalModel = document.getElementById('model-final-preview').value;
-
-    if (savedDesigns[index]) {
-        // Cập nhật thẻ bodyHTML nếu đã từng lưu model trước đó hoặc thêm mới
-        let oldBody = savedDesigns[index].bodyHTML;
-        if (oldBody) {
-            if (oldBody.includes('Model:') || oldBody.includes('MODEL:')) {
-                savedDesigns[index].bodyHTML = oldBody.replace(/Model:\s*[^<]+<\/div>/i, `Model: ${finalModel}</div>`);
-            } else {
-                const separator = '----------</div>';
-                if (oldBody.includes(separator)) {
-                    savedDesigns[index].bodyHTML = oldBody.replace(separator, separator + `\n                <div style="font-weight: bold; color: var(--secondary); margin-bottom: 8px;">Model: ${finalModel}</div>`);
-                } else {
-                    savedDesigns[index].bodyHTML = `<div style="font-weight: bold; color: var(--secondary); margin-bottom: 8px;">Model: ${finalModel}</div>\n` + oldBody;
-                }
-            }
-        }
-
-        savedDesigns[index].modelCode = finalModel;
-        localStorage.setItem(STORAGE_PREFIX + 'designs', JSON.stringify(savedDesigns));
-        renderSavedDesigns();
-    }
-    closeModelGenerator();
 }
 
 function copyModelCode() {
@@ -817,6 +760,7 @@ function openExportModal(index) {
     // Parse header to extract basic parameters
     let qty = "", moichat = "", vanhanh = "", tmc = "", tmc_out = "", tr = "", rh = "";
     let customerName = "", projectName = "Dàn lạnh"; // Default fallback
+    let conn_side = "Trái / Phải";
     if (d.header) {
         let qMatch = d.header.match(/Số lượng:\s*(\d+)/); if (qMatch) qty = qMatch[1];
         let mMatch = d.header.match(/Môi chất:\s*([^|]*)/); if (mMatch) moichat = mMatch[1].trim();
@@ -831,6 +775,9 @@ function openExportModal(index) {
 
         let pMatch = d.header.match(/Loại dàn:\s*([^|]*)/);
         if (pMatch && pMatch[1].trim() !== '---') projectName = pMatch[1].trim();
+        
+        let connMatch = d.header.match(/Vị trí gộp:\s*([^\n]+)/);
+        if (connMatch && connMatch[1].trim() !== '---') conn_side = connMatch[1].trim();
     }
 
     let isFCU = projectName.toUpperCase() === "FCU" || projectName.toUpperCase().includes("FCU");
@@ -838,6 +785,25 @@ function openExportModal(index) {
     let defaultFloor = isFCU ? "AlMg alloy" : "Nhôm";
     let defaultFin = isFCU ? "AlMg alloy" : "Nhôm";
     let defaultFilter = isFCU ? "Có" : "";
+
+    if (d.modelCode) {
+        let parts = d.modelCode.split(' - ');
+        if (parts.length >= 2) {
+            let part2 = parts[1].trim();
+            let finChar = part2.charAt(0);
+            let finMap = {
+                "N": "Nhôm",
+                "S": "Inox 304",
+                "M": "AlMg alloy",
+                "C": "Đồng",
+                "E": "Nhôm Epoxy",
+                "H": "Nhôm Hydrophylic"
+            };
+            if (finMap[finChar]) {
+                defaultFin = finMap[finChar];
+            }
+        }
+    }
 
     let khelaStr = "";
     if (d.line3) {
@@ -896,7 +862,7 @@ function openExportModal(index) {
         document.getElementById('exp_water_tray').value = d.exportData.water_tray || "";
         document.getElementById('exp_inlet').value = d.exportData.inlet || "";
         document.getElementById('exp_outlet').value = d.exportData.outlet || "";
-        document.getElementById('exp_conn_side').value = d.exportData.conn_side || "Trái / Phải";
+        document.getElementById('exp_conn_side').value = d.exportData.conn_side || conn_side;
         document.getElementById('exp_dim_h').value = d.exportData.dim_h || "";
         document.getElementById('exp_dim_l').value = d.exportData.dim_l || "";
         document.getElementById('exp_dim_t').value = d.exportData.dim_t || "";
